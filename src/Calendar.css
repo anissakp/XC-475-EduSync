@@ -1,0 +1,61 @@
+.calendar {
+    margin: 50px auto;
+    padding: 20px;
+    width: 95%;
+    max-width: 600px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.days {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 ; 
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap:10px; 
+}
+
+.column {
+    flex-basis: calc(100% / 7);
+    text-align: center;
+    margin-right: 10px
+}
+
+
+.row .column:last-child {
+    margin-right: 0;
+}
+
+.cell {
+    padding: 10px;
+    cursor: pointer;
+    height: 75px
+}
+
+.header button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: gray;
+    color: white;
+    border-radius: 5px;
+
+    display: flex;
+    gap: 10px; 
+    
+}
+
+.header .label {
+    flex-grow: 1;
+    text-align: center;
+}
+
+
+
