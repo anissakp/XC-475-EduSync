@@ -4,14 +4,11 @@ import UploadSyllabusButton from './components/UploadSyllabusButton';
 import './Calendar.css';
 
 const App: React.FC = () => {
-
     return (
         <div className="App">
             <Calendar />
-            <UploadSyllabusButton />
+            {/* <UploadSyllabusButton /> */}
         </div>
     );
 };
-
-
 export default App;
