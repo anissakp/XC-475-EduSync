@@ -46,13 +46,13 @@ function ToDoList() {
             </div>
             <hr className = "horizontalLine" />
                 {showInput && (
-                    <div>
-                        <input type="text" value={newTask} onChange={handleInputChange} />
-                        <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
-                        <button onClick={addTaskAndHideInput}>Add</button>
+                    <div id = "addNewAssignment">
+                        <input id = "addTaskTitle" type="text" value={newTask} onChange={handleInputChange} />
+                        <input id = "addDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                        <button id = "addTaskButton" onClick={addTaskAndHideInput}>Add</button>
                     </div>
                 )}
-                <ul id = "list">
+                <ul id = "list" className = {showInput ? "shorter-list": ""}>
                     {tasks.map((task, index) => (
                         <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                             <div className = "task">
