@@ -63,7 +63,7 @@ function ToDoList() {
                                 />
                                 <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
                                     <p className='taskTitle'>{task.text}</p>
-                                    <p className = "dueDate">{task.dueDate}</p>
+                                    {task.dueDate && <p className={`dueDate ${task.dueDate ? '' : 'no-date'}`}>{task.dueDate}</p>}
                                 </div>
                                 
                             </div>
