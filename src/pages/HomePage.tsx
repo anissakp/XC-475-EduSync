@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ToDoList from "../components/toDoList";
+
 
 export default function HomePage() {
   const [htmlContent, setHtmlContent] = useState("");
@@ -21,7 +21,7 @@ export default function HomePage() {
           <>
             <h1>Home</h1>
             <button onClick={handleConnectCLK}>Connect with Blackboard</button>
-            <ToDoList></ToDoList>
+           
           </>
         )}
       </div>
