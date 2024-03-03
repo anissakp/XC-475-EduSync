@@ -5,6 +5,7 @@ import { AuthContext } from "./authContext";
 import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import AuthorizedPage from "./pages/AuthorizedPage";
+import CoursePage from "./pages/CoursePage";
 
 function App() {
   const [token, setToken] = useState("");
@@ -61,6 +62,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
+          <Route path="/coursepage" element={<CoursePage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

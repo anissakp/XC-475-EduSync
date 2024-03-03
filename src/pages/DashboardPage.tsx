@@ -1,6 +1,7 @@
 import Calendar from "../components/Calendar";
 import { AuthContext } from "../authContext";
 import { useContext, useState, useEffect } from "react";
+import {NavLink} from 'react-router-dom';
 
 export default function DashboardPage() {
   const [courses, setCourses] = useState([]);
@@ -67,10 +68,16 @@ export default function DashboardPage() {
     }
   }, [auth.token, auth.userID]);
 
+
   return (
     <>
       <h1>Dashboard Page</h1>
-      <button onClick={handleClick}>Test</button>
+      {/* <button onClick={handleClick}>Test</button> */}
+      <button>
+          <NavLink to="/coursepage" className="App-link">
+              Course Page
+          </NavLink>
+      </button>
       <Calendar courses={courses} />
     </>
   );
