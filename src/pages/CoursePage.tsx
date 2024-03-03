@@ -8,14 +8,14 @@ export default function CoursePage() {
 
   const auth = useContext(AuthContext);
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = (event: any) => {
     const file = event.target.files[0];
     setUploadedFile(file);
   };
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
-    const result = await fetch("http://127.0.0.1:5001/edusync-e6e17/us-central1/getCourses", {
+    const result = await fetch("https://getcourses-oh57fnnf2q-uc.a.run.app", {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         userid: auth.userID,
@@ -25,9 +25,9 @@ export default function CoursePage() {
     const classes = await result.json();
     console.log("courses", classes);
 
-    let arr = [];
+    let arr: any = [];
     for (let i = 0; i < classes.length; i++) {
-      const newArr = classes[i].assignments.map((det) => {
+      const newArr = classes[i].assignments.map((det: any) => {
         return {
           date: new Date(det.grading.due),
           event: `${classes[i].courseName} ${det.name}`,
@@ -63,7 +63,7 @@ return (
           </tr>
         </thead>
         <tbody>
-          {courses.map((course, index) => {
+          {courses.map((course: any, index) => {
             if (course.event.split(' ')[0] === "CS132") {
               return (
                 <tr key={index}>
