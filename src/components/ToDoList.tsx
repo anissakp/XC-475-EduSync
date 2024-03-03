@@ -1,20 +1,29 @@
 import React from 'react' 
 import { useState } from 'react';
 import "../ToDoList.css"
-
+interface Course {
+    date: Date;
+    event: string;
+}
+interface Props {
+    courses: Course[];
+}
 
 type Task = {
     text: string ; 
     completed: boolean; 
     dueDate: any ; 
 }
-function ToDoList() {
+
+const ToDoList: React.FC<Props> = ({ courses }:Props) => {
     const[newTask, setnewTask] = useState<string>('')
     const[dueDate, setDueDate] = useState<string>('')
     const [showInput, setShowInput] = useState<boolean>(false);
-    const [tasks, setTasks] = useState<Task[]>([
-       
-      ]);
+    const [tasks, setTasks] = useState<Task[]>([...courses.map(elem => ({
+        text: elem.event,
+        completed: false,
+        dueDate: elem.date
+      }))]);
 
     const setTaskCompleted = (index: number): void => {
         const tempTasks = [...tasks]

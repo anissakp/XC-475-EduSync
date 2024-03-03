@@ -63,7 +63,7 @@ export default function DashboardPage() {
       <button onClick={handleClick}>Test</button>
       <div className="container">
         <Calendar courses={courses} />
-        <ToDoList />
+        <ToDoList courses={courses}/>
       </div>
       <button>
           <NavLink to="/coursepage" className="App-link">
