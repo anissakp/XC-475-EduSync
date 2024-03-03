@@ -18,7 +18,8 @@ function App() {
 
       const response = await fetch(
         // `http://localhost:8000/api/users/token?code=${code}`
-        `http://127.0.0.1:5001/edusync-e6e17/us-central1/getToken?code=${code}`
+        // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getToken?code=${code}`
+        `https://gettoken-oh57fnnf2q-uc.a.run.app?code=${code}`
       );
       const data = await response.json();
 
@@ -43,7 +44,11 @@ function App() {
   //CHECK IF USERS HAS TOKEN ON INITIAL RENDER
   useEffect(() => {
     console.log("does this useffect get invoked");
-    const localStorageData = JSON.parse(localStorage.getItem("data"));
+    const data = localStorage.getItem("data")!;
+
+    const localStorageData = JSON.parse(data);
+
+    // const localStorageData = JSON.parse(localStorage.getItem("data"));
     if (
       localStorageData &&
       localStorageData.token &&
