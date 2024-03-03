@@ -1,6 +1,7 @@
 import Calendar from "../components/Calendar";
 import { AuthContext } from "../authContext" ;
 import { useContext, useState, useEffect } from "react";
+import ToDoList from "../components/ToDoList";
 
 export default function DashboardPage() {
   const [courses, setCourses] = useState([]);
@@ -58,7 +59,11 @@ export default function DashboardPage() {
     <>
       <h1>Dashboard Page</h1>
       <button onClick={handleClick}>Test</button>
-      <Calendar courses={courses} />
+      <div className="container">
+        <Calendar courses={courses} />
+        <ToDoList />
+      </div>
+      
     </>
   );
 }
