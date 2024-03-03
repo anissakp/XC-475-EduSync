@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../calendar.css";
 import {
   format,
@@ -15,7 +15,16 @@ import {
 import { AuthContext } from "../authContext";
 import { useContext } from "react";
 
-const Calendar: React.FC = ({ courses }) => {
+interface Course {
+  date: Date;
+  event: string;
+}
+
+interface Props {
+  courses: Course[];
+}
+
+const Calendar: React.FC<Props> = ({ courses }:Props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const nextMonth = () => {
@@ -44,7 +53,7 @@ const Calendar: React.FC = ({ courses }) => {
         formattedDate = format(day, dateFormat);
         const cloneDay = day;
 
-        const eventsForDay = courses.filter((event) =>
+        const eventsForDay = courses.filter((event:any) =>
           isSameDay(event.date, cloneDay)
         );
 
@@ -61,7 +70,7 @@ const Calendar: React.FC = ({ courses }) => {
           >
             <span className="number">{formattedDate}</span>
             <div className="events">
-              {eventsForDay.map((event, index) => (
+              {eventsForDay.map((event: any, index: any) => (
                 <div className="event" key={index}>
                   {event.event}
                 </div>

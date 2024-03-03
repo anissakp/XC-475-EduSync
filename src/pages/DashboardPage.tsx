@@ -1,5 +1,5 @@
 import Calendar from "../components/Calendar";
-import { AuthContext } from "../authContext";
+import { AuthContext } from "../authContext" ;
 import { useContext, useState, useEffect } from "react";
 import ToDoList from "../components/toDoList";
 
@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
-    const result = await fetch("http://127.0.0.1:5001/edusync-e6e17/us-central1/getCourses", {
+    const result = await fetch("https://getcourses-oh57fnnf2q-uc.a.run.app", {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         userid: auth.userID,
@@ -32,9 +32,9 @@ export default function DashboardPage() {
     const classes = await result.json();
     console.log("courses", classes);
 
-    let arr = [];
+    let arr:any = [];
     for (let i = 0; i < classes.length; i++) {
-      const newArr = classes[i].assignments.map((det) => {
+      const newArr = classes[i].assignments.map((det:any) => {
         return {
           date: new Date(det.grading.due),
           event: `${classes[i].courseName} ${det.name}`,
@@ -44,19 +44,6 @@ export default function DashboardPage() {
     }
     setCourses(arr);
   };
-
-  // INVOKE GETASSIGNMENT WHEN TOKEN AND ID UPDATES
-  // useEffect(() => {
-  //   console.log(auth.token);
-  //   if (!auth.token) {
-  //     console.log("invoked");
-  //     auth.getToken();
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   getAssignments();
-  // }, [auth.token, auth.userID]);
 
   useEffect(() => {
     console.log(auth.token);

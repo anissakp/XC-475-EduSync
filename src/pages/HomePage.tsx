@@ -6,7 +6,7 @@ export default function HomePage() {
 
   // ESTABLISHED CONNECTION WITH BB
   const handleConnectCLK = async () => {
-    const result = await fetch("http://127.0.0.1:5001/edusync-e6e17/us-central1/getConnection");
+    const result = await fetch("https://getconnection-oh57fnnf2q-uc.a.run.app");
     const htmlContent = await result.text();
     console.log("html", htmlContent);
     setHtmlContent(htmlContent);
