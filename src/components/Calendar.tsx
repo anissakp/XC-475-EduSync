@@ -68,7 +68,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
             }`}
             key={day.toString()}
           >
-            <span className="number">{formattedDate}</span>
+            <p className="number">{formattedDate}</p>
             <div className="events">
               {eventsForDay.map((event: any, index: any) => (
                 <div className="event" key={index}>
@@ -92,24 +92,35 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
 
   const dateFormat = "MMMM yyyy";
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
   ];
 
   return (
     <div className="calendar">
-      <div className="header">
-        <div className="label">{format(currentMonth, dateFormat)}</div>
-        <button onClick={prevMonth}>&lt;</button>
-        <button onClick={nextMonth}>&gt;</button>
+      <div className="calendar_header">
+        
+        <button className="chevronButton" onClick={prevMonth}>
+          <svg width="29" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6"/>
+          </svg>
+        </button>
+        <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
+        <button className="chevronButton" onClick={nextMonth}>
+          <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6"/>
+          </svg>
+        </button>
       </div>
 
-      <div className="days row">
+    <div className="inner_calendar_container">
+      <div className="wrapper">
+        <div className="days row day_of_week_name" >
         {days.map((day) => (
           <div className="column" key={day}>
             {day}
@@ -117,6 +128,8 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
         ))}
       </div>
       {renderCells()}
+      </div>
+    </div>
     </div>
   );
 };
