@@ -8,19 +8,6 @@ export default function DashboardPage() {
   const [courses, setCourses] = useState([]);
   const auth = useContext(AuthContext);
 
-  const testEndpoint = async () => {
-    const result = await fetch("http://localhost:8000/api/users/testendpoint", {
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-        userid: auth.userID,
-      },
-    });
-  };
-
-  const handleClick = () => {
-    testEndpoint();
-  };
-
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
     const result = await fetch("https://getcourses-oh57fnnf2q-uc.a.run.app", {
@@ -60,16 +47,15 @@ export default function DashboardPage() {
   return (
     <>
       <h1>Dashboard Page</h1>
-      <button onClick={handleClick}>Test</button>
-      <div className="container">
-        <Calendar courses={courses} />
-        <ToDoList courses={courses}/>
-      </div>
       <button>
           <NavLink to="/coursepage" className="App-link">
               Course Page
           </NavLink>
       </button>
+      <div className="container">
+        <Calendar courses={courses} />
+        <ToDoList courses={courses}/>
+      </div>
     </>
   );
 }
