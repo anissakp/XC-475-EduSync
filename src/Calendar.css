@@ -1,38 +1,51 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
-*{
+body {
     font-family: 'Quicksand';
 }
 
 .calendar {
-    margin: 50px auto;
-    padding: 20px;
-    width: 95%;
-    max-width: 600px;
+    margin: 0px 0px 0px 10px;
+    padding: 15px 20px 20px 20px;
+    border-radius: 20px;
+    /* width: 95%; */
+    /* was 600 **/
+    max-width: 1042px;
+    height: auto;
+    width: 65vw;
+    color: #353638;
+    background-color: #EBEDEC;
+    font-family: 'Quicksand';
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.calendar_header p,
+.calendar_header button {
+    display: inline-block;
+}
+
+.calendar_header {
+    height: auto;
+    padding: 20px;
 }
 
 .days {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0 ; 
+    padding-top: 30px;
+    padding-bottom: 40px;
 }
 
 .row {
     display: flex;
     justify-content: space-between;
-    gap:10px; 
+    gap: 10px;
 }
 
 .column {
     flex-basis: calc(100% / 7);
     text-align: center;
-    margin-right: 10px
+    margin-right: 10px;
+    font-size: 24px;
 }
 
 
@@ -43,27 +56,65 @@
 .cell {
     padding: 10px;
     cursor: pointer;
-    height: 75px
+    height: 120px
 }
 
-.header button {
-    margin-left: 10px;
+.chevronButton {
     padding: 5px 10px;
-    background-color: gray;
-    color: white;
+    background-color: transparent;
+    border: none;
+}
+
+.month_name {
+    /* flex-grow: 1; */
+    font-weight: bold;
+    font-size: 24px;
+    padding: 30px;
+    display: inline;
+}
+
+.day_of_week_name {
+    /** semibold **/
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.inner_calendar_container {
+    background-color: #FFFFFF;
+    height: auto;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.04);
+}
+
+.wrapper {
+    height: auto;
+    padding: 20px;
+}
+
+/* don't render events that are disabled */
+.disabled .event,
+.disabled .number {
+    opacity: 0%;
+}
+
+.number {
+    text-align: left;
+    margin: 0;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.event {
+    background-color: #A2D9D1;
+    font-size: 12px;
     border-radius: 5px;
-
-    display: flex;
-    gap: 10px; 
-    
-}
-
-.header .label {
-    flex-grow: 1;
-    text-align: center;
+    padding: 2px 6px 2px 6px;
 }
 
 
+/* large desktop display */
 
 
+/* mobile display */
 
