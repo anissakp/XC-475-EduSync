@@ -51,7 +51,6 @@ const getActualToken = async (code:any) => {
       }
     );
     const data = await response.json();
-    console.log("data", response);
     console.log("anotherdata", data);
     return data;
   } catch (error) {
