@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import AuthorizedPage from "./pages/AuthorizedPage";
 import CoursePage from "./pages/CoursePage";
+import GSLoginPage from "./pages/GSLoginPage";
 
 function App() {
   const [token, setToken] = useState("");
@@ -17,10 +18,12 @@ function App() {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
 
+      // const response = await fetch(
+      //   `https://gettoken-oh57fnnf2q-uc.a.run.app?code=${code}`
+      // );
+
       const response = await fetch(
-        // `http://localhost:8000/api/users/token?code=${code}`
-        // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getToken?code=${code}`
-        `https://gettoken-oh57fnnf2q-uc.a.run.app?code=${code}`
+        `http://127.0.0.1:5001/edusync-e6e17/us-central1/getToken?code=${code}`
       );
       const data = await response.json();
 
@@ -65,6 +68,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/gsLogin" element={<GSLoginPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursepage" element={<CoursePage />} />

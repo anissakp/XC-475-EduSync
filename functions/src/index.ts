@@ -15,7 +15,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const fetchAssignment = async (courseId: any, token:any) => {
   const data = await fetch(
-    `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/courses/${courseId}/gradebook/columns`,
+    `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/courses/${courseId}/gradebook/columns`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ const getActualToken = async (code:any) => {
     console.log("this is requestbody", requestBody);
 
     const response = await fetch(
-      `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/oauth2/token?code=${code}&redirect_uri=https://edusync-e6e17.web.app/dashboard`,
+      `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/oauth2/token?code=${code}&redirect_uri=http://localhost:5173/dashboard`,
       // `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/oauth2/token?code=${code}&redirect_uri=http://localhost:5173/dashboard`,
       {
         body: requestBody,
@@ -58,11 +58,12 @@ const getActualToken = async (code:any) => {
   }
 };
 
-export const getConnection = onRequest({cors: true}, async (req, res)=>{
+export const getConnection = onRequest( async (req, res)=>{
+  console.log("hello")
   try {
     // console.log("clientid", process.env.CLIENT_ID);
     const response = await fetch(
-      `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/oauth2/authorizationcode?redirect_uri=https://edusync-e6e17.web.app/dashboard&response_type=code&client_id=${process.env.CLIENT_ID}&scope=read&state=DC1067EE-63B9-40FE-A0AD-B9AC069BF4B0`,
+      `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/oauth2/authorizationcode?redirect_uri=http://localhost:5173/dashboard&response_type=code&client_id=${process.env.CLIENT_ID}&scope=read&state=DC1067EE-63B9-40FE-A0AD-B9AC069BF4B0`,
       // `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/oauth2/authorizationcode?redirect_uri=http://localhost:5173/dashboard&response_type=code&client_id=${process.env.CLIENT_ID}&scope=read&state=DC1067EE-63B9-40FE-A0AD-B9AC069BF4B0`,
       {
         headers: {
@@ -93,7 +94,7 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
   console.log("Inside get courses", token, userid);
 
   const classes = await fetch(
-    `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/users/uuid:${userid}/courses`,
+    `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/users/uuid:${userid}/courses`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -109,7 +110,7 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
     data.results.map(async (elem:any) => {
       console.log(elem.courseId);
       const idk = await fetch(
-        `https://ec2-3-87-255-160.compute-1.amazonaws.com/learn/api/public/v1/courses/${elem.courseId}`,
+        `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/courses/${elem.courseId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -128,4 +129,29 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
   ): [];
   console.log(finalList);
   res.send(finalList);
+});
+
+export const getGSConnection = onRequest( async (req, res)=>{
+  console.log("hello")
+  const { username, password } = req.body;
+  console.log("this is username and password", username, password)
+  try {
+    const result = await fetch('https://gs-flask-api-obsoqcj6da-uc.a.run.app/assignments', {
+      method: 'POST', // The HTTP method
+      headers: {
+        'Content-Type': 'application/json', // Set the content type header
+      },
+      body: JSON.stringify({
+        username: username, // The username in the request body
+        password: password // The password in the request body
+      }),
+    })
+
+    const data = await result.json()
+    console.log(data)
+  
+    res.send(data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 });
