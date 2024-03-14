@@ -57,6 +57,8 @@ function App() {
     ) {
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
+    }else{
+      getToken()
     }
   }, []);
 
