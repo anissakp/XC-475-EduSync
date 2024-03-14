@@ -38,7 +38,8 @@ export default function DashboardPage() {
 
   // FUNCTION: RETRIEVES DATA FROM GS
   const handleConnectWithGS = async () => {
-    const result = await fetch("http://127.0.0.1:5001/edusync-e6e17/us-central1/getGSConnection",{
+    const gsConnectionUrl = import.meta.env.VITE_GS_CONNECTION_URL;
+    const result = await fetch(gsConnectionUrl, {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json'
@@ -68,7 +69,8 @@ export default function DashboardPage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
-    const result = await fetch("http://127.0.0.1:5001/edusync-e6e17/us-central1/getCourses", {
+    const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
+    const result = await fetch(bbCoursesUrl, {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         userid: auth.userID,
