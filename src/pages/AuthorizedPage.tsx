@@ -9,8 +9,6 @@ export default function AuthorizedPage() {
 
   useEffect(() => {
     auth.getToken();
-
-    // navigate("/dashboard");
   }, []);
 
   return (

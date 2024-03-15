@@ -15,7 +15,8 @@ export default function CoursePage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
-    const result = await fetch("https://getcourses-oh57fnnf2q-uc.a.run.app", {
+    const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
+    const result = await fetch(bbCoursesUrl, {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         userid: auth.userID,

@@ -1,46 +1,53 @@
-import Calendar from "../components/Calendar";
-import { AuthContext } from "../authContext" ;
 import { useContext, useState, useEffect } from "react";
-import ToDoList from "../components/ToDoList";
 import {NavLink} from 'react-router-dom';
+import { AuthContext } from "../authContext" ;
+import Calendar from "../components/Calendar";
+import ToDoList from "../components/ToDoList";
+import CircularIndeterminate from "../components/CircularIndeterminate";
+import FormDialog from "../components/FormDialog";
+
 
 export default function DashboardPage() {
-  const [courses, setCourses] = useState([]);
+  // ACCESS AUTH CONTEXT
   const auth = useContext(AuthContext);
+
+  // SET INITIAL STATE
+  const [courses, setCourses] = useState<any[]>([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false)
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
-    const result = await fetch("https://getcourses-oh57fnnf2q-uc.a.run.app", {
+    const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
+    const result = await fetch(bbCoursesUrl, {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         userid: auth.userID,
       },
     });
-
+    
     const classes = await result.json();
-    console.log("courses", classes);
 
     let arr:any = [];
     for (let i = 0; i < classes.length; i++) {
       const newArr = classes[i].assignments.map((det:any) => {
+        console.log(det.grading.due)
         return {
           date: new Date(det.grading.due),
           event: `${classes[i].courseName} ${det.name}`,
         };
       });
-      arr = [...arr, ...newArr];
+      arr = [...courses, ...newArr];
     }
     setCourses(arr);
   };
 
+  // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
-    console.log(auth.token);
-    if (!auth.token) {
-      console.log("invoked");
-      auth.getToken();
-    } else {
+    if (auth.token) {
       getAssignments();
-    }
+    } 
   }, [auth.token, auth.userID]);
 
 
@@ -52,6 +59,8 @@ export default function DashboardPage() {
               Course Page
           </NavLink>
       </button>
+      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
+      {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
       <div className="container">
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
