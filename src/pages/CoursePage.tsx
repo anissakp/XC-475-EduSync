@@ -53,7 +53,13 @@ export default function CoursePage() {
 return (
     <>
       <h1> Course Page - CS 132 </h1>
-      
+
+      <div className="w-[480px] h-[291px] bg-gradient-to-b from-emerald-200 to-slate-400 rounded-[10px] border-t-8 border-gray-200"></div>
+
+      <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
+
       <h3> Assignments </h3>
       <table style={{ borderCollapse: 'separate', borderSpacing: '10px' }}>
         <thead>
