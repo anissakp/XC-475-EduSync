@@ -8,6 +8,7 @@ import FormDialog from "../components/FormDialog";
 
 
 import SideMenu from "../components/SideMenu";
+import SideMenuButton from "../components/SideMenuButton";
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -18,6 +19,15 @@ export default function DashboardPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
+  const [showMenu, setShowMenu] = useState(false);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const toggleMenu = () => {
+        setShowMenu(!showMenu);
+  };
+
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen(!isSideMenuOpen);
+  };
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async () => {
@@ -63,8 +73,10 @@ export default function DashboardPage() {
       </button>
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
       {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
+      <button style = {{height: "50px"}}onClick={toggleSideMenu}>Toggle side menu</button>
       <div className="container">
-        <SideMenu />
+        
+        {isSideMenuOpen && <SideMenu />}
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>
