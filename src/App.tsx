@@ -16,12 +16,12 @@ function App() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get("code");
+      const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
 
       const response = await fetch(
-        // `http://localhost:8000/api/users/token?code=${code}`
-        // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getToken?code=${code}`
-        `https://gettoken-oh57fnnf2q-uc.a.run.app?code=${code}`
+        `${bbTokenURL}?code=${code}`
       );
+
       const data = await response.json();
 
       setToken(data.access_token);
@@ -57,6 +57,8 @@ function App() {
     ) {
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
+    }else{
+      getToken()
     }
   }, []);
 

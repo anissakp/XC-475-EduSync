@@ -9,7 +9,8 @@ export default function HomePage() {
 
   // ESTABLISHED CONNECTION WITH BB
   const handleConnectCLK = async () => {
-    const result = await fetch("https://getconnection-oh57fnnf2q-uc.a.run.app");
+    const bbConnectionURL = import.meta.env.VITE_BB_CONNECTION_URL;
+    const result = await fetch(bbConnectionURL);
     const htmlContent = await result.text();
     console.log("html", htmlContent);
     setHtmlContent(htmlContent);
