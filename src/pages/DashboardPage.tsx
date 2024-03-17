@@ -4,6 +4,8 @@ import { useContext, useState, useEffect } from "react";
 import ToDoList from "../components/ToDoList";
 import {NavLink} from 'react-router-dom';
 
+import SideMenu from "../components/SideMenu";
+
 export default function DashboardPage() {
   const [courses, setCourses] = useState([]);
   const auth = useContext(AuthContext);
@@ -53,6 +55,7 @@ export default function DashboardPage() {
           </NavLink>
       </button>
       <div className="container">
+        <SideMenu />
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>

@@ -118,3 +118,25 @@ body {
 
 /* mobile display */
 
+
+/* SideMenu.css */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Move off-screen initially */
+    width: 300px;
+    height: 100vh;
+    background-color: white;
+    transition: left 0.3s ease;
+  }
+  
+  .side-menu.open {
+    left: 0; /* Slide in when open */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  

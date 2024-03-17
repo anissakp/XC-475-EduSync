@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import SideMenu from "../components/SideMenu";
 
 
 
@@ -24,7 +25,7 @@ export default function HomePage() {
             <h1>Home</h1>
             <button onClick={handleConnectCLK}>Connect with Blackboard</button>
    
-           
+            <SideMenu/>
           </>
         )}
       </div>
