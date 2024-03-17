@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import AuthorizedPage from "./pages/AuthorizedPage";
 import CoursePage from "./pages/CoursePage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const [token, setToken] = useState("");
@@ -70,6 +71,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursepage" element={<CoursePage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
