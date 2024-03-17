@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button {
+    @apply h-10 px-5 py-2.5 bg-orange-200 rounded-[17px] justify-center items-center gap-2.5 inline-flex;
+  }
+  
+  button > div {
+    @apply text-neutral-700 text-base font-normal;
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  h1 {
+    @apply text-4xl; 
+  }
