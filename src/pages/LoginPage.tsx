@@ -5,33 +5,33 @@ import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import { app } from "../firebase";
 
-export default function LoginPage() { 
-    useEffect( () => {
-        const ui = 
-            firebaseui.auth.AuthUI.getInstance() ||
-            new firebaseui.auth.AuthUI(getAuth(app));
+export default function LoginPage() {
+    useEffect(() => {
+        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(getAuth(app));
         
-        ui.start("#firebaseui-auth-container", {
-            signInSuccessUrl: "/",
+        ui.start('#firebaseui-auth-container', {
+            // popup instead of redirect
+            signInFlow: 'popup', 
+            signInSuccessUrl: '/',
             signInOptions: [
-                //google login
                 {
+                    //google login
                     provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                    clientId: "1018973533872-qnj9q2sdku9o1fq10rhq55qae790eloq.apps.googleusercontent.com",
                 },
-                //email login 
                 {
+                    //email login
                     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                },
+                }
             ],
-            // for google one tap sign in
+            //google one tap sign in
             credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
         });
     }, []);
+
     return (
-    <>
-        <h1>Login</h1>
-        <div id="firebaseui-auth-container"></div>
-    </>
+        <>
+            <h1>Login</h1>
+            <div id="firebaseui-auth-container"></div>
+        </>
     );
 }

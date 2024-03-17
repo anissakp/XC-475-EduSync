@@ -20,6 +20,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
+      console.log("home is this called");
       console.log(user);
       // redirect to login page if not already logged in
       if (!user) {
