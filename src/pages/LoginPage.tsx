@@ -4,9 +4,6 @@ import firebase from "firebase/compat/app";
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import { app } from "../firebase";
-import { Link } from 'react-router-dom';
-
-//*************************** CHECK VIDEO FOR IF CLIENT ID */
 
 export default function LoginPage() { 
     useEffect( () => {
