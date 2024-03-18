@@ -3,6 +3,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { app } from "../firebase";
 
+import SideMenu from "../components/SideMenu";
+
+
+
 export default function HomePage() {
   const [htmlContent, setHtmlContent] = useState("");
   const[user, setUser] = useState(false);
@@ -49,6 +53,7 @@ export default function HomePage() {
           <>
             <h1>Home</h1>
             <button onClick={handleConnectCLK}>Connect with Blackboard</button>
+  
           </>
         )}
       </div>
