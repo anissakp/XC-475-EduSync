@@ -12,7 +12,7 @@ export default function LoginPage() {
         ui.start('#firebaseui-auth-container', {
             // popup instead of redirect
             signInFlow: 'popup', 
-            signInSuccessUrl: '/',
+            signInSuccessUrl: '/homepage',
             signInOptions: [
                 {
                     //google login

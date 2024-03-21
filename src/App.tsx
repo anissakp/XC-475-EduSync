@@ -69,7 +69,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/homepage" element={<HomePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursepage" element={<CoursePage />} />
