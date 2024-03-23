@@ -7,6 +7,31 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        wiggle1: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        wiggle2: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        wiggle3: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        wiggle4: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+      },
+      animation: {
+        wiggle1: 'wiggle1 2s ease-in-out infinite',
+        wiggle2: 'wiggle2 2.5s ease-in-out infinite',
+        wiggle3: 'wiggle3 3s ease-in-out infinite',
+        wiggle4: 'wiggle4 3.5s ease-in-out infinite',
+      },
+
       width: {
         '300': '300px',
         '400': '400px',
@@ -19,7 +44,9 @@ module.exports = {
         "custom-gray": "#EBEDEC",
         "custom-black": "#1E1E26",
         "custom-gray2": "#D5D2DD",
-        "custom-blue2": "#A2D9D1"
+        "custom-blue2": "#A2D9D1",
+        "customStart": 'rgba(162, 217, 209, 1)',
+        "customEnd": 'rgba(110, 176, 182, 1)',
         
       },
     },
