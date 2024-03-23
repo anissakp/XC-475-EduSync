@@ -67,6 +67,7 @@ export default function LoginPage() {
             <div className="absolute top-[100px] right-[450px] w-[500px] h-[375px] bg-[#F7E2B3] opacity-84 shadow-[10px_10px_20px_#000000] blur-[113.60px]"></div>
             <div className="absolute bottom-[100px] left-[450px] w-[300px] h-[350px] bg-[#6EB0B6] opacity-58 shadow-[10px_10px_20px_#000000] blur-[84.50px]"></div>
 
+
             <footer className="fixed bottom-0 w-[1440px] h-[60px] bg-gradient-to-t from-[#6EB0B6] to-[#A2D9D1]">
                 <div className="text-center text-neutral-700 text-sm font-normal font-['Quicksand'] mt-5">©2024 All rights reserved to EduSync Team</div>
             </footer>
