@@ -16,7 +16,7 @@ export default function LoginPage() {
         ui.start('#firebase-slay-button', {
             // popup instead of redirect
             signInFlow: 'popup', 
-            signInSuccessUrl: '/',
+            signInSuccessUrl: '/homepage',
             signInOptions: [
                 {
                     //google login
