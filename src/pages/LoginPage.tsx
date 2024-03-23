@@ -5,11 +5,9 @@ import * as firebaseui from "firebaseui";
 // import "firebaseui/dist/firebaseui.css";
 import "../custom-firebaseui.css";
 
-
 import { app } from "../firebase";
 
 import logo from '../assets/edusync-logo.png';
-
 
 export default function LoginPage() {
     useEffect(() => {
