@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  background-color:  #EBEDEC
+}
+
 button {
     @apply h-10 px-5 py-2.5 bg-orange-200 rounded-[17px] justify-center items-center gap-2.5 inline-flex;
   }
