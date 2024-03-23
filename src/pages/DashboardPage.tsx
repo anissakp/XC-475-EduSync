@@ -16,6 +16,7 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
+  const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
@@ -40,6 +41,8 @@ export default function DashboardPage() {
     });
     
     const classes = await result.json();
+    const className = classes.map((elem:any)=>elem.courseName)
+    setClassNameList(className)
 
     let arr:any = [];
     for (let i = 0; i < classes.length; i++) {
@@ -50,7 +53,7 @@ export default function DashboardPage() {
           event: `${classes[i].courseName} ${det.name}`,
         };
       });
-      arr = [...courses, ...newArr];
+      arr = [...arr, ...newArr];
     }
     setCourses(arr);
   };
@@ -76,7 +79,7 @@ export default function DashboardPage() {
       <button style = {{height: "50px"}}onClick={toggleSideMenu}>Toggle side menu</button>
       <div className="container">
         
-        {isSideMenuOpen && <SideMenu />}
+        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>
