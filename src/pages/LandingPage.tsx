@@ -19,7 +19,7 @@ import hat from "../assets/hat.png"
 export default function LandingPage() {
   return (
     <>
-      <Header/>
+      <Header buttonText="LOGIN" buttonLink="/login"/>
       <div className="flex flex-col md:flex-row justify-center items-center px-11 gap-6 mt-10">
         <div className="relative flex-shrink-0">
           <img className="animate-wiggle1 relative z-10 w-300 sm:w-300 md:w-400 lg:w-500 xl:w-600"  src={thinkingSyd} alt="Logo" />
