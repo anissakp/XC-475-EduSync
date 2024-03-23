@@ -1,4 +1,3 @@
-
 /* List styling for buttons*/
 .firebaseui-list-item {
     margin-bottom: 20px; /* Add space between list items */
@@ -7,7 +6,6 @@
     flex-direction: column; /* Arrange items in a column */
     align-items: center; /* Center items horizontally */
 }
-
 
 /* SIGN IN WITH GOOGLE BUTTON */
 /* Restyle the Google sign-in button */
@@ -65,7 +63,6 @@
     align-items: center;
 }
 
-
 /* The sign in with email prompt*/
 .mdl-card.firebaseui-container {
     margin-top: -30px; /* Center the card horizontally */
@@ -103,9 +100,9 @@
 }
 
 /* THE EMAIL AND INPUT BOX */
-
+/* Style the buttons */
 .firebaseui-form-actions {
-    text-align: center; /* Center the buttons */
+    text-align: center; 
 }
 
 /* Style the label */
@@ -130,14 +127,12 @@
     background-color: transparent;
 }
 
-
 .mdl-textfield__input.firebaseui-input.firebaseui-id-email:focus + .mdl-textfield__label.firebaseui-label,
 .mdl-textfield__input.firebaseui-input.firebaseui-id-email:not(:placeholder-shown) + .mdl-textfield__label.firebaseui-label {
     top: -8px; /* Move the label above the input */
     font-size: 12px; /* Reduce the font size */
     color: red; /* Change the label color */
 }
-
 
 /* WHEN YOU CLICK ON NEXT WITHOUT ENTERING AN EMAIL */
 /* Style the input */
