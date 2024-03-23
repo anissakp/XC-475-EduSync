@@ -1,4 +1,6 @@
 import React from 'react'
+
+//IMPORT IMAGES
 import thinkingSyd from "../assets/thinkingSyd.png"
 import studyingSyd from "../assets/studyingSyd.png"
 import Header from '../components/Header'
