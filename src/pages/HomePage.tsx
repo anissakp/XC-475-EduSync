@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { app } from "../firebase";
+import { app, db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import SideMenu from "../components/SideMenu";
 
@@ -23,20 +24,34 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
-      console.log("home is this called");
+    const unsubscribe = onAuthStateChanged(getAuth(app), async (user) => {
       console.log(user);
       // redirect to login page if not already logged in
       if (!user) {
         navigate("/login");
       }
-      setUser(!!user);
+      else {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const docSnapshot = await getDoc(userRef);
+          // if userID isn't in database already, we add a new user document
+          if (!docSnapshot.exists()) {
+            await setDoc(userRef, {
+              email: user.email, 
+              name: user.displayName || "-",
+            });
+            setUser(!!user);
+          }
+        } catch (error) {
+          console.error("Error adding user to Firestore", error);
+        }
+      }
     });
     
     return () => {
       unsubscribe();
     };
-  }, [user, setUser, navigate]);
+  }, [navigate, user, setUser]);
 
   function handleClickSignOut() {
     const auth = getAuth(app);
