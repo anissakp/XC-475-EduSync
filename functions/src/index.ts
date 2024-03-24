@@ -102,7 +102,7 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
   const finalList = data.results ? await Promise.all(
     data.results.map(async (elem:any) => {
       const idk = await fetch(
-        `https://ec2-54-90-80-111.compute-1.amazonaws.com/learn/api/public/v1/courses/${elem.courseId}`,
+        `${process.env.BB_BASE_URL}/learn/api/public/v1/courses/${elem.courseId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
