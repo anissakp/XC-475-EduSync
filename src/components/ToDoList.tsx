@@ -54,7 +54,7 @@ const ToDoList: React.FC<Props> = ({ courses }:Props) => {
         setShowInput(false);
       };
     return (
-        <div id = "toDoList">
+        <div id = "toDoList" className='ml-[40px]'>
             <div id = "header">
                 <p className='text'>Tasks</p> 
                 

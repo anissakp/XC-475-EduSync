@@ -1,0 +1,185 @@
+.nav {
+  height: 117px;
+  width: 1440px;
+  position: relative;
+  background-color: var(--light-gray);
+  display: none;
+  max-width: 100%;
+}
+.mainLogoHd1Icon {
+  height: 83px;
+  width: 238px;
+  position: relative;
+  object-fit: cover;
+  z-index: 1;
+}
+.meetTheTeam {
+  align-self: stretch;
+  position: relative;
+  display: inline-block;
+  min-width: 108px;
+  white-space: nowrap;
+  z-index: 1;
+}
+.meetTheTeamWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-2xs) 0 0;
+}
+.aboutUs {
+  align-self: stretch;
+  position: relative;
+  display: inline-block;
+  min-width: 66px;
+  white-space: nowrap;
+  z-index: 1;
+}
+.aboutUsWrapper {
+  width: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-2xs) 0 0;
+  box-sizing: border-box;
+}
+.maskedIcon {
+  height: 22px;
+  width: 18px;
+  position: relative;
+  display: none;
+}
+.button1 {
+  position: relative;
+  letter-spacing: 0.46px;
+  line-height: 26px;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 45px;
+}
+.maskedIcon1 {
+  height: 22px;
+  width: 18px;
+  position: relative;
+  display: none;
+}
+.base {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-5xs);
+}
+.button,
+.buttonHome {
+  flex-direction: column;
+}
+.button {
+  border-radius: var(--boundvariablesdata);
+  background-color: var(--primary-main);
+  box-shadow: var(--elevation-2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-5xs) var(--padding-3xl);
+}
+.buttonHome {
+  z-index: 1;
+  text-align: left;
+  font-size: var(--button-large-size);
+  color: var(--primary-contrast);
+}
+.buttonHome,
+.frameParent,
+.navBarInner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameParent {
+  align-self: stretch;
+  flex-direction: row;
+  gap: var(--gap-14xl);
+}
+.navBarInner {
+  width: 329px;
+  flex-direction: column;
+  padding: var(--padding-xl) 0 0;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.logingButtonChild {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 69px);
+  border-radius: var(--br-60xl);
+  width: 138px;
+  height: 41px;
+  object-fit: cover;
+}
+.login {
+  position: absolute;
+  top: 9px;
+  left: calc(50% - 43px);
+  display: inline-block;
+  width: 85px;
+  height: 30px;
+}
+.logingButton {
+  height: 41px;
+  width: 138px;
+  position: relative;
+  display: none;
+  cursor: pointer;
+  color: var(--dark-gray);
+}
+.navBar {
+  align-self: stretch;
+  height: 117px;
+  background-color: var(--light-gray);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--padding-mid) var(--padding-67xl) var(--padding-mid)
+    var(--padding-56xl);
+  box-sizing: border-box;
+  top: 0;
+  z-index: 99;
+  position: sticky;
+  max-width: 100%;
+  gap: var(--gap-xl);
+  text-align: center;
+  font-size: var(--typography-body1-size);
+  color: var(--color-black);
+  font-family: var(--typography-body1);
+}
+@media screen and (max-width: 750px) {
+  .navBar {
+    padding-left: var(--padding-18xl);
+    padding-right: var(--padding-24xl);
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 675px) {
+  .frameParent {
+    display: none;
+  }
+  .navBarInner {
+    width: 0;
+  }
+}
+@media screen and (max-width: 450px) {
+  .frameParent {
+    gap: 33px 16px;
+  }
+  .navBar {
+    padding-right: var(--padding-xl);
+    box-sizing: border-box;
+  }
+}

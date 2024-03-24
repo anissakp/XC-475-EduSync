@@ -17,7 +17,7 @@ export default function SideMenu() {
 
 
     return (
-        <div style={{ height: "1024px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div className="absolute top-20 left-0 h-full bg-white z-10" style={{ height: "1024px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img style={{ marginBottom: '16px' }} src="mainLogo.png" alt="Logo"></img>
             <input style={{ width: '224px', height: '24px', borderColor: '#d9d9d9', borderStyle: 'solid', outline: 'none', paddingLeft: '12px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px', borderRadius: '4px', fontFamily: 'quicksand' }} placeholder="Placeholder"></input>
          

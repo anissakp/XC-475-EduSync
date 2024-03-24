@@ -40,48 +40,50 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
     const monthEnd = endOfMonth(monthStart);
     const startDate = startOfWeek(monthStart);
     const endDate = endOfWeek(monthEnd);
-
+  
     const dateFormat = "d";
     const rows = [];
-
+  
     let days = [];
     let day = startDate;
     let formattedDate = "";
-
+  
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-        formattedDate = format(day, dateFormat);
-        const cloneDay = day;
-
-        const eventsForDay = courses.filter((event:any) =>
-          isSameDay(event.date, cloneDay)
-        );
-
-        days.push(
-          <div
-            className={`column cell ${
-              !isSameMonth(day, monthStart)
-                ? "disabled"
-                : isSameDay(day, new Date())
-                ? "selected"
-                : ""
-            }`}
+        
+          formattedDate = format(day, dateFormat);
+          const cloneDay = day;
+  
+          const eventsForDay = courses.filter((event) =>
+            isSameDay(event.date, cloneDay)
+          );
+  
+          days.push(
+            <div
+            className={`column cell ${!isSameMonth(day, monthStart) ? "text-gray-300 " : isSameDay(day, new Date()) ? "selected " : ""} ${i > 0 ? 'border-l-2' : ''} `}
             key={day.toString()}
           >
-            <p className="number">{formattedDate}</p>
-            <div className="events">
-              {eventsForDay.map((event: any, index: any) => (
-                <div className="event" key={index}>
-                  {event.event}
-                </div>
-              ))}
+
+              <p className="number">{formattedDate}</p>
+              <div className="events">
+                {eventsForDay.map((event: any, index: any) => (
+                  <div className="event" key={index}>
+                    {event.event}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        );
+          );
+        
         day = addDays(day, 1);
       }
+
+      const isFirstRow = rows.length === 0;
       rows.push(
-        <div className="row" key={day.toString()}>
+        <div
+        className={`flex justify-between ${day > endDate ? 'hidden' : ''} ${isFirstRow ? '' : 'border-t-2'}`}
+        key={day.toString()}
+      >
           {days}
         </div>
       );
@@ -89,6 +91,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
     }
     return <div className="body">{rows}</div>;
   };
+  
 
   const dateFormat = "MMMM yyyy";
   const days = [
@@ -102,7 +105,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
   ];
 
   return (
-    <div className="calendar">
+    <div className="w-[1042px] h-[879px] bg-[#EBEDEC] ml-[60px] rounded-[20px]">
       <div className="calendar_header">
         
         <button className="chevronButton" onClick={prevMonth}>
@@ -118,7 +121,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
         </button>
       </div>
 
-    <div className="inner_calendar_container">
+    <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px]  ">
       <div className="wrapper">
         <div className="days row day_of_week_name" >
         {days.map((day) => (

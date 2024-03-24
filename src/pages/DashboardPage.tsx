@@ -5,6 +5,7 @@ import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import FormDialog from "../components/FormDialog";
+import DashBoardHeader from "../components/DashboardHeader";
 
 
 import SideMenu from "../components/SideMenu";
@@ -19,11 +20,8 @@ export default function DashboardPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
-  const [showMenu, setShowMenu] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const toggleMenu = () => {
-        setShowMenu(!showMenu);
-  };
+ 
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -64,8 +62,9 @@ export default function DashboardPage() {
 
 
   return (
-    <>
-      <h1>Dashboard Page</h1>
+    <div>
+      <DashBoardHeader onClick={toggleSideMenu}/>
+
       <button>
           <NavLink to="/coursepage" className="App-link">
               Course Page
@@ -73,13 +72,12 @@ export default function DashboardPage() {
       </button>
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
       {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
-      <button style = {{height: "50px"}}onClick={toggleSideMenu}>Toggle side menu</button>
-      <div className="container">
-        
+      
+      <div className="flex ">
         {isSideMenuOpen && <SideMenu />}
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>
-    </>
+    </div>
   );
 }

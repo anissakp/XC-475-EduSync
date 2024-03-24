@@ -55,7 +55,8 @@ body {
 .cell {
     padding: 10px;
     cursor: pointer;
-    height: 120px
+    height: 120px; 
+    
 }
 
 .chevronButton {
