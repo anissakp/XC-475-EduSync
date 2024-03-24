@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { app } from "../firebase";
 
 import SideMenu from "../components/SideMenu";
+import SyncToOtherSitesPage from "./SyncToOtherSitesPage";
+import ToDoList from "../components/ToDoList";
 
 
 

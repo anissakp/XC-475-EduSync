@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as StarIcon } from '../assets/StarSharp.svg'
-
+import { useNavigate } from "react-router-dom";
 
 
 type DropdownProps = {
@@ -27,19 +27,18 @@ function Dropdown({
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
     const toggleDropdown = () => setIsOpen(!isOpen);
-
+    const navigate = useNavigate() ; 
     const handleOptionClick = (option: string) => {
         setSelectedOption(option);
         setIsOpen(false);
         onSelect(option);
+        console.log("it reached here") 
+        
+        navigate('/coursepage')
     };
 
     let buttonText;
-    if (selectedOption) {
-        buttonText = selectedOption;
-    } else {
-        buttonText = name;
-    }
+    buttonText = name 
 
     return (
         <div style={containerStyle}>

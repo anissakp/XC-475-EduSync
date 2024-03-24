@@ -5,6 +5,7 @@ import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import FormDialog from "../components/FormDialog";
+import DashBoardHeader from "../components/DashboardHeader";
 
 
 import SideMenu from "../components/SideMenu";
@@ -20,11 +21,8 @@ export default function DashboardPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
-  const [showMenu, setShowMenu] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const toggleMenu = () => {
-        setShowMenu(!showMenu);
-  };
+ 
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -67,22 +65,18 @@ export default function DashboardPage() {
 
 
   return (
-    <>
-      <h1>Dashboard Page</h1>
-      <button>
-          <NavLink to="/coursepage" className="App-link">
-              Course Page
-          </NavLink>
-      </button>
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
-      <button style = {{height: "50px"}}onClick={toggleSideMenu}>Toggle side menu</button>
-      <div className="container">
-        
-        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
+      <DashBoardHeader onClick={toggleSideMenu}/>
+      {/*
+      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
+      */}
+      <div className="flex mt-[30px]">
+        {isSideMenuOpen && <SideMenu />}
+
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>
-    </>
+    </div>
   );
 }
