@@ -62,18 +62,13 @@ export default function DashboardPage() {
 
 
   return (
-    <div>
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
       <DashBoardHeader onClick={toggleSideMenu}/>
-
-      <button>
-          <NavLink to="/coursepage" className="App-link">
-              Course Page
-          </NavLink>
-      </button>
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
-      
-      <div className="flex ">
+      {/*
+      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
+      */}
+      <div className="flex mt-[30px]">
         {isSideMenuOpen && <SideMenu />}
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>

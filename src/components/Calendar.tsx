@@ -81,7 +81,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
-        className={`flex justify-between ${day > endDate ? 'hidden' : ''} ${isFirstRow ? '' : 'border-t-2'}`}
+        className={`flex justify-between ${day > endDate && rows.length > 4 ? 'hidden' : ''} ${isFirstRow ? '' : 'border-t-2'}`}
         key={day.toString()}
       >
           {days}
