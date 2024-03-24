@@ -4,8 +4,12 @@ import Dropdown from './DropDown';
 interface SideMenuProps {
     toggleMenu: () => void;
 }
+  
+interface Props {
+    classNameList: string[];
+}
 
-export default function SideMenu() {
+const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
     const calendarViews = ["Daily View", "Weekly View", "Monthly View", "Yearly View"];
     const listOfClasses = ["option 1", "option 2", "option 3"];
 
@@ -13,16 +17,13 @@ export default function SideMenu() {
         console.log("this has been selected");
     };
 
-
-
-
     return (
-        <div style={{ height: "1024px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div className="absolute top-20 left-0 h-full bg-white z-10" style={{ height: "1024px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img style={{ marginBottom: '16px' }} src="mainLogo.png" alt="Logo"></img>
             <input style={{ width: '224px', height: '24px', borderColor: '#d9d9d9', borderStyle: 'solid', outline: 'none', paddingLeft: '12px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px', borderRadius: '4px', fontFamily: 'quicksand' }} placeholder="Placeholder"></input>
          
                 <div>
-                    <Dropdown name="Classes" options={listOfClasses} onSelect={handleSelect}
+                    <Dropdown name="Classes" options={classNameList} onSelect={handleSelect}
                         containerStyle={{ width: "240px", marginTop: '24px' }}
                         buttonStyle={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                         listStyle={{ listStyle: 'none' }}
@@ -43,3 +44,5 @@ export default function SideMenu() {
         </div>
     );
 }
+
+export default SideMenu

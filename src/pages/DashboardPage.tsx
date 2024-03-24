@@ -8,6 +8,7 @@ import FormDialog from "../components/FormDialog";
 import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import DashBoardHeader from "../components/DashboardHeader";
 
 
 import SideMenu from "../components/SideMenu";
@@ -21,14 +22,12 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
+  const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
-  const [showMenu, setShowMenu] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const toggleMenu = () => {
-        setShowMenu(!showMenu);
-  };
+ 
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -45,6 +44,8 @@ export default function DashboardPage() {
     });
     
     const classes = await result.json();
+    const className = classes.map((elem:any)=>elem.courseName)
+    setClassNameList(className)
 
     let arr:any = [];
     for (let i = 0; i < classes.length; i++) {
@@ -55,7 +56,7 @@ export default function DashboardPage() {
           event: `${classes[i].courseName} ${det.name}`,
         };
       });
-      arr = [...courses, ...newArr];
+      arr = [...arr, ...newArr];
     }
     setCourses(arr);
 
@@ -99,22 +100,18 @@ export default function DashboardPage() {
   };
 
   return (
-    <>
-      <h1>Dashboard Page</h1>
-      <button>
-          <NavLink to="/coursepage" className="App-link">
-              Course Page
-          </NavLink>
-      </button>
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} */}
-      <button style = {{height: "50px"}}onClick={toggleSideMenu}>Toggle side menu</button>
-      <div className="container">
-        
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
+      <DashBoardHeader onClick={toggleSideMenu}/>
+      {/*
+      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
+      */}
+      <div className="flex mt-[30px]">
         {isSideMenuOpen && <SideMenu />}
+
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
       </div>
-    </>
+    </div>
   );
 }

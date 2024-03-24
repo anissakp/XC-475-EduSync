@@ -1,9 +1,17 @@
-import React from "react";
+// DashboardHeader.tsx
+import React, { useState } from "react";
+import SideMenuButton from "./SideMenuButton";
 
-export default function DashBoardHeader () {
+
+interface DashboardHeaderProps {
+    onClick: () => void;
+}
+export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
+
     return (
-        <div>
-            
+        <div className="bg-[#EBEDEC] h-[90px] flex pl-[23px]">
+            <SideMenuButton onClick={onClick} />
+            <p className="ml-[52px] font-bold text-[32px] mt-[20px]">Calendar</p>
         </div>
-    )
+    );
 }
