@@ -2,7 +2,6 @@
 import edusyncLogo from "../assets/edusyncLogo.png"
 export default function Footer() {
   return (
-    
 
 <footer className="bg-gradient-to-r from-customStart to-customEnd shadow dark:bg-gray-900 mt-32">
     <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
@@ -26,7 +25,7 @@ export default function Footer() {
             </ul>
         </div>
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span className="block text-sm text-black-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" className="hover:underline">EduSync™</a>. All Rights Reserved.</span>
+        <span className="block text-sm text-black-500 sm:text-center dark:text-gray-400">© 2024 <a href="https://flowbite.com/" className="hover:underline">EduSync™</a>. All Rights Reserved.</span>
     </div>
 </footer>
 
