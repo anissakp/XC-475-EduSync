@@ -16,7 +16,7 @@ export default function LoginPage() {
         ui.start('#firebase-button', {
             // popup instead of redirect
             signInFlow: 'popup', 
-            signInSuccessUrl: '/homepage',
+            signInSuccessUrl: '/connect',
             signInOptions: [
                 {
                     //google login

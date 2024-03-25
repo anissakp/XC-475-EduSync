@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { app } from "../firebase";
+import Header from '../components/Header';
+import connectBlob from "../assets/connectBlob.png"
+import blackboardLogo from "../assets/blackboardLogo.png"
 
 import SideMenu from "../components/SideMenu";
-import SyncToOtherSitesPage from "./SyncToOtherSitesPage";
 import ToDoList from "../components/ToDoList";
 
-
-
-export default function HomePage() {
+export default function ConnectPage() {
   const [htmlContent, setHtmlContent] = useState("");
   const[user, setUser] = useState(false);
 
@@ -49,17 +49,34 @@ export default function HomePage() {
     return (
     <>
       <div>
-        {(htmlContent && (
-          <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-        )) || (
-          <>
-            <h1>Home</h1>
-            <button onClick={handleConnectCLK}>Connect with Blackboard</button>
-  
-          </>
-        )}
+        {/* header component */}
+        <Header buttonText="HOME" buttonLink="/"/>
+
+        <div className="relative mx-auto flex justify-center">
+        <img className="animate-wiggle1" src={connectBlob} alt="connectblob"/>
+        <div className="absolute flex flex-col justify-center items-center w-full h-full">
+          <div className="mt-[-250px] text-black text-[34px] font-normal font-['Quicksand'] tracking-tight pb-6">
+            Sync To:
+          </div>
+
+          {(htmlContent && (
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+          )) || (
+            <>
+              
+              <button className="bg-white flex items-center" onClick={handleConnectCLK}>
+                <img src={blackboardLogo} alt="blackboardlogo" className="w-8 h-8 mr-[-4px]"/>
+                Blackboard
+              </button>
+            </>
+          )}
+
+        </div>
       </div>
-      <button onClick={handleClickSignOut}>Sign out</button>
+
+      {/* <button onClick={handleClickSignOut}>Sign out</button> */}
+      </div>
+
     </>
   );
 }
