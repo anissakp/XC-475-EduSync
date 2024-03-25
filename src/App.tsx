@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./authContext";
 
 import DashboardPage from "./pages/DashboardPage";
-import HomePage from "./pages/HomePage";
+import ConnectPage from "./pages/ConnectPage";
 import AuthorizedPage from "./pages/AuthorizedPage";
 import CoursePage from "./pages/CoursePage";
 import LoginPage from "./pages/LoginPage";
@@ -69,7 +69,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/connect" element={<ConnectPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursepage" element={<CoursePage />} />
