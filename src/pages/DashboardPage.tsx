@@ -72,7 +72,7 @@ export default function DashboardPage() {
       {/* {loading ? <CircularIndeterminate/> : <div></div>} }
       */}
       <div className="flex mt-[30px]">
-        {isSideMenuOpen && <SideMenu />}
+        {isSideMenuOpen && <SideMenu classNameList={[]} />}
 
         <Calendar courses={courses} />
         <ToDoList courses={courses}/>
