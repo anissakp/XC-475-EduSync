@@ -5,11 +5,16 @@ import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import FormDialog from "../components/FormDialog";
+import { doc, setDoc } from "firebase/firestore";
+import { app, db } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 
 
 import SideMenu from "../components/SideMenu";
 import SideMenuButton from "../components/SideMenuButton";
+
+
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -29,7 +34,7 @@ export default function DashboardPage() {
   };
 
   // RETRIEVE ASSIGNMENT FROM BB API
-  const getAssignments = async () => {
+  const getAssignments = async (userId: string) => {
     const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
     const result = await fetch(bbCoursesUrl, {
       headers: {
@@ -54,15 +59,45 @@ export default function DashboardPage() {
       arr = [...arr, ...newArr];
     }
     setCourses(arr);
+
+    // puts assignments into database
+    await saveAssignmentsToFirestore(userId, classes);
   };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
     if (auth.token) {
-      getAssignments();
+      const auth = getAuth(app);
+      onAuthStateChanged(auth, (user) => {
+        // check if user signed in through auth already
+        if (user) {
+          getAssignments(user.uid);
+        }
+      });
     } 
   }, [auth.token, auth.userID]);
 
+
+  // function to save assignments to database, userID is from Firebase Auth
+  const saveAssignmentsToFirestore = async (userID: string, classes: any) => {
+    const userDocRef = doc(db, 'users', userID); // Reference to the user's document in Firestore
+
+    for (const classInfo of classes) {
+      for (const assignment of classInfo.assignments) {
+        // index is assignment ID from blackboard
+        const assignmentId = assignment.id;
+        const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
+        const assignmentData = {
+          name: assignment.name,
+          dueDate: new Date(assignment.grading.due),
+          courseName: classInfo.courseName,
+        };
+
+        // assignment document saved in user's assignments subcollection
+        await setDoc(assignmentDocRef, assignmentData);
+      }
+    }
+  };
 
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
