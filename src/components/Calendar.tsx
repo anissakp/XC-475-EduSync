@@ -61,9 +61,8 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
   
         days.push(
           <div
-            className={`column cell ${!isSameMonth(day, monthStart) ? "" : isSameDay(day, new Date()) ? "text-red-400" : ""} ${i > 0 ? 'border-l-2' : ''} `}
+            className={`column cell ${!isSameMonth(day, monthStart) ? "text-gray-400" : isSameDay(day, new Date()) ? "text-red-400" : ""} ${i > 0 ? 'border-l-2' : ''}`}
             key={day.toString()}
-            style={isSameDay(day, new Date()) ? { } : {}}
           >
             <p className="number">{formattedDate}</p>
             <div className="events">
@@ -77,7 +76,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
         );
         day = addDays(day, 1);
       }
-
+  
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
@@ -91,6 +90,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
     }
     return <div className="body">{rows}</div>;
   };
+  
 
   const dateFormat = "MMMM yyyy";
   const days = [
