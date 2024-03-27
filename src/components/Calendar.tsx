@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import CalendarViewSwitcher from './CalendarViewSwitcher';
+
 import "../calendar.css";
 import {
   format,
@@ -105,23 +107,31 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
   ];
 
   return (
-    <div className="w-[1042px] h-[879px] bg-[#EBEDEC] ml-[60px] rounded-[20px]">
-      <div className="calendar_header">
+    <div className="w-[1042px] h-[879px] bg-[#EBEDEC] ml-[20px] rounded-[20px] ">
+
+      <div className="calendar_header flex justify-between items-center">
+        <div>
+          <button className="chevronButton" onClick={prevMonth}>
+            <svg width="29" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6"/>
+            </svg>
+          </button>
+          <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
+          <button className="chevronButton" onClick={nextMonth}>
+            <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6"/>
+            </svg>
+          </button>
+        </div>
+
         
-        <button className="chevronButton" onClick={prevMonth}>
-          <svg width="29" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6"/>
-          </svg>
-        </button>
-        <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
-        <button className="chevronButton" onClick={nextMonth}>
-          <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6"/>
-          </svg>
-        </button>
+        <div>
+          <CalendarViewSwitcher />
+        </div>
+
       </div>
 
-    <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px]  ">
+    <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
       <div className="wrapper">
         <div className="days row day_of_week_name" >
         {days.map((day) => (

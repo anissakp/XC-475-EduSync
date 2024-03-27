@@ -100,17 +100,21 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full">
       <DashBoardHeader onClick={toggleSideMenu}/>
-      {/*
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
-      */}
-      <div className="flex mt-[30px]">
+      
+      {/* {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {loading ? <CircularIndeterminate/> : <div></div>}  */}
+      <div className="flex mt-[25px] h-full">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
 
-        <Calendar courses={courses} />
-        <ToDoList courses={courses}/>
+        <div className="mb-[25px]"> 
+          <Calendar courses={courses} />
+        </div>
+
+        <div className="mr-[25px]"> 
+          <ToDoList courses={courses}/>
+        </div>
       </div>
     </div>
   );
