@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import {NavLink} from 'react-router-dom';
-import { AuthContext } from "../authContext" ;
+import { NavLink } from 'react-router-dom';
+import { AuthContext } from "../authContext";
 import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
 import CircularIndeterminate from "../components/CircularIndeterminate";
@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
- 
+
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -42,14 +42,14 @@ export default function DashboardPage() {
         userid: auth.userID,
       },
     });
-    
+
     const classes = await result.json();
-    const className = classes.map((elem:any)=>elem.courseName)
+    const className = classes.map((elem: any) => elem.courseName)
     setClassNameList(className)
 
-    let arr:any = [];
+    let arr: any = [];
     for (let i = 0; i < classes.length; i++) {
-      const newArr = classes[i].assignments.map((det:any) => {
+      const newArr = classes[i].assignments.map((det: any) => {
         console.log(det.grading.due)
         return {
           date: new Date(det.grading.due),
@@ -74,7 +74,7 @@ export default function DashboardPage() {
           getAssignments(user.uid);
         }
       });
-    } 
+    }
   }, [auth.token, auth.userID]);
 
 
@@ -101,16 +101,16 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
-      <DashBoardHeader onClick={toggleSideMenu}/>
+      <DashBoardHeader onClick={toggleSideMenu} />
       {/*
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
       {/* {loading ? <CircularIndeterminate/> : <div></div>} }
       */}
-      <div className="flex mt-[30px]">
+      <div className="flex mt-[30px] p-[2em]">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
 
         <Calendar courses={courses} />
-        <ToDoList courses={courses}/>
+        <ToDoList courses={courses} />
       </div>
     </div>
   );
