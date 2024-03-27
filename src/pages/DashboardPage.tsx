@@ -9,12 +9,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
-
-
 import SideMenu from "../components/SideMenu";
 import SideMenuButton from "../components/SideMenuButton";
-
-
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -28,7 +24,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
  
-
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };

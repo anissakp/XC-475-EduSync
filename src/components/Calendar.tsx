@@ -92,8 +92,6 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
     return <div className="body">{rows}</div>;
   };
 
-  
-
   const dateFormat = "MMMM yyyy";
   const days = [
     "SUNDAY",

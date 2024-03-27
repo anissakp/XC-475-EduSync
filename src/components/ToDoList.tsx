@@ -91,6 +91,4 @@ const ToDoList: React.FC<Props> = ({ courses }:Props) => {
     )
 }
 
-
-
 export default ToDoList
