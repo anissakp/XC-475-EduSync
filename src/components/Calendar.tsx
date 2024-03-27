@@ -52,40 +52,38 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
   
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-        
-          formattedDate = format(day, dateFormat);
-          const cloneDay = day;
+        formattedDate = format(day, dateFormat);
+        const cloneDay = day;
   
-          const eventsForDay = courses.filter((event) =>
-            isSameDay(event.date, cloneDay)
-          );
+        const eventsForDay = courses.filter((event) =>
+          isSameDay(event.date, cloneDay)
+        );
   
-          days.push(
-            <div
-            className={`column cell ${!isSameMonth(day, monthStart) ? "text-gray-300 " : isSameDay(day, new Date()) ? "selected " : ""} ${i > 0 ? 'border-l-2' : ''} `}
+        days.push(
+          <div
+            className={`column cell ${!isSameMonth(day, monthStart) ? "" : isSameDay(day, new Date()) ? "text-red-400" : ""} ${i > 0 ? 'border-l-2' : ''} `}
             key={day.toString()}
+            style={isSameDay(day, new Date()) ? { } : {}}
           >
-
-              <p className="number">{formattedDate}</p>
-              <div className="events">
-                {eventsForDay.map((event: any, index: any) => (
-                  <div className="event" key={index}>
-                    {event.event}
-                  </div>
-                ))}
-              </div>
+            <p className="number">{formattedDate}</p>
+            <div className="events">
+              {eventsForDay.map((event: any, index: any) => (
+                <div className="event" key={index}>
+                  {event.event}
+                </div>
+              ))}
             </div>
-          );
-        
+          </div>
+        );
         day = addDays(day, 1);
       }
 
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
-        className={`flex justify-between ${day > endDate && rows.length > 4 ? 'hidden' : ''} ${isFirstRow ? '' : 'border-t-2'}`}
-        key={day.toString()}
-      >
+          className={`flex justify-between ${day > endDate && rows.length > 4 ? 'hidden' : ''} ${isFirstRow ? '' : 'border-t-2'}`}
+          key={day.toString()}
+        >
           {days}
         </div>
       );
@@ -93,6 +91,7 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
     }
     return <div className="body">{rows}</div>;
   };
+
   
 
   const dateFormat = "MMMM yyyy";
@@ -123,7 +122,6 @@ const Calendar: React.FC<Props> = ({ courses }:Props) => {
             </svg>
           </button>
         </div>
-
         
         <div>
           <CalendarViewSwitcher />
