@@ -1,12 +1,14 @@
 import { AuthContext } from "../authContext";
 import { useContext, useState, useEffect } from "react";
-import {NavLink} from 'react-router-dom';
+import {NavLink, useParams} from 'react-router-dom';
+
 
 export default function CoursePage() {
   const [courses, setCourses] = useState([]);
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const auth = useContext(AuthContext);
+  let { id } = useParams();
 
   const handleFileUpload = (event: any) => {
     const file = event.target.files[0];

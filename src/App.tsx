@@ -8,6 +8,7 @@ import AuthorizedPage from "./pages/AuthorizedPage";
 import CoursePage from "./pages/CoursePage";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
+import CoursesPage from "./pages/CoursesPage";
 
 function App() {
   const [token, setToken] = useState("");
@@ -16,29 +17,79 @@ function App() {
   // 3L0: GETS TOKEN FOR USER BASED ON AUTHORIZATION CODE
   const getToken = async () => {
     try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-      const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
+      const refresh = localStorage.getItem("refresh")!;
+      const refreshData = JSON.parse(refresh);
+      console.log("refreshDATA", refreshData)
+      if (refreshData && refreshData.refreshToken){
+        console.log("INSIDE IF")
+        //GET TOKEN BASED ON REFRESH TOKEN
+        const bbRefreshTokenURL = import.meta.env.VITE_BB_REFRESH_TOKEN_URL;
 
-      const response = await fetch(
-        `${bbTokenURL}?code=${code}`
-      );
+        const response = await fetch(
+          `${bbRefreshTokenURL}?refreshToken=${refreshData.refreshToken}`
+        );
 
-      const data = await response.json();
+        const data = await response.json();
+        console.log("REFRESSHHHHH", data)
 
-      setToken(data.access_token);
-      setUserID(data.user_id);
+        setToken(data.access_token);
+        setUserID(data.user_id);
 
-      localStorage.setItem(
-        "data",
-        JSON.stringify({
-          userID: data.user_id,
-          token: data.access_token,
-          expiresAt: new Date(new Date().getTime() + 3600000).toISOString(),
-        })
-      );
+        localStorage.setItem(
+          "data",
+          JSON.stringify({
+            userID: data.user_id,
+            token: data.access_token,
+            expiresAt: new Date(new Date().getTime() + 7200000).toISOString(),
+          })
+        );
 
-      if (data.access_token && data.user_id) return "success";
+        // SET REFRESH TOKEN
+        localStorage.setItem(
+          "refresh",
+          JSON.stringify({
+            refreshToken: data.refresh_token,
+          })
+        );
+
+
+      }else{
+        console.log("INSIDE ELSE")
+              // INITIAL TOKEN 
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
+
+        const response = await fetch(
+          `${bbTokenURL}?code=${code}`
+        );
+
+        const data = await response.json();
+        console.log("REFRESH?", data)
+
+        console.log("inside get token function", data.access_token)
+
+        setToken(data.access_token);
+        setUserID(data.user_id);
+
+        localStorage.setItem(
+          "data",
+          JSON.stringify({
+            userID: data.user_id,
+            token: data.access_token,
+            expiresAt: new Date(new Date().getTime() + 7200000).toISOString(),
+          })
+        );
+
+        // SET REFRESH TOKEN
+        localStorage.setItem(
+          "refresh",
+          JSON.stringify({
+            refreshToken: data.refresh_token,
+          })
+        );
+      }
+
     } catch (error) {
       console.log("Inside GET TOKEN ERROR: ", error);
     }
@@ -48,8 +99,8 @@ function App() {
   useEffect(() => {
     console.log("does this useffect get invoked");
     const data = localStorage.getItem("data")!;
-
     const localStorageData = JSON.parse(data);
+    console.log("LOCALSTORAGEDATA", localStorageData)
 
     // const localStorageData = JSON.parse(localStorage.getItem("data"));
     if (
@@ -60,6 +111,7 @@ function App() {
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
     }else{
+      console.log("GETTOKEN INVOKED")
       getToken()
     }
   }, []);
@@ -73,6 +125,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursepage" element={<CoursePage />} />
+          <Route path="/coursespage/:id/:courseName" element={<CoursesPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>

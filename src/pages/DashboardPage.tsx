@@ -44,7 +44,8 @@ export default function DashboardPage() {
     });
     
     const classes = await result.json();
-    const className = classes.map((elem:any)=>elem.courseName)
+    const className = classes.map((elem:any)=>[elem.courseName,elem.courseID])
+    console.log("classname", className)
     setClassNameList(className)
 
     let arr:any = [];
@@ -102,10 +103,10 @@ export default function DashboardPage() {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
       <DashBoardHeader onClick={toggleSideMenu}/>
-      {/*
+      
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
-      */}
+     {/* {loading ? <CircularIndeterminate/> : <div></div>}  */}
+     
       <div className="flex mt-[30px]">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
 

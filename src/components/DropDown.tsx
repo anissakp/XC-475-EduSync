@@ -22,6 +22,7 @@ function Dropdown({
     listStyle,
     listItemStyle,
 }: DropdownProps) {
+    console.log("options", options)
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -34,7 +35,7 @@ function Dropdown({
         onSelect(option);
         console.log("it reached here") 
         
-        navigate('/coursepage')
+        navigate(`/coursespage/${option[1]}/${option[0]}`)
     };
 
     let buttonText;
@@ -60,7 +61,7 @@ function Dropdown({
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                         >
-                            {option}
+                            {option[0]}
                         </li>
                     ))}
                 </ul>
