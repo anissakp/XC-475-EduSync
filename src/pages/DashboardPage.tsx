@@ -99,7 +99,7 @@ export default function DashboardPage() {
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full">
       <DashBoardHeader onClick={toggleSideMenu}/>
       
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {/* {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> }  */}
      
       <div className="flex mt-[30px]">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}

@@ -2,7 +2,11 @@ import { AuthContext } from "../authContext" ;
 import { useContext, useEffect, useState } from "react";
 import parse from 'html-react-parser';
 
-export default function Announcement({courseID}) {
+interface Props {
+  courseID: string
+};
+
+const Announcement: React.FC<Props> = ({courseID}) => {
   const [annoucements, setAnnoucements] = useState([])
   const auth = useContext(AuthContext);
 
@@ -37,3 +41,5 @@ export default function Announcement({courseID}) {
      </div>
   )
 }
+
+export default Announcement

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Dropdown from './DropDown';
+import DropDownCourses from './DropDownCourses';
 
 import classesIcon from "../assets/classesIcon.png"
 import calendarIcon from "../assets/calendarIcon.png"
@@ -15,7 +16,6 @@ interface Props {
 
 const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
     const calendarViews = ["Daily View", "Weekly View", "Monthly View", "Yearly View"];
-    const listOfClasses = ["option 1", "option 2", "option 3"];
 
     const handleSelect = () => {
         console.log("this has been selected");
@@ -25,7 +25,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
 
             <div className="absolute top-[90px] left-0 min-h-screen bg-custom-yellow z-10" style={{ width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div>
-                    <Dropdown 
+                    <DropDownCourses
                         name={
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <img src={classesIcon} alt="Classes" style={{ marginRight: "22px" }} />

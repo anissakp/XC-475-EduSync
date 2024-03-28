@@ -1,16 +1,19 @@
+import { useParams } from 'react-router-dom';
+import { useState } from "react"
+
 import Announcement from "../components/Announcement"
 import StudentForum from "../components/StudentForum"
 import Assignment from "../components/Assignment"
 import ProgressBar from "../components/ProgressBar"
 import Document from "../components/Document"
 import CoursePageHeader from "../components/CoursePageHeader"
-import { useParams } from 'react-router-dom';
-import { useState } from "react"
 
 export default function CoursesPage() {
-  
+  // RETRIVE COURSENAME AND COURSEID FROM URL PARAM
   let { id, courseName } = useParams();
-  const [courseID, setCourseID]= useState(id)
+
+  // SET STATE FOR COURSE ID
+  const [courseID, setCourseID]= useState<string>(id || "")
 
   return (
     <div className="flex flex-col">

@@ -11,7 +11,7 @@ type DropdownProps = {
     listItemStyle?: React.CSSProperties;
 };
 
-function Dropdown({
+function DropDownCourses({
     name,
     options,
     onSelect,
@@ -20,6 +20,7 @@ function Dropdown({
     listStyle,
     listItemStyle,
 }: DropdownProps) {
+    console.log("options", options)
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -28,8 +29,9 @@ function Dropdown({
     const handleOptionClick = (option: string) => {
         setIsOpen(false);
         onSelect(option);
-        //CHANGE TO SOMETHING ELSE
-        // navigate('/coursepage');
+        console.log("it reached here") 
+        
+        navigate(`/coursespage/${option[1]}/${option[0]}`)
     };
 
     return (
@@ -62,7 +64,7 @@ function Dropdown({
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                         >
-                            {option}
+                            {option[0]}
                         </li>
                     ))}
                 </ul>
@@ -71,4 +73,4 @@ function Dropdown({
     );
 }
 
-export default Dropdown;
+export default DropDownCourses;
