@@ -14,6 +14,7 @@ import {
 } from "date-fns";
 import { AuthContext } from "../authContext";
 import { useContext } from "react";
+import ToDoList from "./ToDoList";
 
 interface Course {
   date: Date;
@@ -94,43 +95,71 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
 
   const dateFormat = "MMMM yyyy";
+  // const days = [
+  //   "SUNDAY",
+  //   "MONDAY",
+  //   "TUESDAY",
+  //   "WEDNESDAY",
+  //   "THURSDAY",
+  //   "FRIDAY",
+  //   "SATURDAY",
+  // ];
+
+  // to fix responsive issues
   const days = [
-    "SUNDAY",
-    "MONDAY",
-    "TUESDAY",
-    "WEDNESDAY",
-    "THURSDAY",
-    "FRIDAY",
-    "SATURDAY",
+    "SUN",
+    "MON",
+    "TUE",
+    "WED",
+    "THU",
+    "FRI",
+    "SAT",
   ];
+  // for the new tasks' list button for when the screen is minimized
+  const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
+
+  const toggleToDoListVisibility = (): void => {
+    setIsToDoListVisible(!isToDoListVisible);
+  };
+
 
   return (
-    <div className="w-[1042px] h-[879px] bg-[#EBEDEC] rounded-[20px]">
-      <div className="calendar_header">
+    // Default calendar header
+    <div className=" w-full lg:w-[1042px] h-[879px] bg-[#EBEDEC] rounded-[20px] overflow-hidden ">
+      <div className="calendar_header flex justify-between ">
+        <div>
+          <button className="chevronButton" onClick={prevMonth}>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6" />
+            </svg>
+          </button>
+          <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
+          <button className="chevronButton" onClick={nextMonth}>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6" />
+            </svg>
+          </button>
+        </div>
 
-        <button className="chevronButton" onClick={prevMonth}>
-          <svg width="29" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6" />
-          </svg>
-        </button>
-        <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
-        <button className="chevronButton" onClick={nextMonth}>
-          <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6" />
-          </svg>
-        </button>
+        {/* Task button when a screen is minimized */}
+        <div className=" block lg:hidden ">
+          <button onClick={toggleToDoListVisibility}>Tasks</button>
+        </div>
       </div>
 
-      <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px]  ">
+      {/* the calendar grid */}
+      <div className="bg-white w-full lg:w-[1004px] lg:h-[774px] h-full mx-auto rounded-[20px]">
         <div className="wrapper">
-          <div className="days row day_of_week_name" >
+          <div className="days row day_of_week_name " >
             {days.map((day) => (
               <div className="column" key={day}>
                 {day}
               </div>
             ))}
           </div>
-          {renderCells()}
+          <div className="grid">
+            {renderCells()}
+          </div>
         </div>
       </div>
     </div>

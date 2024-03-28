@@ -32,7 +32,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding-top: 30px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .row {
@@ -53,14 +53,15 @@ body {
 }
 
 .cell {
-    padding: 10px;
+    display: flex;
+    padding: 0.5em;
     cursor: pointer;
-    height: 120px; 
-    
+    height: 130px;
+
 }
 
 .chevronButton {
-    padding: 5px 10px;
+    padding: 5px;
     background-color: transparent;
     border: none;
 }
@@ -68,22 +69,22 @@ body {
 .month_name {
     /* flex-grow: 1; */
     font-weight: bold;
-    font-size: 26px;
-    padding: 30px;
+    font-size: calc(1rem + 1vw);
+    padding: 10px;
     display: inline;
 }
 
 .day_of_week_name {
     /** semibold **/
     font-weight: 600;
-    font-size: 18px;
+    font-size: calc(0.5rem + 1vw);
 }
 
 .inner_calendar_container {
     background-color: #FFFFFF;
     height: auto;
     border-radius: 20px;
-    padding: 15px;
+    /* padding: 15px; */
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.04);
 }
 
@@ -101,9 +102,9 @@ body {
 .number {
     text-align: left;
     margin: 0;
-    padding-bottom: 5px;
+    /* padding-bottom: 5px; */
     font-weight: bold;
-    font-size: 24px;
+    font-size: calc(0.5rem + 1vw);
 }
 
 .event {
@@ -118,10 +119,28 @@ body {
 
 
 /* mobile display */
+@media screen and (max-width: 768px) {
+    .calendar {
+        margin: 0px 0px 0px 10px;
+        padding: 15px 20px 20px 20px;
+        border-radius: 20px;
+        /* width: 95%; */
+        /* was 600 **/
+        max-width: 53.25em;
+        height: auto;
+        width: 65vw;
+        color: #353638;
+        background-color: #EBEDEC;
+        font-family: 'Quicksand';
+    }
+
+    .month_name {
+        /* flex-grow: 1; */
+        font-weight: bold;
+        font-size: calc(1rem + 1vw);
+        padding: 10px;
+        display: inline;
+    }
 
 
-
-
-
-
-  
+}

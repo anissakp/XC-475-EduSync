@@ -18,8 +18,8 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
     };
 
     return (
-        <div className="absolute top-[90px] left-0 h-full bg-white z-10" style={{ height: "973px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <img style={{ marginBottom: '16px' }} src="mainLogo.png" alt="Logo"></img>
+        <div className="absolute top-[90px] left-0 h-full bg-white z-10" style={{ height: "945px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* <img style={{ marginBottom: '16px' }} src="mainLogo.png" alt="Logo"></img> */}
             {/* <input style={{ width: '224px', height: '24px', borderColor: '#d9d9d9', borderStyle: 'solid', outline: 'none', paddingLeft: '12px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px', borderRadius: '4px', fontFamily: 'quicksand' }} placeholder="Placeholder"></input> */}
 
             <div>
@@ -32,7 +32,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                     containerStyle={{ width: "240px" }}
                     buttonStyle={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                     listStyle={{ listStyle: 'none' }}
-                    listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '35px' }} />
+                    listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '40%' }} />
                 <button style={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
                     <img style={{ marginRight: '32px', width: '24px', height: '24px' }} src="StarSharp.svg" alt="Star"></img>
                     <span style={{ flex: '1' }}>
