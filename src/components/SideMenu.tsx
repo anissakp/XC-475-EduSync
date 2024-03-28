@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Dropdown from './DropDown';
 
+import classesIcon from "../assets/classesIcon.png"
+import calendarIcon from "../assets/calendarIcon.png"
+import tasksIcon from "../assets/tasksIcon.png";
+
 interface SideMenuProps {
     toggleMenu: () => void;
 }
@@ -18,23 +22,37 @@ const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
     };
 
     return (
-        <div className="absolute top-20 left-0 h-full bg-white z-10" style={{ height: "1024px", width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <img style={{ marginBottom: '16px' }} src="mainLogo.png" alt="Logo"></img>
-            <input style={{ width: '224px', height: '24px', borderColor: '#d9d9d9', borderStyle: 'solid', outline: 'none', paddingLeft: '12px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px', borderRadius: '4px', fontFamily: 'quicksand' }} placeholder="Placeholder"></input>
-         
+
+            <div className="absolute top-[90px] left-0 min-h-screen bg-custom-yellow z-10" style={{ width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div>
-                    <Dropdown name="Classes" options={classNameList} onSelect={handleSelect}
+                    <Dropdown 
+                        name={
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img src={classesIcon} alt="Classes" style={{ marginRight: "22px" }} />
+                                Classes
+                            </div>
+                        }
+                        options={classNameList} 
+                        onSelect={handleSelect}
                         containerStyle={{ width: "240px", marginTop: '24px' }}
-                        buttonStyle={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
+                        buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                         listStyle={{ listStyle: 'none' }}
                         listItemStyle={{ padding: "10px", cursor: "pointer", paddingLeft: '35px' }} />
-                    <Dropdown name="Calendar" options={calendarViews} onSelect={handleSelect}
+                    <Dropdown 
+                        name={
+                            <div style={{ display: 'flex', marginLeft: "-2px" }}>
+                                <img src={calendarIcon} alt="Calendar" style={{ marginRight: "20px" }} />
+                                Calendar
+                            </div>
+                        }
+                        options={calendarViews} onSelect={handleSelect}
                         containerStyle={{ width: "240px" }}
-                        buttonStyle={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
+                        buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                         listStyle={{ listStyle: 'none' }}
-                        listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '35px' }} />
-                    <button style={{ backgroundColor: 'white', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
-                        <img style={{ marginRight: '32px', width: '24px', height: '24px' }} src="StarSharp.svg" alt="Star"></img>
+                        listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '58px' }} />
+                        
+                    <button style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
+                        <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />
                         <span style={{ flex: '1' }}>
                             Tasks
                         </span>
@@ -42,6 +60,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
                 </div>
             
         </div>
+
     );
 }
 

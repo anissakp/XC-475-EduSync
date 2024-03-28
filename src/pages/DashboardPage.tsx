@@ -9,12 +9,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
-
-
 import SideMenu from "../components/SideMenu";
 import SideMenuButton from "../components/SideMenuButton";
-
-
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -28,7 +24,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
  
-
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
@@ -101,17 +96,21 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4]">
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full">
       <DashBoardHeader onClick={toggleSideMenu}/>
       
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-     {/* {loading ? <CircularIndeterminate/> : <div></div>}  */}
      
       <div className="flex mt-[30px]">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
 
-        <Calendar courses={courses} />
-        <ToDoList courses={courses}/>
+        <div className="mb-[25px]"> 
+          <Calendar courses={courses} />
+        </div>
+
+        <div className="mr-[25px]"> 
+          <ToDoList courses={courses}/>
+        </div>
       </div>
     </div>
   );

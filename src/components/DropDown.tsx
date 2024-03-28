@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { ReactComponent as StarIcon } from '../assets/StarSharp.svg'
 import { useNavigate } from "react-router-dom";
 
-
 type DropdownProps = {
-    name: string;
+    name: React.ReactNode;
     options: string[];
     onSelect: (option: string) => void;
-    containerStyle?: React.CSSProperties; // Inline style for the dropdown container
-    buttonStyle?: React.CSSProperties; // Inline style for the button
-    listStyle?: React.CSSProperties; // Inline style for the list
-    listItemStyle?: React.CSSProperties; // Inline style for list items
+    containerStyle?: React.CSSProperties;
+    buttonStyle?: React.CSSProperties;
+    listStyle?: React.CSSProperties;
+    listItemStyle?: React.CSSProperties;
 };
 
 function Dropdown({
@@ -24,13 +22,11 @@ function Dropdown({
 }: DropdownProps) {
     console.log("options", options)
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
-    const navigate = useNavigate() ; 
+    const navigate = useNavigate();
     const handleOptionClick = (option: string) => {
-        setSelectedOption(option);
         setIsOpen(false);
         onSelect(option);
         console.log("it reached here") 
@@ -38,18 +34,22 @@ function Dropdown({
         navigate(`/coursespage/${option[1]}/${option[0]}`)
     };
 
-    let buttonText;
-    buttonText = name 
-
     return (
         <div style={containerStyle}>
             <button onClick={toggleDropdown} style={buttonStyle}>
-                <img style = {{marginRight: '32px', width: '24px' , height: '24px'}}src = "StarSharp.svg"></img>
-                <span style = {{flex: '1', fontFamily: 'quicksand'}}>
-                    {buttonText}
+                <span style={{ flex: '1', fontFamily: 'quicksand' }}>
+                    {name}
                 </span>
-                
-                <img style = {{transform: 'rotate(180deg)',marginLeft:'32px', width: '24px' , height: '24px'}}src = "arrow.svg"></img>
+                <img 
+                    style={{ 
+                        transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)', // Rotate the arrow based on isOpen
+                        marginLeft: '32px', 
+                        width: '24px', 
+                        height: '24px' 
+                    }}
+                    src="arrow.svg"
+                    alt="Arrow"
+                />
             </button>
             {isOpen && (
                 <ul style={listStyle}>
@@ -57,7 +57,10 @@ function Dropdown({
                         <li
                             key={option}
                             onClick={() => handleOptionClick(option)}
-                            style={{...listItemStyle, backgroundColor: hoveredIndex === index ? '#ececec': 'initial'}}
+                            style={{
+                                ...listItemStyle, 
+                                backgroundColor: hoveredIndex === index ? '#f1ddb0' : 'initial'
+                            }}
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                         >

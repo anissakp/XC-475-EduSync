@@ -48,6 +48,7 @@ module.exports = {
         "custom-black": "#1E1E26",
         "custom-gray2": "#D5D2DD",
         "custom-blue2": "#A2D9D1",
+        "custom-yellow": "#FBE6B7",
         "customStart": 'rgba(162, 217, 209, 1)',
         "customEnd": 'rgba(110, 176, 182, 1)',
         "custom-gray2": "rgba(235, 237, 236, 1)",
