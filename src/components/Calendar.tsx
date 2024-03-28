@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import CalendarViewSwitcher from './CalendarViewSwitcher';
+
 import "../calendar.css";
 import {
   format,
@@ -51,7 +53,6 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-
         formattedDate = format(day, dateFormat);
         const cloneDay = day;
 
@@ -61,10 +62,9 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
         days.push(
           <div
-            className={`column cell ${!isSameMonth(day, monthStart) ? "text-gray-300 " : isSameDay(day, new Date()) ? "selected " : ""} ${i > 0 ? 'border-l-2' : ''} `}
+            className={`column cell ${!isSameMonth(day, monthStart) ? "text-gray-400" : isSameDay(day, new Date()) ? "text-red-400" : ""} ${i > 0 ? 'border-l-2' : ''}`}
             key={day.toString()}
           >
-
             <p className="number">{formattedDate}</p>
             <div className="events">
               {eventsForDay.map((event: any, index: any) => (
@@ -75,7 +75,6 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </div>
           </div>
         );
-
         day = addDays(day, 1);
       }
 
@@ -124,27 +123,32 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
 
   return (
-    // Default calendar header
     <div className=" w-full lg:w-[1042px] h-[879px] bg-[#EBEDEC] rounded-[20px] overflow-hidden ">
-      <div className="calendar_header flex justify-between ">
+
+      <div className="calendar_header flex justify-between items-center">
         <div>
           <button className="chevronButton" onClick={prevMonth}>
-            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6" />
             </svg>
           </button>
           <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
           <button className="chevronButton" onClick={nextMonth}>
-            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6" />
             </svg>
           </button>
+        </div>
+
+        <div>
+          <CalendarViewSwitcher />
         </div>
 
         {/* Task button when a screen is minimized */}
         <div className=" block lg:hidden ">
           <button onClick={toggleToDoListVisibility}>Tasks</button>
         </div>
+
       </div>
 
       {/* the calendar grid */}

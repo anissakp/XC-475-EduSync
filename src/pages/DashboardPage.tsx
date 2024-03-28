@@ -9,12 +9,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
-
-
 import SideMenu from "../components/SideMenu";
 import SideMenuButton from "../components/SideMenuButton";
-
-
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -27,8 +23,7 @@ export default function DashboardPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-
-
+ 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
@@ -108,8 +103,13 @@ export default function DashboardPage() {
       */}
       <div className="flex p-[0.5em] sm:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
-        <Calendar courses={courses} />
-        <ToDoList courses={courses} />
+        <div className="mb-[25px]"> 
+          <Calendar courses={courses} />
+        </div>
+
+        <div className="mr-[25px]"> 
+          <ToDoList courses={courses} />
+        </div>
 
       </div>
     </div>
