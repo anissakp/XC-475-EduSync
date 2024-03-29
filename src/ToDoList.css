@@ -48,10 +48,10 @@
 }
 
 .horizontalLine {
-    border-color: black;
-    border-width: 2px;
+    border-color: #6FB0B6;
+    border-width: 1px;
     border-bottom: 0;
-    margin: 0;
+    margin-top: 10px;
 }
 
 .checkbox {

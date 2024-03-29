@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
- 
+
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
@@ -94,6 +94,16 @@ export default function DashboardPage() {
     }
   };
 
+  // for the new tasks' list button for when the screen is minimized
+  const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
+
+  const toggleToDoListVisibility = (): void => {
+    setIsToDoListVisible(!isToDoListVisible);
+  };
+
+  const ToDoListComponent = <ToDoList courses={courses} />
+
+
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
@@ -103,12 +113,15 @@ export default function DashboardPage() {
       */}
       <div className="flex p-[0.5em] sm:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
-        <div className="mb-[25px]"> 
-          <Calendar courses={courses} />
-        </div>
+        <Calendar courses={courses} />
 
-        <div className="mr-[25px]"> 
-          <ToDoList courses={courses} />
+        <div className=" hidden lg:block">{ToDoListComponent}</div>
+
+        {/* Task button when a screen is minimized */}
+        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap " >
+          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+
         </div>
 
       </div>

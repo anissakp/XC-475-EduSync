@@ -114,12 +114,6 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
     "FRI",
     "SAT",
   ];
-  // for the new tasks' list button for when the screen is minimized
-  const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
-
-  const toggleToDoListVisibility = (): void => {
-    setIsToDoListVisible(!isToDoListVisible);
-  };
 
 
   return (
@@ -128,31 +122,27 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       <div className="calendar_header flex justify-between items-center">
         <div>
           <button className="chevronButton" onClick={prevMonth}>
-            <svg width="22" height="22" viewBox="0 0 29 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M19.5007 3.96925L10.1339 11.0136L19.5007 18.058" fill="#6EB0B6" />
             </svg>
           </button>
           <div className="month_name">{format(currentMonth, dateFormat).toUpperCase()}</div>
           <button className="chevronButton" onClick={nextMonth}>
-            <svg width="22" height="22" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0.822021 0.969246L10.1889 8.01361L0.822021 15.058" fill="#6EB0B6" />
             </svg>
           </button>
         </div>
 
+        {/* creates a responsiveness problem */}
         <div>
           <CalendarViewSwitcher />
-        </div>
-
-        {/* Task button when a screen is minimized */}
-        <div className=" block lg:hidden ">
-          <button onClick={toggleToDoListVisibility}>Tasks</button>
         </div>
 
       </div>
 
       {/* the calendar grid */}
-      <div className="bg-white w-full lg:w-[1004px] lg:h-[774px] h-full mx-auto rounded-[20px]">
+      <div className="bg-white w-full lg:w-[96%] h-full lg:h-[774px]  mx-auto rounded-[20px]">
         <div className="wrapper">
           <div className="days row day_of_week_name " >
             {days.map((day) => (
