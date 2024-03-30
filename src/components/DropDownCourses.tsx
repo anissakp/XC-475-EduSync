@@ -30,8 +30,9 @@ function DropDownCourses({
         setIsOpen(false);
         onSelect(option);
         console.log("it reached here") 
+        navigate(`/coursespage?id=${option[1]}&courseName=${option[0]}`);
         
-        navigate(`/coursespage/${option[1]}/${option[0]}`)
+        // navigate(`/coursespage/${option[1]}/${option[0]}`)
     };
 
     return (

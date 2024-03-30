@@ -44,7 +44,6 @@ const getBBActualToken = async (code:any) => {
       }
     );
     const data = await response.json();
-    console.log("DATA", data)
     return data;
   } catch (error) {
     console.log("Inside Get Actual Token Function Error:", error);
@@ -85,7 +84,6 @@ export const getToken = onRequest({cors: true}, async (req, res)=>{
 
 export const getTokenByRefresh = onRequest({cors: true}, async (req, res)=>{
   const refreshToken = req.query.refreshToken;
-  console.log("THISER IS My", refreshToken)
 
   let redirectUri = "http://localhost:5173/dashboard";
   const environment = process.env.ENVIRONMENT || "development";
@@ -101,10 +99,7 @@ export const getTokenByRefresh = onRequest({cors: true}, async (req, res)=>{
     },
     body: `grant_type=refresh_token&refresh_token=${refreshToken}&redirect_uri=${encodeURIComponent(redirectUri)}`,
   });
-  
-  console.log("RESSSPONSE", response)
   const data = await response.json();
-  console.log("REFRESH TOKEN?", data)
   res.send(data);
 });
 
@@ -113,8 +108,6 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const userid = req.headers["userid"];
-
-  console.log(token, userid)
 
   const classes = await fetch(
     `${process.env.BB_BASE_URL}/learn/api/public/v1/users/uuid:${userid}/courses`,
@@ -126,8 +119,6 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
   );
 
   const data = await classes.json();
-
-  console.log("data inside getcourses", data)
 
   const finalList = data.results ? await Promise.all(
     data.results.map(async (elem:any) => {
@@ -188,9 +179,7 @@ export const getCourseAnnouncements = onRequest({cors: true}, async (req, res)=>
       }
     );
     const result = await data.json();
-    console.log("RESULT", result)
-    res.send(result)
-
+    res.send(result);
   } catch (error) {
     console.error("Inside getCourseAnnouncement Function Error:", error);
   }

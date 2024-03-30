@@ -1,10 +1,15 @@
 import { useState, useContext, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import { AuthContext } from "../authContext";
+
 import homework from "../assets/Homwork.png"
-import { useParams } from "react-router-dom";
 
 export default function Assignment() {
-  const {courseName} = useParams()
+  // RETRIVE COURSENAME FROM URL 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const courseName = searchParams.get('courseName');
+
   const [courses, setCourses] = useState([]);
   const auth = useContext(AuthContext);
 

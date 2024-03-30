@@ -106,7 +106,7 @@ function App() {
           <Route path="/connect" element={<ConnectPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/authorized" element={<AuthorizedPage />} />
-          <Route path="/coursespage/:id/:courseName" element={<CoursesPage />} />
+          <Route path="/coursespage" element={<CoursesPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>

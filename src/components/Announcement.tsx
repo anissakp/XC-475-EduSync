@@ -32,7 +32,7 @@ const Announcement: React.FC<Props> = ({courseID}) => {
   }, [auth.token, auth.userID]);
 
 
-  const displayAnnouncements = !annoucements ? [] : annoucements.map((elem)=> <div className="text-center mb-5 p-2 bg-custom-gray2 rounded-2xl"><div>{elem.title}</div><div className="text-center">{parse(elem.body)}</div></div>)
+  const displayAnnouncements = !annoucements ? [] : annoucements.map((elem:any)=> <div className="text-center mb-5 p-2 bg-custom-gray2 rounded-2xl"><div>{elem.title}</div><div className="text-center">{parse(elem.body)}</div></div>)
 
   return (
      <div className="col-span-1 h-96 sm:col-span-1 md:h-auto md:col-span-3 overflow-y-auto rounded-tl-lg rounded-tr-lg bg-gradient-custom2 relative">
