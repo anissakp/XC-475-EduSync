@@ -5,7 +5,7 @@ import { app, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import SideMenu from "../components/SideMenu";
-import SyncToOtherSitesPage from "./SyncToOtherSitesPage";
+
 import ToDoList from "../components/ToDoList";
 
 
