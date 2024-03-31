@@ -111,7 +111,7 @@ export default function DashboardPage() {
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
       {/* {loading ? <CircularIndeterminate/> : <div></div>} }
       */}
-      <div className="flex p-[0.5em] sm:p-[2em] ">
+      <div className="flex p-[0.5em] lg:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
         <Calendar courses={courses} />
 

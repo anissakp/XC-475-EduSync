@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CalendarViewSwitcher from './CalendarViewSwitcher';
+import DropdownCalendarView from "./DropdownCalendarView";
 
 import "../calendar.css";
 import {
@@ -134,15 +135,21 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
           </button>
         </div>
 
+        <div className="block lg:hidden">
+          <DropdownCalendarView />
+        </div>
+
         {/* creates a responsiveness problem */}
-        <div>
+        <div className="hidden lg:block">
           <CalendarViewSwitcher />
         </div>
+
+
 
       </div>
 
       {/* the calendar grid */}
-      <div className="bg-white w-full lg:w-[96%] h-full lg:h-[774px]  mx-auto rounded-[20px]">
+      <div className="bg-white w-full sm:w-[96%] h-full lg:h-[774px]  mx-auto rounded-[20px]">
         <div className="wrapper">
           <div className="days row day_of_week_name " >
             {days.map((day) => (
