@@ -5,6 +5,8 @@ import classesIcon from "../assets/classesIcon.png"
 import calendarIcon from "../assets/calendarIcon.png"
 import tasksIcon from "../assets/tasksIcon.png";
 
+import { useNavigate } from 'react-router-dom';
+
 interface SideMenuProps {
     toggleMenu: () => void;
 }
@@ -20,6 +22,11 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
     const handleSelect = () => {
         console.log("this has been selected");
     };
+
+    const navigate = useNavigate() 
+    const goToTasks = ():void => {
+        navigate('/tasks')
+    }
 
     return (
 
@@ -51,7 +58,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                         listStyle={{ listStyle: 'none' }}
                         listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '58px' }} />
                         
-                    <button style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
+                    <button onClick={goToTasks} style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
                         <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />
                         <span style={{ flex: '1' }}>
                             Tasks

@@ -1,16 +1,17 @@
 import { useContext, useState, useEffect } from "react";
+
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from "../authContext";
+
 import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
-import CircularIndeterminate from "../components/CircularIndeterminate";
-import FormDialog from "../components/FormDialog";
+
 import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
-import SideMenuButton from "../components/SideMenuButton";
+
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
