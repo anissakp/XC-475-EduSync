@@ -6,8 +6,8 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import SideMenu from "../components/SideMenu";
 // import SyncToOtherSitesPage from "./SyncToOtherSitesPage";
-import ToDoList from "../components/ToDoList";
 
+import ToDoList from "../components/ToDoList";
 
 
 export default function HomePage() {

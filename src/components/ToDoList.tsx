@@ -1,4 +1,4 @@
-import React from 'react' 
+import React from 'react'
 import { useState, useEffect } from 'react';
 import "../ToDoList.css"
 interface Course {
@@ -10,14 +10,14 @@ interface Props {
 }
 
 type Task = {
-    text: string ; 
-    completed: boolean; 
-    dueDate: any ; 
+    text: string;
+    completed: boolean;
+    dueDate: any;
 }
 
-const ToDoList: React.FC<Props> = ({ courses }:Props) => {
-    const[newTask, setnewTask] = useState<string>('')
-    const[dueDate, setDueDate] = useState<string>('')
+const ToDoList: React.FC<Props> = ({ courses }: Props) => {
+    const [newTask, setnewTask] = useState<string>('')
+    const [dueDate, setDueDate] = useState<string>('')
     const [showInput, setShowInput] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -39,7 +39,7 @@ const ToDoList: React.FC<Props> = ({ courses }:Props) => {
     }
 
     const addTask = (): void => {
-        const newTaskTemp = {text: newTask, completed: false, dueDate: dueDate }
+        const newTaskTemp = { text: newTask, completed: false, dueDate: dueDate }
         setnewTask("")
         setTasks([...tasks, newTaskTemp])
     }
@@ -48,45 +48,45 @@ const ToDoList: React.FC<Props> = ({ courses }:Props) => {
     }
     const toggleInputVisibility = (): void => {
         setShowInput(!showInput);
-      };
+    };
     const addTaskAndHideInput = (): void => {
         addTask();
         setShowInput(false);
-      };
+    };
     return (
-        <div id = "toDoList" className='ml-[40px]'>
-            <div id = "header">
-                <p className='text'>Tasks</p> 
-                
+        <div id="toDoList" className='ml-[2em]'>
+            <div id="header">
+                <p className='text'>Tasks</p>
+
                 <button className='add' onClick={toggleInputVisibility}>+</button>
             </div>
-            <hr className = "horizontalLine" />
-                {showInput && (
-                    <div id = "addNewAssignment">
-                        <input id = "addTaskTitle" type="text" value={newTask} onChange={handleInputChange} />
-                        <input id = "addDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
-                        <button id = "addTaskButton" onClick={addTaskAndHideInput}>Add</button>
-                    </div>
-                )}
-                <ul id = "list" className = {showInput ? "shorter-list": ""}>
-                    {tasks.map((task, index) => (
-                        <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
-                            <div className = "task">
-                                <input className = "checkbox"
-                                    type="checkbox"
-                                    checked={task.completed}
-                                    onChange={() => setTaskCompleted(index)}
-                                />
-                                <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                    <p className='taskTitle'>{task.text}</p>
-                                    {task.dueDate && <p className={`dueDate ${task.dueDate ? '' : 'no-date'}`}>{task.dueDate}</p>}
-                                </div>
-                                
+            <hr className="horizontalLine" />
+            {showInput && (
+                <div id="addNewAssignment">
+                    <input id="addTaskTitle" type="text" value={newTask} onChange={handleInputChange} />
+                    <input id="addDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                    <button id="addTaskButton" onClick={addTaskAndHideInput}>Add</button>
+                </div>
+            )}
+            <ul id="list" className={showInput ? "shorter-list" : ""}>
+                {tasks.map((task, index) => (
+                    <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+                        <div className="task">
+                            <input className="checkbox"
+                                type="checkbox"
+                                checked={task.completed}
+                                onChange={() => setTaskCompleted(index)}
+                            />
+                            <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
+                                <p className='taskTitle'>{task.text}</p>
+                                {task.dueDate && <p className={`dueDate ${task.dueDate ? '' : 'no-date'}`}>{task.dueDate}</p>}
                             </div>
-                            
-                        </li>
-                    ))}
-                </ul>
+
+                        </div>
+
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }
