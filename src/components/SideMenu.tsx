@@ -10,12 +10,12 @@ import { useNavigate } from 'react-router-dom';
 interface SideMenuProps {
     toggleMenu: () => void;
 }
-  
+
 interface Props {
     classNameList: string[];
 }
 
-const SideMenu: React.FC<Props> = ({ classNameList }:Props) => {
+const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
     const calendarViews = ["Daily View", "Weekly View", "Monthly View", "Yearly View"];
     const listOfClasses = ["option 1", "option 2", "option 3"];
 

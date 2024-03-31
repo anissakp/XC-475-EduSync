@@ -8,7 +8,9 @@ interface SideMenuButtonProps {
 
 export default function SideMenuButton({ onClick }: SideMenuButtonProps) {
     return (
-        <div className="cursor-pointer mb-9" onClick={onClick} >
+
+        <div className="cursor-pointer mt-[1.37rem] lg:mt-[1.69rem]" onClick={onClick} >
+
             <img src="dashboardHeaderBackground.svg" className="absolute  w-[36px] h-[36px] object-cover" alt="Background" />
             <img src="dashboardHeaderList.svg" className="absolute w-[18px] h-[18px] object-cover mt-[9px] ml-[9px]" alt="List" />
         </div>
