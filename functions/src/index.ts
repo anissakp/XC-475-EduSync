@@ -141,3 +141,45 @@ export const getGSConnection = onRequest({cors: true}, async (req, res)=>{
     console.error("Inside getGSConnection Function Error:", error);
   }
 });
+
+/////////////////
+export const exchangeToken = onRequest(async (request, response) => {
+  const code: any = request.query.code;
+  const redirect_uri = "http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken"; // Replace with your actual redirect URI
+
+  // Prepare the URL and the data for the POST request to Google's OAuth2 endpoint
+  const tokenExchangeUrl = 'https://oauth2.googleapis.com/token';
+  const params = new URLSearchParams();
+  params.append('code', code);
+  params.append('client_id', 'YOUR_CLIENT_ID'); // Replace with your actual client ID
+  params.append('client_secret', 'YOUR_CLIENT_SECRET'); // Replace with your actual client secret
+  params.append('redirect_uri', redirect_uri);
+  params.append('grant_type', 'authorization_code');
+
+  try {
+    // Await the response from the fetch request
+    const fetchResponse = await fetch(tokenExchangeUrl, {
+      method: 'POST',
+      body: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    // Check if the fetch request was not successful
+    if (!fetchResponse.ok) {
+      throw new Error(`Server responded with ${fetchResponse.status}`);
+    }
+
+    // Await the parsing of the JSON response
+    const data = await fetchResponse.json();
+
+    // Respond to the client with the access token
+    // Optionally, you can handle storing the tokens securely or further processing here
+    response.send({ accessToken: data.access_token });
+  } catch (error:any) {
+    // Log and respond with the error
+    console.error('Failed to exchange token:', error);
+    response.status(500).send(error.toString());
+  }
+});
