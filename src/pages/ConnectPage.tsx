@@ -14,24 +14,40 @@ import connectOrangeBlob from "../assets/connectOrangeBlob.png"
 import SideMenu from "../components/SideMenu";
 import ToDoList from "../components/ToDoList";
 
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
+
 export default function ConnectPage() {
   const [htmlContent, setHtmlContent] = useState("");
   const[user, setUser] = useState(false);
 
   // ESTABLISHED CONNECTION WITH BB
-  const handleConnectCLK = async () => {
-    const bbConnectionURL = import.meta.env.VITE_BB_CONNECTION_URL;
+const handleConnectCLK = async () => {
+  const bbConnectionURL = import.meta.env.VITE_BB_CONNECTION_URL;
+  try {
     const result = await fetch(bbConnectionURL);
     const htmlContent = await result.text();
-    console.log("html", htmlContent);
-    setHtmlContent(htmlContent);
-  };
+    if (htmlContent) { 
+      console.log("html", htmlContent);
+      setHtmlContent(htmlContent);
+      // set a flag in our database that the user should recieve updated api call blackboard assignments
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid); 
+        await setDoc(userRef, { blackboardConnected: true }, { merge: true });
+      }
+    }
+  } catch (error) {
+    console.error("Error connecting to Blackboard:", error);
+  }
+};
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
-      console.log("home is this called");
       console.log(user);
       // redirect to login page if not already logged in
       if (!user) {

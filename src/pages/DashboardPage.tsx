@@ -11,7 +11,10 @@ import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
-
+import FormDialog from "../components/FormDialog";
+import CircularIndeterminate from "../components/CircularIndeterminate";
+import SideMenuButton from "../components/SideMenuButton";
+import { collection, getDocs, getDoc } from "firebase/firestore";
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -19,6 +22,7 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
+  const [resetCal, setResetCal] = useState(false);
   const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,49 +57,90 @@ export default function DashboardPage() {
           event: `${classes[i].courseName} ${det.name}`,
         };
       });
+
       arr = [...arr, ...newArr];
     }
-    setCourses(arr);
-
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
+    setCourses(arr);
+    setResetCal(!resetCal);
   };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
-    if (auth.token) {
-      const auth = getAuth(app);
-      onAuthStateChanged(auth, (user) => {
-        // check if user signed in through auth already
-        if (user) {
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        const userRef = doc(db, "users", user.uid); 
+        if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
+          // if user pressed connect to Blackboard and connect to gradescope
           getAssignments(user.uid);
+          await setDoc(userRef, { blackboardConnected: false }, { merge: true });
+          await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
         }
-      });
-    }
-  }, [auth.token, auth.userID]);
+        else if (userDoc.exists() && userDoc.data().blackboardConnected) {
+          // if user pressed connect to Blackboard, fetch and update assignments
+          getAssignments(user.uid);
+          await setDoc(userRef, { blackboardConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
+        } 
+        else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
+          // if user pressed connect to Blackboard, fetch and update assignments
+          getAssignments(user.uid);
+          await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
+        } 
+        else {
+          fetchAssignmentsFromFirestore(user.uid);
+        }
+      } else {
+        console.log("User is not signed in");
+        setLoading(false);
+      }
+    });
+  }, [auth.token, auth.userID, resetCal]);
 
 
   // function to save assignments to database, userID is from Firebase Auth
   const saveAssignmentsToFirestore = async (userID: string, classes: any) => {
-    const userDocRef = doc(db, 'users', userID); // Reference to the user's document in Firestore
-
+    const userDocRef = doc(db, 'users', userID); 
     for (const classInfo of classes) {
       for (const assignment of classInfo.assignments) {
-        // index is assignment ID from blackboard
         const assignmentId = assignment.id;
         const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
         const assignmentData = {
           name: assignment.name,
           dueDate: new Date(assignment.grading.due),
           courseName: classInfo.courseName,
+          source: "Blackboard",
         };
-
         // assignment document saved in user's assignments subcollection
         await setDoc(assignmentDocRef, assignmentData);
       }
     }
   };
 
+  // **************NEW *************************
+const fetchAssignmentsFromFirestore = async (userId: string) => {
+  console.log("fetchAssignmentsFromFirestore called", userId);
+  const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
+  const querySnapshot = await getDocs(userAssignmentsRef);
+  const assignments:any = [];
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    assignments.push({
+      date: data.dueDate.toDate(), 
+      event: `${data.courseName} ${data.name}`,
+    });
+  });
+  console.log(assignments);
+  setCourses(assignments);
+};
+
+//*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
   const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
 
@@ -109,10 +154,10 @@ export default function DashboardPage() {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-      {/*
+      
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
-      */}
+      {/*loading ? <CircularIndeterminate/> : <div></div>} */}
+      
       <div className="flex p-[0.5em] lg:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={[]} />}
         <Calendar courses={courses} />
