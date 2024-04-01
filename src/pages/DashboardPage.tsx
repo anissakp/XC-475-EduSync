@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect } from "react";
-import {NavLink} from 'react-router-dom';
-import { AuthContext } from "../authContext" ;
+
+import { NavLink } from 'react-router-dom';
+import { AuthContext } from "../authContext";
+
 import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
-import CircularIndeterminate from "../components/CircularIndeterminate";
-import FormDialog from "../components/FormDialog";
+
 import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -24,7 +25,7 @@ export default function DashboardPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
- 
+
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
@@ -38,14 +39,15 @@ export default function DashboardPage() {
         userid: auth.userID,
       },
     });
-    
+
     const classes = await result.json();
-    const className = classes.map((elem:any)=>elem.courseName)
+    const className = classes.map((elem:any)=>[elem.courseName,elem.courseID])
+    console.log("classname", className)
     setClassNameList(className)
 
-    let arr:any = [];
+    let arr: any = [];
     for (let i = 0; i < classes.length; i++) {
-      const newArr = classes[i].assignments.map((det:any) => {
+      const newArr = classes[i].assignments.map((det: any) => {
         console.log(det.grading.due)
         return {
           date: new Date(det.grading.due),
@@ -136,21 +138,33 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
 
 
 
+  // for the new tasks' list button for when the screen is minimized
+  const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
+
+  const toggleToDoListVisibility = (): void => {
+    setIsToDoListVisible(!isToDoListVisible);
+  };
+
+  const ToDoListComponent = <ToDoList courses={courses} />
+
+
   return (
-    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full">
-      <DashBoardHeader onClick={toggleSideMenu}/>
-      
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
+      <DashBoardHeader onClick={toggleSideMenu} />
+      {/*
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-      {/* {loading ? <CircularIndeterminate/> : <div></div>}  */}
-      <div className="flex mt-[25px] h-full">
-        {isSideMenuOpen && <SideMenu classNameList={[]} />}
+      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
+      */}
+      <div className="flex p-[0.5em] sm:p-[2em] ">
+        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
+        <Calendar courses={courses} />
 
-        <div className="mb-[25px]"> 
-          <Calendar courses={courses} />
-        </div>
+        <div className=" hidden lg:block">{ToDoListComponent}</div>
 
-        <div className="mr-[25px]"> 
-          <ToDoList courses={courses}/>
+        {/* Task button when a screen is minimized */}
+        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap " >
+          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
         </div>
       </div>
     </div>

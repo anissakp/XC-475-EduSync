@@ -12,15 +12,20 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/joy": "^5.0.0-beta.32",
     "@mui/material": "^5.15.13",
+    "@mui/x-charts": "^7.0.0",
     "camelcase-css": "^2.0.1",
     "date-fns": "^3.3.1",
     "firebase": "^10.6.0",
     "firebase-functions": "^4.8.0",
     "firebaseui": "^6.1.0",
+    "html-react-parser": "^5.1.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.1"
+    "react-router-dom": "^6.22.1",
+    "root": "^3.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.58",
