@@ -104,16 +104,17 @@ const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
             // add gradescope assignments to database
             const auth = getAuth();
             const user = auth.currentUser;
-            const saveGradescopeAssignmentsToFirestore = async (userID: string, classes: any[]) => {
+            const saveGradescopeAssignmentsToFirestore = async (userID: string, assignments: any[]) => {
               console.log("gradescope assign saved to db")
               const userDocRef = doc(db, 'users', userID);
-              for (const classInfo of classes) {
-                const assignmentId = `${classInfo.id}-${Date.now()}`;
+              for (const assign of assignments) {
+                console.log("this is the objecct" + assign);
+                const assignmentId = `${assign.course_name + assign.title}`;
                 const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
                 const assignmentData = {
-                  name: classInfo.title,
-                  dueDate: new Date(convertDateString(classInfo.due_date)),
-                  courseName: classInfo.course_name,
+                  name: assign.title,
+                  dueDate: new Date(convertDateString(assign.due_date)),
+                  courseName: assign.course_name,
                   source: "Gradescope",
                 };
                 await setDoc(assignmentDocRef, assignmentData);

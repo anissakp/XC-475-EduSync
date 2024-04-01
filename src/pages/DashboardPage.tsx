@@ -11,6 +11,8 @@ import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
+import FormDialog from "../components/FormDialog";
+import CircularIndeterminate from "../components/CircularIndeterminate";
 import SideMenuButton from "../components/SideMenuButton";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 
@@ -20,6 +22,7 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
+  const [resetCal, setResetCal] = useState(false);
   const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -60,6 +63,7 @@ export default function DashboardPage() {
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
     setCourses(arr);
+    setResetCal(!resetCal);
   };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
@@ -75,16 +79,19 @@ export default function DashboardPage() {
           getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
         }
         else if (userDoc.exists() && userDoc.data().blackboardConnected) {
           // if user pressed connect to Blackboard, fetch and update assignments
           getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
         } 
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard, fetch and update assignments
           getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          fetchAssignmentsFromFirestore(user.uid);
         } 
         else {
           fetchAssignmentsFromFirestore(user.uid);
@@ -94,7 +101,7 @@ export default function DashboardPage() {
         setLoading(false);
       }
     });
-  }, [auth.token, auth.userID]);
+  }, [auth.token, auth.userID, resetCal]);
 
 
   // function to save assignments to database, userID is from Firebase Auth
@@ -134,10 +141,6 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
 };
 
 //*************************************NEW ******************************* */
-
-
-
-
   // for the new tasks' list button for when the screen is minimized
   const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
 
@@ -151,10 +154,10 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-      {/*
+      
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
-      {/* {loading ? <CircularIndeterminate/> : <div></div>} }
-      */}
+      {/*loading ? <CircularIndeterminate/> : <div></div>} */}
+      
       <div className="flex p-[0.5em] sm:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
