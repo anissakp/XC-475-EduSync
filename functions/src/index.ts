@@ -61,7 +61,7 @@ export const getConnection = onRequest({cors: true}, async (req, res)=>{
     }
 
     const response = await fetch(
-      `${process.env.BB_BASE_URL}/learn/api/public/v1/oauth2/authorizationcode?redirect_uri=${redirectUri}&response_type=code&client_id=${clientId}&scope=read&state=DC1067EE-63B9-40FE-A0AD-B9AC069BF4B0`,
+      `${process.env.BB_BASE_URL}/learn/api/public/v1/oauth2/authorizationcode?redirect_uri=${redirectUri}&response_type=code&client_id=${clientId}&scope=offline read&state=DC1067EE-63B9-40FE-A0AD-B9AC069BF4B0`,
       {
         headers: {
           "Content-Type": "form/urlencoded",
@@ -80,6 +80,27 @@ export const getToken = onRequest({cors: true}, async (req, res)=>{
   const code = req.query.code;
   const token = await getBBActualToken(code);
   res.send(token);
+});
+
+export const getTokenByRefresh = onRequest({cors: true}, async (req, res)=>{
+  const refreshToken = req.query.refreshToken;
+
+  let redirectUri = "http://localhost:5173/dashboard";
+  const environment = process.env.ENVIRONMENT || "development";
+  if (environment === "production") {
+    redirectUri = "https://edusync-e6e17.web.app/dashboard";
+  }
+
+  const response = await fetch(`${process.env.BB_BASE_URL}/learn/api/public/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": "Basic " + Buffer.from(process.env.CLIENT_ID + ":" + process.env.SECRET).toString("base64"),
+    },
+    body: `grant_type=refresh_token&refresh_token=${refreshToken}&redirect_uri=${encodeURIComponent(redirectUri)}`,
+  });
+  const data = await response.json();
+  res.send(data);
 });
 
 // GETS COURSES FOR BB
@@ -113,6 +134,7 @@ export const getCourses = onRequest({cors: true}, async (req, res)=> {
       const moreData = await idk.json();
       return {
         courseName: moreData.name,
+        courseID: elem.courseId,
         assignments: assignments.results.slice(2),
       };
     })
@@ -139,5 +161,26 @@ export const getGSConnection = onRequest({cors: true}, async (req, res)=>{
     res.send(data);
   } catch (error) {
     console.error("Inside getGSConnection Function Error:", error);
+  }
+});
+
+export const getCourseAnnouncements = onRequest({cors: true}, async (req, res)=>{
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const courseId = req.headers["courseid"];
+
+  try {
+    const data = await fetch(
+      `${process.env.BB_BASE_URL}/learn/api/public/v1/courses/${courseId}//announcements`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const result = await data.json();
+    res.send(result);
+  } catch (error) {
+    console.error("Inside getCourseAnnouncement Function Error:", error);
   }
 });
