@@ -5,11 +5,7 @@ body {
 }
 
 .calendar {
-    margin: 0px 0px 0px 10px;
-    padding: 15px 20px 20px 20px;
     border-radius: 20px;
-    /* width: 95%; */
-    /* was 600 **/
     max-width: 1042px;
     height: auto;
     width: 65vw;
@@ -18,21 +14,33 @@ body {
     font-family: 'Quicksand';
 }
 
+.calendar_header {
+    height: auto;
+    padding: 20px;
+}
+
 .calendar_header p,
 .calendar_header button {
     display: inline-block;
 }
 
-.calendar_header {
-    height: auto;
-    padding: 20px;
+.month_name {
+    font-weight: bold;
+    font-size: calc(1rem + 1vw);
+    padding: 10px;
+    display: inline;
 }
 
 .days {
     display: flex;
     justify-content: space-between;
     padding-top: 30px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+.day_of_week_name {
+    font-weight: 600;
+    font-size: calc(0.5rem + 1vw);
 }
 
 .row {
@@ -44,52 +52,51 @@ body {
 .column {
     flex-basis: calc(100% / 7);
     text-align: center;
-    margin-right: 10px;
+    margin-right: 0;
 }
-
 
 .row .column:last-child {
     margin-right: 0;
 }
 
 .cell {
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     cursor: pointer;
-    height: 120px; 
-    
+    height: 125px;
+    padding: 0;
+    width: 100%;
 }
 
-.chevronButton {
-    padding: 5px 10px;
-    background-color: transparent;
-    border: none;
+.date-container {
+    border-bottom: 2px solid #EBEDEC;
+    padding: 10px 0;
+    width: 100%;
 }
 
-.month_name {
-    /* flex-grow: 1; */
+.number {
+    text-align: left;
+    margin: 0;
+    padding-left: 5px;
+    padding-bottom: 2px;
     font-weight: bold;
-    font-size: 26px;
-    padding: 30px;
-    display: inline;
+    font-size: calc(0.5rem + 1vw);
 }
 
-.day_of_week_name {
-    /** semibold **/
-    font-weight: 600;
-    font-size: 18px;
+.events {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 6px;
 }
 
-.inner_calendar_container {
-    background-color: #FFFFFF;
-    height: auto;
-    border-radius: 20px;
-    padding: 15px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.04);
-}
-
-.wrapper {
-    height: auto;
-    padding: 20px;
+.event {
+    background-color: #A2D9D1;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* don't render events that are disabled */
@@ -98,30 +105,40 @@ body {
     opacity: 0%;
 }
 
-.number {
-    text-align: left;
-    margin: 0;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 24px;
+.chevronButton {
+    padding: 5px;
+    background-color: transparent;
+    border: none;
 }
 
-.event {
-    background-color: #A2D9D1;
-    font-size: 12px;
-    border-radius: 5px;
-    padding: 2px 6px 2px 6px;
+.inner_calendar_container {
+    background-color: #FFFFFF;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.04);
 }
 
+.wrapper {
+    height: auto;
+    padding: 20px;
+}
 
-/* large desktop display */
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .calendar {
+        margin: 0px 0px 0px 10px;
+        padding: 15px 20px 20px 20px;
+        border-radius: 20px;
+        max-width: 53.25em;
+        height: auto;
+        width: 65vw;
+        color: #353638;
+        background-color: #EBEDEC;
+    }
 
-
-/* mobile display */
-
-
-
-
-
-
-  
+    .month_name {
+        font-weight: bold;
+        font-size: calc(1rem + 1vw);
+        padding: 10px;
+    }
+}

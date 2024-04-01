@@ -14,7 +14,7 @@ const CalendarSwitcher: React.FC<Props> = ({ selectedView, setSelectedView }) =>
   const views = ["Daily", "Weekly", "Monthly", "Yearly"];
 
   return (
-    <div className="w-[496.87px] h-11 px-[42px] bg-custom-yellow rounded-2xl justify-center items-center gap-[26px] inline-flex">
+    <div className=" hidden lg:inline-flex lg:w-[31.054rem] h-11 px-[42px] bg-custom-yellow rounded-2xl justify-center items-center gap-[26px]">
       {views.map((view) => (
         <button
           key={view}

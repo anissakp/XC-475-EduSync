@@ -1,62 +1,63 @@
 #list {
     list-style-type: none;
-    height: 365px ; 
-    overflow-y: auto; 
-    padding: 0 ; 
-    margin-top: 0; 
+    height: 365px;
+    overflow-y: auto;
+    padding: 0;
+    margin-top: 0;
 }
 
 #list.shorter-list {
-    height: 220px ; 
+    height: 220px;
 }
 
 .task {
     display: flex;
-    font-size:20px; 
-    margin-top: 10px ; 
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 #toDoList {
     background-color: #A0D7D0;
-    width: 316px; 
-    height: 460px; 
+    width: 316px;
+    height: 460px;
     border-radius: 20px;
-    padding-left: 25px; 
-    padding-top: 10px; 
+    padding-left: 25px;
+    padding-top: 10px;
     padding-right: 25px;
-    
-    
+
+
 }
 
 
-#header{
-    display: flex; 
+#header {
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .text {
     font-size: 24px;
 }
 
 .add {
-    width: 40px ; 
-    height: 40px ; 
+    width: 40px;
+    height: 40px;
     font-size: 2em;
-    background: none ; 
-    border: none;  
+    background: none;
+    border: none;
 }
 
 .horizontalLine {
-    border-color: black; 
-    border-width: 2px;
+    border-color: #6FB0B6;
+    border-width: 1px;
     border-bottom: 0;
-    margin: 0 ; 
+    margin-top: 10px;
 }
 
 .checkbox {
-    width: 24px ; 
-    height: 24px; 
-    margin-right: 15px ; 
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
 
 }
 
@@ -64,13 +65,13 @@
 
 .assignmentDetails.without-due-date {
     display: flex;
-    align-items: center; 
+    align-items: center;
 
 }
-  
+
 .assignmentDetails.with-due-date {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 
@@ -79,50 +80,47 @@
 }
 
 .dueDate {
-    margin: 0; 
+    margin: 0;
     background-color: #EBEDEC;
-    border-radius: 30px;
+    border-radius: 5px;
     padding: 10px;
-    margin-top: 10px; 
+    margin-top: 10px;
     font-size: 14px;
     text-align: center;
 }
 
 .taskTitle {
-    margin: 0 ; 
- 
+    margin: 0;
+
 }
 
 #addNewAssignment {
-    display: flex ; 
+    display: flex;
     flex-direction: column;
-    gap: 5px; 
+    gap: 5px;
 }
 
 #addTaskTitle {
-    background-color: #EBEDEC;
+    background-color: #D2EFED;
     border-radius: 30px;
     padding: 10px;
-    margin-top: 5px ; 
+    margin-top: 5px;
 }
 
 #addDate {
-    background-color: #EBEDEC;
+    background-color: #D2EFED;
     border-radius: 30px;
     padding: 10px;
 }
 
 #addTaskButton {
-    background-color: #EBEDEC;
+    background-color: #D2EFED;
     border-radius: 30px;
     padding: 10px;
 }
 
 
 .container {
-    display:flex; 
+    display: flex;
     justify-content: space-around;
 }
-
-
-  
