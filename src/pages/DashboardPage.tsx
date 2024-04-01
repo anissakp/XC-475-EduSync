@@ -40,7 +40,8 @@ export default function DashboardPage() {
     });
 
     const classes = await result.json();
-    const className = classes.map((elem: any) => elem.courseName)
+    const className = classes.map((elem:any)=>[elem.courseName,elem.courseID])
+    console.log("classname", className)
     setClassNameList(className)
 
     let arr: any = [];
@@ -113,7 +114,7 @@ export default function DashboardPage() {
       {/* {loading ? <CircularIndeterminate/> : <div></div>} }
       */}
       <div className="flex p-[0.5em] sm:p-[2em] ">
-        {isSideMenuOpen && <SideMenu classNameList={[]} />}
+        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
 
         <div className=" hidden lg:block">{ToDoListComponent}</div>
