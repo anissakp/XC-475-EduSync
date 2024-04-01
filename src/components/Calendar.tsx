@@ -17,6 +17,7 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
+import DropdownCalendarView from "./DropdownCalendarView";
 
 interface Course {
   date: Date;
