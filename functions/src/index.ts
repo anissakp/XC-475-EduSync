@@ -151,8 +151,8 @@ export const exchangeToken = onRequest(async (request, response) => {
   const tokenExchangeUrl = 'https://oauth2.googleapis.com/token';
   const params = new URLSearchParams();
   params.append('code', code);
-  params.append('client_id', 'YOUR_CLIENT_ID'); // Replace with your actual client ID
-  params.append('client_secret', 'YOUR_CLIENT_SECRET'); // Replace with your actual client secret
+  params.append('client_id', '642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com'); // Replace with your actual client ID
+  params.append('client_secret', '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'); // Replace with your actual client secret
   params.append('redirect_uri', redirect_uri);
   params.append('grant_type', 'authorization_code');
 
@@ -166,17 +166,24 @@ export const exchangeToken = onRequest(async (request, response) => {
       },
     });
 
+    console.log("IDK")
+
     // Check if the fetch request was not successful
     if (!fetchResponse.ok) {
+      console.log("THIS IS WRONG")
       throw new Error(`Server responded with ${fetchResponse.status}`);
     }
+
+    console.log("DOES IT GO HERE")
 
     // Await the parsing of the JSON response
     const data = await fetchResponse.json();
 
     // Respond to the client with the access token
     // Optionally, you can handle storing the tokens securely or further processing here
-    response.send({ accessToken: data.access_token });
+    // response.send({ accessToken: data.access_token });
+    const frontendRedirectUri = `http://localhost:5173/piazza?accessToken=${data.access_token}`;
+    response.redirect(frontendRedirectUri);
   } catch (error:any) {
     // Log and respond with the error
     console.error('Failed to exchange token:', error);
