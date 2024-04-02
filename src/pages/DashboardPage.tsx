@@ -44,7 +44,7 @@ export default function DashboardPage() {
     });
 
     const classes = await result.json();
-    const className = classes.map((elem:any)=>[elem.courseName,elem.courseID])
+    const className = classes.map((elem: any) => [elem.courseName, elem.courseID])
     console.log("classname", className)
     setClassNameList(className)
 
@@ -73,7 +73,7 @@ export default function DashboardPage() {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        const userRef = doc(db, "users", user.uid); 
+        const userRef = doc(db, "users", user.uid);
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
           getAssignments(user.uid);
@@ -86,13 +86,13 @@ export default function DashboardPage() {
           getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           fetchAssignmentsFromFirestore(user.uid);
-        } 
+        }
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard, fetch and update assignments
           getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           fetchAssignmentsFromFirestore(user.uid);
-        } 
+        }
         else {
           fetchAssignmentsFromFirestore(user.uid);
         }
@@ -106,7 +106,7 @@ export default function DashboardPage() {
 
   // function to save assignments to database, userID is from Firebase Auth
   const saveAssignmentsToFirestore = async (userID: string, classes: any) => {
-    const userDocRef = doc(db, 'users', userID); 
+    const userDocRef = doc(db, 'users', userID);
     for (const classInfo of classes) {
       for (const assignment of classInfo.assignments) {
         const assignmentId = assignment.id;
@@ -124,23 +124,23 @@ export default function DashboardPage() {
   };
 
   // **************NEW *************************
-const fetchAssignmentsFromFirestore = async (userId: string) => {
-  console.log("fetchAssignmentsFromFirestore called", userId);
-  const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
-  const querySnapshot = await getDocs(userAssignmentsRef);
-  const assignments:any = [];
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    assignments.push({
-      date: data.dueDate.toDate(), 
-      event: `${data.courseName} ${data.name}`,
+  const fetchAssignmentsFromFirestore = async (userId: string) => {
+    console.log("fetchAssignmentsFromFirestore called", userId);
+    const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
+    const querySnapshot = await getDocs(userAssignmentsRef);
+    const assignments: any = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      assignments.push({
+        date: data.dueDate.toDate(),
+        event: `${data.courseName} ${data.name}`,
+      });
     });
-  });
-  console.log(assignments);
-  setCourses(assignments);
-};
+    console.log(assignments);
+    setCourses(assignments);
+  };
 
-//*************************************NEW ******************************* */
+  //*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
   const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
 
@@ -154,12 +154,12 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-      
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+
+      {loading ? <CircularIndeterminate /> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading} />}
       {/*loading ? <CircularIndeterminate/> : <div></div>} */}
-      
-      <div className="flex p-[0.5em] sm:p-[2em] ">
-        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
+
+      <div className="flex p-[0.5em] lg:p-[2em] ">
+        {isSideMenuOpen && <SideMenu classNameList={[]} />}
         <Calendar courses={courses} />
 
         <div className=" hidden lg:block">{ToDoListComponent}</div>

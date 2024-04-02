@@ -17,6 +17,7 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
+import DropdownCalendarView from "./DropdownCalendarView";
 
 interface Course {
   date: Date;
@@ -69,11 +70,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
         days.push(
           <div
-            className={`column cell ${
-              !isSameMonth(day, monthStart)
-                ? "text-gray-400"
-                : ""
-            } ${i > 0 ? "border-l-2" : ""}`}
+            className={`column cell ${!isSameMonth(day, monthStart)
+              ? "text-gray-400"
+              : ""
+              } ${i > 0 ? "border-l-2" : ""}`}
             key={day.toString()}
           >
             <p className="number">{formattedDate}</p>
@@ -90,16 +90,15 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </div>
           </div>
         );
-        
+
         day = addDays(day, 1);
       }
 
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
-          className={`flex justify-between ${
-            day > endDate && rows.length > 4 ? "hidden" : ""
-          } ${isFirstRow ? "" : "border-t-2"}`}
+          className={`flex justify-between ${day > endDate && rows.length > 4 ? "hidden" : ""
+            } ${isFirstRow ? "" : "border-t-2"}`}
           key={day.toString()}
         >
           {days}
@@ -113,19 +112,19 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const renderWeeklyCells = () => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
-  
+
     const dateFormat = "d";
     const dayOfWeekFormat = "EEE";
     const days = [];
-  
+
     let day = weekStart;
-  
+
     for (let i = 0; i < 7; i++) {
       const formattedDate = format(day, dateFormat);
       const dayOfWeek = format(day, dayOfWeekFormat).toUpperCase();
-  
+
       const eventsForDay = courses.filter((event) => isSameDay(event.date, day));
-  
+
       days.push(
         <div
           className={`column cell weekly-cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
@@ -137,42 +136,43 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             <span className="text-neutral-700 text-xl font-medium font-['Quicksand']">{dayOfWeek}</span>
           </div>
           <div className="w-full h-[645px]">
-          <div className="events">
-            {eventsForDay.map((event, index) => {
-              const [className, ...assignmentTitle] = event.event.split(' ');
-              return (
-                <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2" key={index}> 
-                <div className="flex justify-between items-center">
-                  <span className="font-extrabold">{className}</span> 
-                  <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 ml-2" /> 
-                </div>
-                {assignmentTitle.join(' ')}
-                <button className="w-[83px] h-[30px] px-2.5 py-1 bg-cyan-800 rounded flex justify-start items-center mt-2 text-white text-[12px] font-medium font-['Quicksand'] uppercase leading-snug tracking-wide"> {/* Button under the assignment */}
-                  More
-                  <img src={IconRight} alt="Icon" className="w-4 h-4" /> 
-                </button>
-              </div>
-              );
-            })}
+            <div className="events">
+              {eventsForDay.map((event, index) => {
+                const [className, ...assignmentTitle] = event.event.split(' ');
+                return (
+                  <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2" key={index}>
+                    <div className="flex justify-between items-center">
+                      <span className="font-extrabold">{className}</span>
+                      <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 ml-2" />
+                    </div>
+                    {assignmentTitle.join(' ')}
+                    <button className="w-[83px] h-[30px] px-2.5 py-1 bg-cyan-800 rounded flex justify-start items-center mt-2 text-white text-[12px] font-medium font-['Quicksand'] uppercase leading-snug tracking-wide"> {/* Button under the assignment */}
+                      More
+                      <img src={IconRight} alt="Icon" className="w-4 h-4" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          </div>
-          
+
         </div>
       );
       day = addDays(day, 1);
     }
-  
+
     return <div className="flex justify-between">
       {days}
     </div>;
   };
-  
+
 
   const dateFormat = "MMMM yyyy";
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  // calendar header code
   return (
-    <div className="w-[1042px] h-[875px] bg-[#EBEDEC] ml-[-5px] rounded-[20px] ">
+    <div className="w-[1042px] h-[875px] bg-[#EBEDEC] rounded-[20px] ">
       <div className="calendar_header flex justify-between items-center">
         <div>
           <button className="chevronButton" onClick={prevMonth}>
@@ -207,17 +207,26 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </svg>
           </button>
         </div>
-        <div>
+
+        <div className="block lg:hidden">
+          <DropdownCalendarView
+            selectedView={selectedView}
+            setSelectedView={setSelectedView} />
+        </div>
+
+        <div className="hidden lg:block">
           <CalendarViewSwitcher
             selectedView={selectedView}
             setSelectedView={setSelectedView}
           />
         </div>
+
+
       </div>
 
       {/* MONTHLY CALENDAR VIEW */}
       {selectedView === "Monthly" && (
-        <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
+        <div className="bg-white w-full sm:w-[96%] h-[90%] lg:h-[774px] lg:p-[20px] mx-auto rounded-[20px] ">
           <div className="wrapper">
             <div className="days row day_of_week_name">
               {days.map((day) => (
@@ -230,7 +239,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
           </div>
         </div>
       )}
-      
+
       {/* WEEKLY CALENDAR VIEW */}
       {selectedView === "Weekly" && (
         <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
