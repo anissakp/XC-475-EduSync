@@ -18,6 +18,7 @@ import {
   subMonths,
 } from "date-fns";
 import DropdownCalendarView from "./DropdownCalendarView";
+import DropdownCalendarView from "./DropdownCalendarView";
 
 interface Course {
   date: Date;
@@ -113,17 +114,22 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
 
+
     const dateFormat = "d";
     const dayOfWeekFormat = "EEE";
     const days = [];
 
+
     let day = weekStart;
+
 
     for (let i = 0; i < 7; i++) {
       const formattedDate = format(day, dateFormat);
       const dayOfWeek = format(day, dayOfWeekFormat).toUpperCase();
 
+
       const eventsForDay = courses.filter((event) => isSameDay(event.date, day));
+
 
       days.push(
         <div
@@ -156,15 +162,18 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </div>
           </div>
 
+
         </div>
       );
       day = addDays(day, 1);
     }
 
+
     return <div className="flex justify-between">
       {days}
     </div>;
   };
+
 
 
   const dateFormat = "MMMM yyyy";
@@ -222,6 +231,8 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
         </div>
 
 
+
+
       </div>
 
       {/* MONTHLY CALENDAR VIEW */}
@@ -239,6 +250,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
           </div>
         </div>
       )}
+
 
       {/* WEEKLY CALENDAR VIEW */}
       {selectedView === "Weekly" && (
