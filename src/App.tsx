@@ -11,6 +11,10 @@ import PiazzaPage from "./pages/PiazzaPage";
 import CoursesPage from "./pages/CoursesPage";
 import TasksPage from "./pages/TasksPage"
 
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import { Edit } from "@mui/icons-material";
+
 function App() {
   const [token, setToken] = useState("");
   const [userID, setUserID] = useState("");
@@ -112,6 +116,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/piazza" element={<PiazzaPage/>}/>
           <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/editProfile" element={<EditProfile/>} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
