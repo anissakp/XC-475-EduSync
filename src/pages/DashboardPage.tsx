@@ -15,6 +15,7 @@ import FormDialog from "../components/FormDialog";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import SideMenuButton from "../components/SideMenuButton";
 import { collection, getDocs, getDoc } from "firebase/firestore";
+import StickyNote from "../components/StickyNotes";
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
@@ -139,6 +140,11 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
   console.log(assignments);
   setCourses(assignments);
 };
+const [stickyNotes, setStickyNotes] = useState<number[]>([]);
+const onClone = (id: number) => {
+  const newId = Date.now(); // Generate a new ID for the cloned sticky note
+  setStickyNotes((prevStickyNotes) => [...prevStickyNotes, newId]); // Add the new ID to the stickyNotes state
+};
 
 //*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
@@ -161,14 +167,23 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
       <div className="flex p-[0.5em] sm:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
+        <div>
 
         <div className=" hidden lg:block">{ToDoListComponent}</div>
 
-        {/* Task button when a screen is minimized */}
-        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap " >
-          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
-          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+{/* Task button when a screen is minimized */}
+
+<div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap " >
+  {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+  <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+</div>
+<button className="w-[90%] h-[5%] ml-8 mt-5" onClick={() => onClone(-1)}>Sticky Notes</button>
         </div>
+        
+        {stickyNotes.map((id) => (
+        <StickyNote key={id} onClone={() => onClone(id)} />
+      ))}
+       
       </div>
     </div>
   );
