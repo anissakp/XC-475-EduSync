@@ -76,8 +76,8 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             } ${i > 0 ? "border-l-2" : ""}`}
             key={day.toString()}
           >
-            <p className="number">{formattedDate}</p>
-            <div className="events">
+            <p className="number text-left m-0 pl-[5px] pb-[2px] font-bold text-[calc(0.5rem+1vw)]">{formattedDate}</p>
+            <div className="events w-[90%] mx-auto mt-[6px]">
               {eventsForDay.map((event, index) => {
                 // Split the event string into class name and assignment name
                 const [className, assignmentName] = event.event.split(' ', 2);
@@ -128,7 +128,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   
       days.push(
         <div
-          className={`column cell weekly-cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
+          className={`column cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
           key={day.toString()}
         >
           <div className="date-container text-center">
@@ -137,7 +137,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             <span className="text-neutral-700 text-xl font-medium font-['Quicksand']">{dayOfWeek}</span>
           </div>
           <div className="w-full h-[645px]">
-          <div className="events">
+          <div className="events w-[90%] mx-auto mt-[6px]">
             {eventsForDay.map((event, index) => {
               const [className, ...assignmentTitle] = event.event.split(' ');
               return (
@@ -162,7 +162,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       day = addDays(day, 1);
     }
   
-    return <div className="flex justify-between">
+    return <div className="flex justify-between font-['Quicksand']">
       {days}
     </div>;
   };
@@ -172,10 +172,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   return (
-    <div className="w-[1042px] h-[875px] bg-[#EBEDEC] ml-[-5px] rounded-[20px] ">
-      <div className="calendar_header flex justify-between items-center">
+    <div className="w-[1042px] h-[875px] bg-[#EBEDEC] ml-[-5px] rounded-[20px] font-['Quicksand']">
+      <div className="calendar_header flex justify-between items-center h-auto p-[20px]">
         <div>
-          <button className="chevronButton" onClick={prevMonth}>
+          <button className="chevronButton p-[5px] bg-transparent border-none" onClick={prevMonth}>
             <svg
               width="29"
               height="22"
@@ -189,10 +189,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
               />
             </svg>
           </button>
-          <div className="month_name">
+          <div className="month_name font-bold text-[calc(1rem+1vw)] p-[10px] inline">
             {format(currentMonth, dateFormat).toUpperCase()}
           </div>
-          <button className="chevronButton" onClick={nextMonth}>
+          <button className="chevronButton p-[5px] bg-transparent border-none" onClick={nextMonth}>
             <svg
               width="11"
               height="16"
@@ -218,10 +218,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       {/* MONTHLY CALENDAR VIEW */}
       {selectedView === "Monthly" && (
         <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
-          <div className="wrapper">
-            <div className="days row day_of_week_name">
+          <div className="wrapper h-auto p-[20px]">
+            <div className="day_of_week_name flex justify-between pt-[30px] pb-[20px] font-semibold text-[calc(0.5rem+1vw)] gap-[10px]">
               {days.map((day) => (
-                <div className="column" key={day}>
+                <div className="column column flex-[calc(100%/7)] text-center mr-0" key={day}>
                   {day}
                 </div>
               ))}
@@ -234,7 +234,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       {/* WEEKLY CALENDAR VIEW */}
       {selectedView === "Weekly" && (
         <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
-          <div className="wrapper h-full">
+          <div className="wrapper h-auto p-[20px]">
             {renderWeeklyCells()}
           </div>
         </div>

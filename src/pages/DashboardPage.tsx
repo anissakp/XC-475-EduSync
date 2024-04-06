@@ -158,14 +158,14 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
       {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
       {/*loading ? <CircularIndeterminate/> : <div></div>} */}
       
-      <div className="flex p-[0.5em] sm:p-[2em] ">
+      <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
 
         <div className=" hidden lg:block">{ToDoListComponent}</div>
 
         {/* Task button when a screen is minimized */}
-        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap " >
+        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap font-['Quicksand']" >
           {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
           <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
         </div>
