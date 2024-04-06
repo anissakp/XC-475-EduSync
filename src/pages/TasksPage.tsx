@@ -87,8 +87,8 @@ export default function TasksPage() {
             
             
         <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px]">
-            <SideMenuButton  onClick={toggleSideMenu} />
-            <button className="bg-black text-white ml-14 " onClick={goToCalendar}>{'< CALENDAR'}</button>
+            <SideMenuButton onClick={toggleSideMenu} />
+            <button className="bg-black text-white ml-4" onClick={goToCalendar}>{'< CALENDAR'}</button>
             <p className="ml-[52px] font-bold text-[32px] ">Tasks</p>
         </div>
     
