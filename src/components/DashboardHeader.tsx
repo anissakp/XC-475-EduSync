@@ -1,6 +1,7 @@
 // DashboardHeader.tsx
 import React, { useState } from "react";
 import SideMenuButton from "./SideMenuButton";
+import { useNavigate } from "react-router-dom";
 
 
 interface DashboardHeaderProps {
@@ -8,11 +9,24 @@ interface DashboardHeaderProps {
 }
 export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
 
-    return (
-        <div className="bg-[#EBEDEC] h-[45px] lg:h-[90px] flex pl-[23px]">
+    const navigate = useNavigate() 
 
-            <div><SideMenuButton onClick={onClick} /></div>
-            <div><p className="ml-[52px] text-2xl lg:text-4xl font-bold text-[20px] mt-[0.35em] lg:mt-[1.44rem]">Calendar</p></div>
+    const goToProfile = () => {
+
+        navigate('/Profile')
+    }
+
+    return (
+        <div className="bg-[#EBEDEC] h-[45px] lg:h-[90px] flex pl-[23px] justify-between items-center">
+
+            <div className="flex">
+                <div><SideMenuButton onClick={onClick} /></div>
+                <div><p className="ml-4 text-2xl lg:text-4xl font-bold text-[32px]">Calendar</p></div>
+            </div>
+
+            
+
+            <div  onClick={goToProfile}className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
 
         </div>
     );
