@@ -28,12 +28,12 @@ export default function EditProfile () {
                 <div className='w-[352px]' >
                     <img src={selectedImage}className='w-[322px] h-[322px] bg-gray-300 rounded-full'></img>
                     <div className='grid grid-cols-3 gap-[20px] mt-[20px]'>
-                        <img onClick={() => handleImageClick('profile pic.svg')} src="profile pic.svg"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
-                        <img onClick={() => handleImageClick('susan1.png')} src="susan1.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
-                        <img onClick={() => handleImageClick('susan2.png')} src="susan2.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
-                        <img onClick={() => handleImageClick('susan3.png')} src="susan3.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
-                        <img onClick={() => handleImageClick('susan4.png')} src="susan4.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
-                        <img onClick={() => handleImageClick('susan5.png')} src="susan5.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full'/>
+                        <img onClick={() => handleImageClick('profile pic.svg')} src="profile pic.svg"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
+                        <img onClick={() => handleImageClick('Emily.png')} src="Emily.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
+                        <img onClick={() => handleImageClick('Samantha.png')} src="Samantha.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
+                        <img onClick={() => handleImageClick('Shaimaa.png')} src="Shaimaa.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
+                        <img onClick={() => handleImageClick('Anissa.png')} src="Anissa.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
+                        <img onClick={() => handleImageClick('Zai.png')} src="Zai.png"className='w-[90px] h-[90px] bg-gray-300 rounded-full hover:cursor-pointer'/>
                     </div>
 
                 </div>
