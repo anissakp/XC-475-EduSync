@@ -1,157 +1,94 @@
-// import { useState, useEffect } from "react"
-
-// export default function PiazzaPage(){
-//   const [isAuthorized, setIsAuthorized] = useState(false);
-//   const [content, setContent] = useState('');
-
-//   useEffect(() => {
-//     // Load the Google API client library
-//     const loadGapi = () => {
-//       const script = document.createElement('script');
-//       script.src = 'https://apis.google.com/js/api.js';
-//       script.onload = () => {
-//         window.gapi.load('client', () => {
-//           initializeGapiClient();
-//         });
-//       };
-//       document.body.appendChild(script);
-//     };
-
-//     // Load the Google Identity Services library
-//     const loadGis = () => {
-//       const script = document.createElement('script');
-//       script.src = 'https://accounts.google.com/gsi/client';
-//       script.onload = gisLoaded;
-//       document.body.appendChild(script);
-//     };
-
-//     loadGapi();
-//     loadGis();
-//   }, []);
-
-//   const initializeGapiClient = async () => {
-//     await window.gapi.client.init({
-//       apiKey: 'AIzaSyDDeEBb4pmbeXWu7BKkfzsrKj7xlpD-Jno',
-//       discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'],
-//     });
-//     maybeEnableButtons();
-//   };
-
-//   const gisLoaded = () => {
-//     // Initialize your Google Identity Services client here
-//     maybeEnableButtons();
-//   };
-
-//   const maybeEnableButtons = () => {
-//     // Logic to enable buttons if both gapi and GIS are loaded
-//     console.log("Token", window.gapi.client.getToken())
-//     setIsAuthorized(window.gapi.client.getToken() !== null);
-//   };
-
-//   const handleAuthClick = () => {
-//     // Initialize the token client if it hasn't been already initialized in gisLoaded
-//     if (!window.tokenClient) {
-//       window.tokenClient = window.google.accounts.oauth2.initTokenClient({
-//         client_id: '642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com',
-//         scope: 'https://www.googleapis.com/auth/gmail.readonly',
-//         callback: '', // The callback will be set dynamically
-//       });
-//     }
-  
-//     window.tokenClient.callback = async (response) => {
-//       if (response.error !== undefined) {
-//         // Handle the error. For example, show an error message
-//         console.error(response.error);
-//         return;
-//       }
-//       // The user is successfully authorized; you can make API calls here.
-//       setIsAuthorized(true);
-//       listLabels(); // Assuming you have a function to list labels or perform other API calls
-//     };
-  
-//     // Request an access token. The first time you call this, it will prompt the user for consent.
-//     window.tokenClient.requestAccessToken({prompt: ''});
-//   };
-
-//   const handleSignoutClick = () => {
-//     window.google.accounts.oauth2.revoke(window.gapi.client.getToken().access_token, () => {
-//       window.gapi.client.setToken(null);
-//       setIsAuthorized(false);
-//       setContent('');
-//     });
-//   };
-
-//   const listMessages = async () => {
-//     let response;
-//     try {
-//       // response = await gapi.client.gmail.users.labels.list({
-//       //   'userId': 'me',
-//       // });
-//       response = await window.gapi.client.gmail.users.messages.list({
-//         'userId': 'me',
-//       });
-//     } catch (err) {
-//       setContent(err.message)
-//       return;
-//     }
-
-//     // const labels = response.result.labels;
-//     const messages = response.result.messages;
-
-//     const searchString = 'no-reply@piazza.com'
-//     const filteredMessagePromises = messages.map(async (elem) => {
-//       const indMessages = await window.gapi.client.gmail.users.messages.get({
-//         'userId': 'me',
-//         'id': elem.id, // This might need to be elem.id instead of messages[10].id
-//       });
-//       // console.log("INDMESSAGES", indMessages)
-//       for (let header of indMessages.result.payload.headers) {
-//         if (header.name === "From" && header.value.includes(searchString)) {
-//           return indMessages.result; // Ensure you're returning the correct part of the response
-//         }
-//       }
-//       return null; // Return null or similar if the condition is not met
-//     });
-
-//     // Wait for all promises to resolve
-//     Promise.all(filteredMessagePromises).then((messages) => {
-//       // Filter out nulls if some messages didn't match the criteria
-//       const filteredMessages = messages.filter(msg => msg !== null);
-//       console.log(filteredMessages);
-//     });
-//   };
-
-//   // When authorization state changes, list labels if authorized
-//   useEffect(() => {
-//     if (isAuthorized) {
-//       console.log("isAuhthorized", isAuthorized)
-//       listMessages();
-//     }
-//   }, [isAuthorized]);
-
-//   return (
-//     <div>
-//       <p>Gmail API Quickstart</p>
-//       <button onClick={handleAuthClick} style={{ visibility: isAuthorized ? 'hidden' : 'visible' }}>
-//         Authorize
-//       </button>
-//       <button onClick={handleSignoutClick} style={{ visibility: isAuthorized ? 'visible' : 'hidden' }}>
-//         Sign Out
-//       </button>
-//       <pre style={{ whiteSpace: 'pre-wrap' }}>Hello</pre>
-//     </div>
-//   );
-// };
+import { app, db } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
 
 export default function PiazzaPage(){
-  const YOUR_FIREBASE_FUNCTION_URL = "http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken"
+  const [userID, setUserID] = useState("")
+  const [authorized, setAuthorized] = useState(false)
+  const [piazzaData, setPiazzaData] = useState([])
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      onAuthStateChanged(auth, async (user) => {
+          setUserID(user.uid);
+          const docRef = doc(db, `users/${user.uid}`);
+          const docSnap = await getDoc(docRef);
+          const data = docSnap.data()
+
+          // If Access Token Doesn't Exist => Need to Authorize => Display Authorize Button
+          if (!data.gmailApiAccessToken) setAuthorized(true)
+          else {
+            const date = new Date(data.gmailApiAccessTokenExpiration.seconds * 1000 + data.gmailApiAccessTokenExpiration.nanoseconds / 1000000);
+            if (data.gmailApiAccessToken && date > new Date()){
+              //THIS MEANS ACCESS TOKEN AVAILABLE AND NOT EXPIRED THEN FETCH ANNOUNCEMTNS
+              connectPiazza(user.uid)
+              
+            }else{
+              // USE REFRESH TOKEN 
+              getPiazzaNewToken(user.uid)
+              connectPiazza(user.uid)
+            }
+          }
+      });
+    };
+    fetchData();
+  }, []);
+
+
+  const state = JSON.stringify({userID: userID});
+  const encodedState = encodeURIComponent(state);
+  
+  const YOUR_FIREBASE_FUNCTION_URL = `http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken`
   const YOUR_CLIENT_ID = "642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com"
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&redirect_uri=${encodeURIComponent(YOUR_FIREBASE_FUNCTION_URL)}&response_type=code&scope=${encodeURIComponent('https://www.googleapis.com/auth/gmail.readonly')}&access_type=offline&prompt=consent`;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&redirect_uri=${encodeURIComponent(YOUR_FIREBASE_FUNCTION_URL)}&response_type=code&scope=${encodeURIComponent('https://www.googleapis.com/auth/gmail.readonly')}&access_type=offline&prompt=consent&state=${encodedState}`;
 
   const handleLogin = () => {
     window.location.href = GOOGLE_AUTH_URL;
   };
 
-  return <button onClick={handleLogin}>Authorize</button>
+  const connectPiazza = async (userId) => {
+    const result = await fetch(`http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaAnnouncements?userID=${userId}`);
+    const data = await result.json()
+    setPiazzaData(data)
+    console.log("PIZAAPAGE", data)
+  }
+
+  const getPiazzaNewToken = async (userId) => {
+    const result = await fetch(`http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaNewAccessToken?userID=${userId}`);
+    const data = await result.json()
+    console.log("getpiazza new", data)
+  }
+
+  const display = piazzaData.map((elem)=>{
+    let encoded_text_plain = elem.payload.parts[0].parts[0].body.data
+    encoded_text_plain = encoded_text_plain.replace(/-/g, '+').replace(/_/g, '/');
+    encoded_text_plain += '='.repeat((4 - encoded_text_plain.length % 4) % 4);
+    let decoded_text_plain = atob(encoded_text_plain);
+  
+    const arr = decoded_text_plain.split(" ")
+    if (arr[0] === "Instructor"){
+      return (
+        <div className="border border-black rounded-xl p-5">
+          <div>{elem.payload.headers[33].value.split("on Piazza")[0]}</div>
+          <div>{decoded_text_plain.split("Go to https://piazza")[0]}</div>
+        </div>
+      )
+    }
+  })
+
+  return (
+  <div>
+    <h2 className="text-5xl text-center mb-10 mt-5">Piazza Instructor Announcements</h2>
+    <div className="flex justify-center gap-6 mb-10">
+      {authorized && <button onClick={handleLogin}>Authorize</button>}
+      {/* <button onClick={connectPiazza}>Connect Piazza</button> */}
+    </div>
+    <div className="flex flex-col gap-9 px-9">{display}</div>
+  </div>)
 }
+
+
+
 
