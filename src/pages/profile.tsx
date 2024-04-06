@@ -17,29 +17,32 @@ export default function Profile() {
     }
     return (
         <div className='flex flex-col gap-[33px]'>
-            <div className="h-[90px] w-full flex justify-between items-center px-8">
-                <img className="w-[238px] mt-auto  h-[83px]"src="mainLogo2.png"></img>
-                <button onClick={goToDashboard}className='bg-black text-white'>{"< Dashboard"}</button>
-
-            </div>
-            <div className='relative'>
-                <div className="h-[161px] bg-gradient-to-r from-[#F7E2B3] to-[#6FB0B6]"></div>
-                <div className='flex w-[1232px] ml-auto mr-auto justify-between'> 
-                    <div className='flex'>
-                        
-                        <img  src="ShaimaaSabbagh.png" className='bg-[#EBEDEC] w-[216px] h-[216px] rounded-full  border-solid absolute top-16 border-[#EBEDEC] border-[10px] m-0 p-0'/>
-                       
-                        <div className='ml-60 mt-4'>
-                            <p className='text-[34px]'>Shaimaa Sabbagh</p>
-                            <p>Computer Science - Senior</p>
-                            <p className='font-extrabold'>SHARED NOTES: 133 LIKES: 500 FRIENDS: 12</p>
-                        </div>
-
-                    </div>
-                    
-                    <button onClick={goToEditProfile} className='bg-[#6FB0B6] text-white mt-6'>EDIT/VIEW INFORMATION</button>
+            <div>
+                <div className=" w-full flex justify-between items-center  px-8 py-4 mb-0">
+                    <img className="w-[238px] mt-auto  h-[83px]"src="mainLogo2.png"></img>
+                    <button onClick={goToDashboard}className='bg-black text-white'>{"< Dashboard"}</button>
                 </div>
+                <div className='relative'>
+                    <div className="h-[161px] bg-gradient-to-r from-[#F7E2B3] to-[#6FB0B6] "></div>
+                    <div className='flex w-[1232px] ml-auto mr-auto justify-between'> 
+                        <div className='flex'>
+                            
+                            <img  src="ShaimaaSabbagh.png" className='bg-[#EBEDEC] w-[216px] h-[216px] rounded-full  border-solid absolute top-16 border-[#EBEDEC] border-[10px] m-0 p-0'/>
+                        
+                            <div className='ml-60 mt-4'>
+                                <p className='text-[34px]'>Shaimaa Sabbagh</p>
+                                <p>Computer Science - Senior</p>
+                                <p className='font-extrabold'>SHARED NOTES: 133 LIKES: 500 FRIENDS: 12</p>
+                            </div>
+
+                        </div>
+                        
+                        <button onClick={goToEditProfile} className='bg-[#6FB0B6] text-white mt-6'>EDIT/VIEW INFORMATION</button>
+                    </div>
+                </div>
+
             </div>
+            
             
             <div className='ml-auto mr-auto mt-10'>
                 <TextField rows={2} multiline className='w-[1232px]  bg-[#D9D9D9]' label="Description"/>
