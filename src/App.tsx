@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./authContext";
 
+import { getAuth } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
+
+
 import DashboardPage from "./pages/DashboardPage";
 import ConnectPage from "./pages/ConnectPage";
 import AuthorizedPage from "./pages/AuthorizedPage";
@@ -72,6 +77,17 @@ function App() {
         setToken(data.access_token);
         setUserID(data.user_id);
 
+        // ******* store refresh token in the database ********
+        const firebaseAuth = getAuth();
+        const firebaseAuthUser = firebaseAuth.currentUser;
+        if (firebaseAuthUser) {
+          console.log("refresh token stored in DB [ only happens when no token in local storage ] ")
+          const userDocRef = doc(db, 'users', firebaseAuthUser.uid); 
+          // assignment document saved in user's assignments subcollection
+          await setDoc(userDocRef, { refreshToken: data.refresh_token }, { merge: true } );
+        }
+
+        // *** delete this line after storing refresh token in database ***
         setStorageValue(data.user_id, data.access_token, data.refresh_token)
       }
 
