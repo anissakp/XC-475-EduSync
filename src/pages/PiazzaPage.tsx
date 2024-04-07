@@ -56,11 +56,7 @@ export default function PiazzaPage() {
   // Generate googleauth url
   const state = JSON.stringify({ userID: userID });
   const encodedState = encodeURIComponent(state);
-  // const YOUR_FIREBASE_FUNCTION_URL = `http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken`;
   const YOUR_FIREBASE_FUNCTION_URL = import.meta.env.VITE_PIAZZA_TOKEN_URL;
-  
-  // const YOUR_CLIENT_ID =
-  //   "642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com";
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     YOUR_FIREBASE_FUNCTION_URL
   )}&response_type=code&scope=${encodeURIComponent(
@@ -75,7 +71,6 @@ export default function PiazzaPage() {
   const connectPiazza = async (userId: any) => {
     setLoading(true);
     const result = await fetch(
-      // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaAnnouncements?userID=${userId}`
       `${import.meta.env.VITE_PIAZZA_ANNOUNCEMENT_URL}?userID=${userId}`
     );
     const data = await result.json();
@@ -85,7 +80,6 @@ export default function PiazzaPage() {
 
   const getPiazzaNewToken = async (userId: any) => {
     const result = await fetch(
-      // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaNewAccessToken?userID=${userId}`
       `${import.meta.env.VITE_PIAZZA_REFRESH_TOKEN_URL}?userID=${userId}`
     );
     const data = await result.json();
