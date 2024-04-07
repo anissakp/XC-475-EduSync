@@ -35,6 +35,7 @@ export default function DashboardPage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async (userId: string) => {
+    console.log("BB getAssignments called")
     const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
     const result = await fetch(bbCoursesUrl, {
       headers: {
@@ -60,10 +61,10 @@ export default function DashboardPage() {
 
       arr = [...arr, ...newArr];
     }
+    setCourses(arr);
+
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
-    setCourses(arr);
-    setResetCal(!resetCal);
   };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
@@ -74,38 +75,45 @@ export default function DashboardPage() {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         const userRef = doc(db, "users", user.uid); 
+
+        
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
-          getAssignments(user.uid);
+          await getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
-          fetchAssignmentsFromFirestore(user.uid);
+          await fetchAssignmentsFromFirestore(user.uid);
         }
-        else if (userDoc.exists() && userDoc.data().blackboardConnected) {
-          // if user pressed connect to Blackboard, fetch and update assignments
-          getAssignments(user.uid);
-          await setDoc(userRef, { blackboardConnected: false }, { merge: true });
-          fetchAssignmentsFromFirestore(user.uid);
-        } 
+        // else if (userDoc.exists() && userDoc.data().blackboardConnected) {
+        //   // if user pressed connect to Blackboard, fetch and update assignments
+        //   getAssignments(user.uid);
+        //   await setDoc(userRef, { blackboardConnected: false }, { merge: true });
+        //   fetchAssignmentsFromFirestore(user.uid);
+        // } 
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard, fetch and update assignments
-          getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
-          fetchAssignmentsFromFirestore(user.uid);
+          await fetchAssignmentsFromFirestore(user.uid);
         } 
         else {
-          fetchAssignmentsFromFirestore(user.uid);
+          // ***************** even if a user never pressed connect to BB button this happens rip ******************88
+          await getAssignments(user.uid);
+          await fetchAssignmentsFromFirestore(user.uid);
         }
+        // else {
+        //   fetchAssignmentsFromFirestore(user.uid);
+        // }
       } else {
         console.log("User is not signed in");
         setLoading(false);
       }
     });
-  }, [auth.token, auth.userID, resetCal]);
+  }, [auth.token, auth.userID]);
 
 
   // function to save assignments to database, userID is from Firebase Auth
   const saveAssignmentsToFirestore = async (userID: string, classes: any) => {
+    console.log("saveAssignToFirestore called from getAssignments {BB only} ")
     const userDocRef = doc(db, 'users', userID); 
     for (const classInfo of classes) {
       for (const assignment of classInfo.assignments) {
@@ -136,6 +144,10 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
       event: `${data.courseName} ${data.name}`,
     });
   });
+
+
+  // *********** trying to do both courses / append them ********
+
   console.log(assignments);
   setCourses(assignments);
 };
@@ -155,7 +167,7 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
       
-      {loading ? <CircularIndeterminate/> : <FormDialog courses={courses} setCourses={setCourses} setLoading={setLoading}/> } 
+      {/* {loading ? <CircularIndeterminate/> : <FormDialog /> }  */}
       {/*loading ? <CircularIndeterminate/> : <div></div>} */}
       
       <div className="flex p-[0.5em] sm:p-[2em] ">

@@ -9,7 +9,8 @@ import piazzaLogo from "../assets/piazzaLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
 import connectBlueBlob from "../assets/connectBlueBlob.png"
 import connectOrangeBlob from "../assets/connectOrangeBlob.png"
-
+import FormDialog from "../components/FormDialog";
+import CircularIndeterminate from "../components/CircularIndeterminate";
 
 import SideMenu from "../components/SideMenu";
 import ToDoList from "../components/ToDoList";
@@ -21,6 +22,7 @@ import { db } from "../firebase";
 export default function ConnectPage() {
   const [htmlContent, setHtmlContent] = useState("");
   const[user, setUser] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // ESTABLISHED CONNECTION WITH BB
 const handleConnectCLK = async () => {
@@ -51,6 +53,7 @@ const handleConnectCLK = async () => {
       console.log(user);
       // redirect to login page if not already logged in
       if (!user) {
+        setLoading(false);
         navigate("/login");
       }
       setUser(!!user);
@@ -92,10 +95,11 @@ const handleConnectCLK = async () => {
             )) || (
               <>
                 {/* connect to Gradescope button -- NEED TO ADD ONCLICK */}
-                <button className="bg-white flex items-center text-[20px]">
+                {/* <button className="bg-white flex items-center text-[20px]">
                   <img src={gradescopeLogo} alt="GradescopeLogo" className="w-8 h-8 mr-[1px]"/>
                   Gradescope
-                </button>
+                </button> */}
+                {loading ? <CircularIndeterminate/> : <FormDialog setLoading={setLoading}/> }
   
                 {/* connect to BlackBoard button */}
                 <button className="mt-5 bg-white flex items-center text-[20px]" onClick={handleConnectCLK}>
