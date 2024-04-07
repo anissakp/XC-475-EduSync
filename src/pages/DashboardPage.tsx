@@ -165,6 +165,7 @@ export default function DashboardPage() {
   };
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {
+    console.log(id)
     const newId = Date.now(); // Generate a new ID for the cloned sticky note
     setStickyNotes((prevStickyNotes) => [...prevStickyNotes, newId]); // Add the new ID to the stickyNotes state
   };

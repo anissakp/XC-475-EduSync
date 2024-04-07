@@ -1,6 +1,6 @@
-import { onRequest } from "firebase-functions/v2/https";
+import {onRequest} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import { google } from "googleapis";
+import {google} from "googleapis";
 admin.initializeApp();
 
 // NEED TO CHANGE THIS FOR PRODUCTION
@@ -38,7 +38,7 @@ const getBBActualToken = async (code: any) => {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          Authorization:
+          "Authorization":
             "Basic " +
             Buffer.from(
               process.env.CLIENT_ID + ":" + process.env.SECRET
@@ -54,7 +54,7 @@ const getBBActualToken = async (code: any) => {
 };
 
 // ESTABLISHES CONNECTION WITH BB
-export const getConnection = onRequest({ cors: true }, async (req, res) => {
+export const getConnection = onRequest({cors: true}, async (req, res) => {
   try {
     const clientId = process.env.CLIENT_ID;
     let redirectUri = "http://localhost:5173/dashboard";
@@ -79,13 +79,13 @@ export const getConnection = onRequest({ cors: true }, async (req, res) => {
 });
 
 // GETS TOKEN FOR BB
-export const getToken = onRequest({ cors: true }, async (req, res) => {
+export const getToken = onRequest({cors: true}, async (req, res) => {
   const code = req.query.code;
   const token = await getBBActualToken(code);
   res.send(token);
 });
 
-export const getTokenByRefresh = onRequest({ cors: true }, async (req, res) => {
+export const getTokenByRefresh = onRequest({cors: true}, async (req, res) => {
   const refreshToken = req.query.refreshToken;
 
   let redirectUri = "http://localhost:5173/dashboard";
@@ -100,7 +100,7 @@ export const getTokenByRefresh = onRequest({ cors: true }, async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization:
+        "Authorization":
           "Basic " +
           Buffer.from(
             process.env.CLIENT_ID + ":" + process.env.SECRET
@@ -116,7 +116,7 @@ export const getTokenByRefresh = onRequest({ cors: true }, async (req, res) => {
 });
 
 // GETS COURSES FOR BB
-export const getCourses = onRequest({ cors: true }, async (req, res) => {
+export const getCourses = onRequest({cors: true}, async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const userid = req.headers["userid"];
@@ -131,34 +131,31 @@ export const getCourses = onRequest({ cors: true }, async (req, res) => {
   );
 
   const data = await classes.json();
-
-  const finalList = data.results
-    ? await Promise.all(
-        data.results.map(async (elem: any) => {
-          const idk = await fetch(
-            `${process.env.BB_BASE_URL}/learn/api/public/v1/courses/${elem.courseId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const assignments = await fetchBBAssignment(elem.courseId, token);
-          const moreData = await idk.json();
-          return {
-            courseName: moreData.name,
-            courseID: elem.courseId,
-            assignments: assignments.results.slice(2),
-          };
-        })
-      )
-    : [];
+  const finalList = data.results ? await Promise.all(
+    data.results.map(async (elem:any) => {
+      const idk = await fetch(
+        `${process.env.BB_BASE_URL}/learn/api/public/v1/courses/${elem.courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const assignments = await fetchBBAssignment(elem.courseId, token);
+      const moreData = await idk.json();
+      return {
+        courseName: moreData.name,
+        courseID: elem.courseId,
+        assignments: assignments.results.slice(2),
+      };
+    })
+  ): [];
   res.send(finalList);
 });
 
 // ESTABLISHES CONNECTION AND RETRIEVE DATA FROM GRADESCOPE
-export const getGSConnection = onRequest({ cors: true }, async (req, res) => {
-  const { username, password } = req.body;
+export const getGSConnection = onRequest({cors: true}, async (req, res) => {
+  const {username, password} = req.body;
   try {
     const result = await fetch(
       "https://gs-flask-api-obsoqcj6da-uc.a.run.app/assignments",
@@ -191,15 +188,18 @@ export const exchangeToken = onRequest(async (req, res) => {
   const stateObject = JSON.parse(decodedState);
   const userID = stateObject.userID;
 
-  const redirect_uri =
-    "http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken";
+  let redirectUri = "http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken";
+  const environment = process.env.ENVIRONMENT || "development";
+  if (environment === "production") {
+    redirectUri = "https://exchangetoken-oh57fnnf2q-uc.a.run.app";
+  }
 
   // Body for fetch request
   const body: any = {
     code: code,
     client_id: process.env.GOOGLE_CLIENT_ID,
     client_secret: process.env.GOOGLE_SECRET,
-    redirect_uri: redirect_uri,
+    redirect_uri: redirectUri,
     grant_type: "authorization_code",
   };
 
@@ -216,17 +216,10 @@ export const exchangeToken = onRequest(async (req, res) => {
     const data = await tokenResponse.json();
     console.log("DATAAAA", data);
 
-    const expirationSeconds = data.expires_in; // This is typically in seconds
+    const expirationSeconds = data.expires_in;
     const expirationDate = new Date();
     expirationDate.setSeconds(expirationDate.getSeconds() + expirationSeconds);
 
-    // Store access token into firestore database for given user
-    // const userDocRef = admin.firestore().doc(`users/${userID}`);
-    // await userDocRef.update({
-    //     gmailApiAccessToken: data.access_token,
-    //     gmailApiAccessTokenExpiration: expirationDate,
-    //     gmailApiRefreshToken: data.refresh_token
-    // });
     const userDocRef = admin.firestore().doc(`users/${userID}`);
 
     // Check if the user document exists
@@ -250,8 +243,13 @@ export const exchangeToken = onRequest(async (req, res) => {
       console.log("Document created successfully");
     }
 
+    let frontendRedirectUri = "http://localhost:5173/piazza";
+    const environment = process.env.ENVIRONMENT || "development";
+    if (environment === "production") {
+      frontendRedirectUri = "https://edusync-e6e17.web.app/piazza";
+    }
+
     // Send repsonse back to client
-    const frontendRedirectUri = `http://localhost:5173/piazza`;
     res.redirect(frontendRedirectUri);
   } catch (error: any) {
     // Log and respond with the error
@@ -261,32 +259,31 @@ export const exchangeToken = onRequest(async (req, res) => {
 });
 
 export const getPiazzaAnnouncements = onRequest(
-  { cors: true },
+  {cors: true},
   async (req, res) => {
-    console.log("INSIDE GET PIAZZA");
-    // const userID = "ejPKKytR8MV6Hu2g3cyncOmP6Q33"
+    // Get userid from query parameter
     const userID: any = req.query.userID;
-    console.log("GETPIAZZA", userID);
+
+    // Retrieve user info from database
     const userDocRef = admin.firestore().doc(`users/${userID}`);
     const docSnapshot = await userDocRef.get();
     const userData: any = docSnapshot.data();
-    console.log("USERDATAAAAA", userData);
     const gmailAccessToken = userData.gmailApiAccessToken;
 
     const oauth2Client = new google.auth.OAuth2();
-    oauth2Client.setCredentials({ access_token: gmailAccessToken });
+    oauth2Client.setCredentials({access_token: gmailAccessToken});
 
-    const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+    // Retrieve first 200 emails
+    const gmail = google.gmail({version: "v1", auth: oauth2Client});
     const listResponse = await gmail.users.messages.list({
       userId: "me",
       maxResults: 200,
     });
 
     const messages = listResponse.data.messages || [];
-
-    console.log("MESSAGES", messages);
     const searchString = "no-reply@piazza.com";
 
+    // Filter email for piazza only
     const filteredMessagePromises = messages.map(async (message: any) => {
       const indMessage: any = await gmail.users.messages.get({
         userId: "me",
@@ -300,26 +297,29 @@ export const getPiazzaAnnouncements = onRequest(
       return null;
     });
 
+    // Send message back to client
     Promise.all(filteredMessagePromises).then((filteredMessages) => {
       const validMessages = filteredMessages.filter((msg) => msg !== null);
-      console.log("VALIDMESSAGE", validMessages);
       res.status(200).send(validMessages);
     });
   }
 );
 
 export const getPiazzaNewAccessToken = onRequest(
-  { cors: true },
+  {cors: true},
   async (req, res) => {
+    // Get userid from query parameter
     const userID: any = req.query.userID;
+
+    // Retrieve user info from database
     const userDocRef = admin.firestore().doc(`users/${userID}`);
     const docSnapshot = await userDocRef.get();
     const userData: any = docSnapshot.data();
     const body: any = {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_SECRET,
-      refresh_token: userData.gmailApiRefreshToken, // Use the stored refresh token
-      grant_type: "refresh_token", // Specify the grant type for refreshing
+      refresh_token: userData.gmailApiRefreshToken,
+      grant_type: "refresh_token",
     };
 
     // Make the request to Google's OAuth2 token endpoint
@@ -330,9 +330,9 @@ export const getPiazzaNewAccessToken = onRequest(
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
+    const data = await response.json();
 
-    const data = await response.json(); // Parse the JSON response
-    const expirationSeconds = data.expires_in; // The new expiration time in seconds
+    const expirationSeconds = data.expires_in;
     const expirationDate = new Date();
     expirationDate.setSeconds(expirationDate.getSeconds() + expirationSeconds);
 
@@ -340,15 +340,14 @@ export const getPiazzaNewAccessToken = onRequest(
     await userDocRef.update({
       gmailApiAccessToken: data.access_token,
       gmailApiAccessTokenExpiration: expirationDate,
-      // Note: The refresh token usually remains the same and doesn't need to be updated unless you've received a new one
     });
 
-    res.status(200).send({ hello: "hello" }); // Or handle the new token as needed
+    res.status(200).send({hello: "hello"});
   }
 );
 
 export const getCourseAnnouncements = onRequest(
-  { cors: true },
+  {cors: true},
   async (req, res) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];

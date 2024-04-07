@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import CircularIndeterminate from "../components/CircularIndeterminate";
+import { useNavigate } from "react-router-dom";
 
 export default function PiazzaPage() {
   // Set initial states
@@ -10,9 +11,15 @@ export default function PiazzaPage() {
   const [authorized, setAuthorized] = useState(false);
   const [piazzaData, setPiazzaData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const nav = useNavigate()
 
   // Necessary to get user info later on
   const auth = getAuth(app);
+
+  // Navigate back to dashboard page
+  const handleClick = () => {
+    nav("/dashboard")
+  }
 
   // On initial load, retrieves announcements
   useEffect(() => {
@@ -32,9 +39,11 @@ export default function PiazzaPage() {
           );
           if (date > new Date()) {
             // Access token not expired so get announcement
+            console.log("Using Stored Access Token");
             connectPiazza(user.uid);
           } else {
             // Access token expired, thus get new token and then get announcements
+            console.log("Refresh Logic Invoked");
             await getPiazzaNewToken(user.uid);
             connectPiazza(user.uid);
           }
@@ -47,7 +56,9 @@ export default function PiazzaPage() {
   // Generate googleauth url
   const state = JSON.stringify({ userID: userID });
   const encodedState = encodeURIComponent(state);
-  const YOUR_FIREBASE_FUNCTION_URL = `http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken`;
+  // const YOUR_FIREBASE_FUNCTION_URL = `http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken`;
+  const YOUR_FIREBASE_FUNCTION_URL = import.meta.env.VITE_PIAZZA_TOKEN_URL;
+  
   const YOUR_CLIENT_ID =
     "642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com";
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -64,7 +75,8 @@ export default function PiazzaPage() {
   const connectPiazza = async (userId: any) => {
     setLoading(true);
     const result = await fetch(
-      `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaAnnouncements?userID=${userId}`
+      // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaAnnouncements?userID=${userId}`
+      `${import.meta.env.VITE_PIAZZA_ANNOUNCEMENT_URL}?userID=${userId}`
     );
     const data = await result.json();
     setPiazzaData(data);
@@ -73,7 +85,8 @@ export default function PiazzaPage() {
 
   const getPiazzaNewToken = async (userId: any) => {
     const result = await fetch(
-      `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaNewAccessToken?userID=${userId}`
+      // `http://127.0.0.1:5001/edusync-e6e17/us-central1/getPiazzaNewAccessToken?userID=${userId}`
+      `${import.meta.env.VITE_PIAZZA_REFRESH_TOKEN_URL}?userID=${userId}`
     );
     const data = await result.json();
   };
@@ -97,8 +110,11 @@ export default function PiazzaPage() {
     }
   });
 
+  console.log("display", display);
+
   return (
     <div>
+      <button className="m-5" onClick={handleClick}>Dashboard</button>
       <h2 className="text-5xl text-center mb-10 mt-5">
         Piazza Instructor Announcements
       </h2>
