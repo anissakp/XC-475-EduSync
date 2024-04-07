@@ -59,9 +59,9 @@ export default function PiazzaPage() {
   // const YOUR_FIREBASE_FUNCTION_URL = `http://127.0.0.1:5001/edusync-e6e17/us-central1/exchangeToken`;
   const YOUR_FIREBASE_FUNCTION_URL = import.meta.env.VITE_PIAZZA_TOKEN_URL;
   
-  const YOUR_CLIENT_ID =
-    "642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com";
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUR_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+  // const YOUR_CLIENT_ID =
+  //   "642660880490-eofmqqgspbhulqckmbbplt9q97j69af6.apps.googleusercontent.com";
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     YOUR_FIREBASE_FUNCTION_URL
   )}&response_type=code&scope=${encodeURIComponent(
     "https://www.googleapis.com/auth/gmail.readonly"
