@@ -6,18 +6,21 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import gradescopeLogo from "../assets/gradescopeLogo.png"
 
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
 interface Props{
-  courses: any[];
-  setCourses: React.Dispatch<React.SetStateAction<any[]>>;
+  // courses: any[];
+  // setCourses: React.Dispatch<React.SetStateAction<any[]>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
+
+// REMOVED PROPS {courses, setCourses, setLoading}
+const FormDialog : React.FC<Props> = ({setLoading}) => {
   
   const [open, setOpen] = React.useState(false);
 
@@ -54,9 +57,10 @@ const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Connect With Gradescope
-      </Button>
+      <button className="bg-white flex items-center text-[20px]" onClick={handleClickOpen}>
+        <img src={gradescopeLogo} alt="GradescopeLogo" className="w-8 h-8 mr-[1px]"/>
+        Gradescope
+      </button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -99,7 +103,7 @@ const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
                 event: `${det.course_name} ${det.title}`,
               };
             });
-            arr = [...courses, ...newArr];
+            // arr = [...courses, ...newArr];
             
             // add gradescope assignments to database
             const auth = getAuth();
@@ -110,6 +114,7 @@ const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
               for (const assign of assignments) {
                 console.log("this is the objecct" + assign);
                 const assignmentId = `${assign.course_name + assign.title}`;
+                /// ************** SHOULD WE SAVE IT TO ITS OWN SUBCOLLECTION OF JUST FIREBASE ASSIGN ************
                 const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
                 const assignmentData = {
                   name: assign.title,
@@ -126,7 +131,7 @@ const FormDialog: React.FC<Props> = ({courses, setCourses, setLoading}) => {
               saveGradescopeAssignmentsToFirestore(user.uid, classes);
             }
 
-            setCourses(arr)
+            // setCourses(arr)
             setLoading(false)
           },
         }}

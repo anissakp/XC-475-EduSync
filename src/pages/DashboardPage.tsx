@@ -23,7 +23,6 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
-  const [resetCal, setResetCal] = useState(false);
   const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +35,7 @@ export default function DashboardPage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async (userId: string) => {
+    console.log("BB getAssignments called")
     const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
     const result = await fetch(bbCoursesUrl, {
       headers: {
@@ -64,10 +64,10 @@ export default function DashboardPage() {
 
       arr = [...arr, ...newArr];
     }
+    setCourses(arr);
+
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
-    setCourses(arr);
-    setResetCal(!resetCal);
   };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
@@ -77,52 +77,37 @@ export default function DashboardPage() {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        const userRef = doc(db, "users", user.uid);
-        if (
-          userDoc.exists() &&
-          userDoc.data().blackboardConnected &&
-          userDoc.data().gradescopeConnected
-        ) {
+        const userRef = doc(db, "users", user.uid); 
+
+        
+        if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
-          getAssignments(user.uid);
-          await setDoc(
-            userRef,
-            { blackboardConnected: false },
-            { merge: true }
-          );
-          await setDoc(
-            userRef,
-            { gradescopeConnected: false },
-            { merge: true }
-          );
-          fetchAssignmentsFromFirestore(user.uid);
-        } else if (userDoc.exists() && userDoc.data().blackboardConnected) {
+          console.log("if 1");
+          await getAssignments(user.uid);
+          await setDoc(userRef, { blackboardConnected: false }, { merge: true });
+          await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          await fetchAssignmentsFromFirestore(user.uid);
+        }
+
+        else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
+          console.log("if 2 no get assignments ");
           // if user pressed connect to Blackboard, fetch and update assignments
-          getAssignments(user.uid);
-          await setDoc(
-            userRef,
-            { blackboardConnected: false },
-            { merge: true }
-          );
-          fetchAssignmentsFromFirestore(user.uid);
-        } else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
-          // if user pressed connect to Blackboard, fetch and update assignments
-          getAssignments(user.uid);
-          await setDoc(
-            userRef,
-            { gradescopeConnected: false },
-            { merge: true }
-          );
-          fetchAssignmentsFromFirestore(user.uid);
-        } else {
-          fetchAssignmentsFromFirestore(user.uid);
+          await getAssignments(user.uid);
+          await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          await fetchAssignmentsFromFirestore(user.uid);
+        } 
+        else {
+          console.log("if 3");
+          await getAssignments(user.uid);
+          await fetchAssignmentsFromFirestore(user.uid);
         }
       } else {
         console.log("User is not signed in");
         setLoading(false);
       }
     });
-  }, [auth.token, auth.userID, resetCal]);
+  }, [auth.token, auth.userID]);
+
 
   // function to save assignments to database, userID is from Firebase Auth
   const saveAssignmentsToFirestore = async (userID: string, classes: any) => {
@@ -170,7 +155,6 @@ export default function DashboardPage() {
     setStickyNotes((prevStickyNotes) => [...prevStickyNotes, newId]); // Add the new ID to the stickyNotes state
   };
 
-  //*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
   const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
 
@@ -183,18 +167,9 @@ export default function DashboardPage() {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-
-      {loading ? (
-        <CircularIndeterminate />
-      ) : (
-        <FormDialog
-          courses={courses}
-          setCourses={setCourses}
-          setLoading={setLoading}
-        />
-      )}
-      {/*loading ? <CircularIndeterminate/> : <div></div>} */}
-
+      
+      
+      
       <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
