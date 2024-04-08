@@ -13,7 +13,7 @@ export default function TasksPageHeader({ onClick }: TasksPageHeaderProps) {
 
     const goToProfile = () => {
 
-        navigate('/Profile')
+        navigate('/EditProfile')
     }
 
     const handleClick = () => {

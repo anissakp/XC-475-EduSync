@@ -9,11 +9,11 @@ interface DashboardHeaderProps {
 }
 export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
 
-    const navigate = useNavigate() 
+    const navigate = useNavigate()
 
     const goToProfile = () => {
 
-        navigate('/Profile')
+        navigate('/EditProfile')
     }
 
     return (
@@ -24,9 +24,9 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
                 <div><p className="ml-4 text-2xl lg:text-4xl font-bold text-[32px]">Calendar</p></div>
             </div>
 
-            
 
-            <div  onClick={goToProfile}className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
+
+            <div onClick={goToProfile} className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
 
         </div>
     );
