@@ -11,7 +11,7 @@ import PiazzaPage from "./pages/PiazzaPage";
 import CoursesPage from "./pages/CoursesPage";
 import TasksPage from "./pages/TasksPage";
 
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
 

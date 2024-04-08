@@ -8,6 +8,7 @@ interface Props {
 }
 
 const DropdownCalendarView: React.FC<Props> = ({ selectedView, setSelectedView }) => {
+    console.log(selectedView)
     const handleViewChange = (view: string) => {
         console.log(`Switching to ${view} view`);
         setSelectedView(view);
