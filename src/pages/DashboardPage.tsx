@@ -79,6 +79,7 @@ export default function DashboardPage() {
         
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
+          console.log("if 1");
           await getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
@@ -91,12 +92,15 @@ export default function DashboardPage() {
         //   fetchAssignmentsFromFirestore(user.uid);
         // } 
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
+          console.log("if 2 no get assignments ");
           // if user pressed connect to Blackboard, fetch and update assignments
+          await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
         } 
         else {
           // ***************** even if a user never pressed connect to BB button this happens rip ******************88
+          console.log("if 3");
           await getAssignments(user.uid);
           await fetchAssignmentsFromFirestore(user.uid);
         }
