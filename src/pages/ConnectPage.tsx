@@ -94,11 +94,7 @@ const handleConnectCLK = async () => {
               <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
             )) || (
               <>
-                {/* connect to Gradescope button -- NEED TO ADD ONCLICK */}
-                {/* <button className="bg-white flex items-center text-[20px]">
-                  <img src={gradescopeLogo} alt="GradescopeLogo" className="w-8 h-8 mr-[1px]"/>
-                  Gradescope
-                </button> */}
+                {/* connect to Gradescope button */}
                 {loading ? <CircularIndeterminate/> : <FormDialog setLoading={setLoading}/> }
   
                 {/* connect to BlackBoard button */}

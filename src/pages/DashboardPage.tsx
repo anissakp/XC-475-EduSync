@@ -22,7 +22,6 @@ export default function DashboardPage() {
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
-  const [resetCal, setResetCal] = useState(false);
   const [classNameList, setClassNameList] = useState<string[]>([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -85,12 +84,7 @@ export default function DashboardPage() {
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
         }
-        // else if (userDoc.exists() && userDoc.data().blackboardConnected) {
-        //   // if user pressed connect to Blackboard, fetch and update assignments
-        //   getAssignments(user.uid);
-        //   await setDoc(userRef, { blackboardConnected: false }, { merge: true });
-        //   fetchAssignmentsFromFirestore(user.uid);
-        // } 
+
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           console.log("if 2 no get assignments ");
           // if user pressed connect to Blackboard, fetch and update assignments
@@ -99,14 +93,10 @@ export default function DashboardPage() {
           await fetchAssignmentsFromFirestore(user.uid);
         } 
         else {
-          // ***************** even if a user never pressed connect to BB button this happens rip ******************88
           console.log("if 3");
           await getAssignments(user.uid);
           await fetchAssignmentsFromFirestore(user.uid);
         }
-        // else {
-        //   fetchAssignmentsFromFirestore(user.uid);
-        // }
       } else {
         console.log("User is not signed in");
         setLoading(false);
@@ -135,7 +125,6 @@ export default function DashboardPage() {
     }
   };
 
-  // **************NEW *************************
 const fetchAssignmentsFromFirestore = async (userId: string) => {
   console.log("fetchAssignmentsFromFirestore called", userId);
   const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
@@ -149,14 +138,10 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
     });
   });
 
-
-  // *********** trying to do both courses / append them ********
-
   console.log(assignments);
   setCourses(assignments);
 };
 
-//*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
   const [isToDoListVisible, setIsToDoListVisible] = useState<boolean>(false);
 
@@ -170,9 +155,6 @@ const fetchAssignmentsFromFirestore = async (userId: string) => {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-      
-      {/* {loading ? <CircularIndeterminate/> : <FormDialog /> }  */}
-      {/*loading ? <CircularIndeterminate/> : <div></div>} */}
       
       <div className="flex p-[0.5em] sm:p-[2em] ">
         {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
