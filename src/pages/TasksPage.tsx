@@ -50,7 +50,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     },
 }));
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+const AccordionDetails = styled(MuiAccordionDetails)(() => ({
     borderTop: '0 solid rgba(0, 0, 0, .125)',
     textAlign: 'center',
     width: '360px',
@@ -70,6 +70,7 @@ export default function TasksPage() {
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+            console.log(event)
             setExpanded(newExpanded ? panel : false);
         };
 
