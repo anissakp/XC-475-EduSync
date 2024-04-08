@@ -6,7 +6,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 
 export default function Profile() {
-    const navigate = useNavigate() 
+    const navigate = useNavigate()
 
     const goToDashboard = () => {
         navigate('/dashboard')
@@ -19,16 +19,16 @@ export default function Profile() {
         <div className='flex flex-col gap-[33px]'>
             <div>
                 <div className=" w-full flex justify-between items-center  px-8 py-4 mb-0">
-                    <img className="w-[238px] mt-auto  h-[83px]"src="mainLogo2.png"></img>
-                    <button onClick={goToDashboard}className='bg-black text-white'>{"< Dashboard"}</button>
+                    <img className="w-[238px] mt-auto  h-[83px]" src="mainLogo2.png"></img>
+                    <button onClick={goToDashboard} className='bg-black text-white'>{"< Dashboard"}</button>
                 </div>
                 <div className='relative'>
                     <div className="h-[161px] bg-gradient-to-r from-[#F7E2B3] to-[#6FB0B6] "></div>
-                    <div className='flex w-[1232px] ml-auto mr-auto justify-between'> 
+                    <div className='flex w-[1232px] ml-auto mr-auto justify-between'>
                         <div className='flex'>
-                            
-                            <img  src="ShaimaaSabbagh.png" className='bg-[#EBEDEC] w-[216px] h-[216px] rounded-full  border-solid absolute top-16 border-[#EBEDEC] border-[10px] m-0 p-0'/>
-                        
+
+                            <img src="ShaimaaSabbagh.png" className='bg-[#EBEDEC] w-[216px] h-[216px] rounded-full  border-solid absolute top-16 border-[#EBEDEC] border-[10px] m-0 p-0' />
+
                             <div className='ml-60 mt-4'>
                                 <p className='text-[34px]'>Shaimaa Sabbagh</p>
                                 <p>Computer Science - Senior</p>
@@ -36,32 +36,36 @@ export default function Profile() {
                             </div>
 
                         </div>
-                        
+
                         <button onClick={goToEditProfile} className='bg-[#6FB0B6] text-white mt-6'>EDIT/VIEW INFORMATION</button>
                     </div>
                 </div>
 
             </div>
-            
-            
-            <div className='ml-auto mr-auto mt-10'>
-                <TextField rows={2} multiline className='w-[1232px]  bg-[#D9D9D9]' label="Description"/>
+
+
+            <div className='ml-auto mr-auto rounded-[20px]'>
+                <TextField rows={2} multiline InputProps={{
+                    readOnly: true,
+                    sx: { borderRadius: '20px' }
+                }}
+                    className='w-[1232px] bg-[#D9D9D9] rounded-[20px]' defaultValue="Descrption" />
             </div>
             <div className='flex ml-auto mr-auto gap-[30px]'>
                 <div className='w-[909px] h-[494px] rounded-t-[20px] bg-white overflow-y-auto'>
                     <div className='sticky top-0 z-10 flex rounded-t-[20px] h-[76px] bg-[#A2D9D1] pl-10 justify-between items-center'>
                         <p className='text-[20px]'>PUBLIC NOTES</p>
                         <div className='flex'>
-                            
+
                         </div>
-                        
+
                     </div>
 
                     <div className=''>
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -70,17 +74,17 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
 
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -89,16 +93,16 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -107,16 +111,16 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -125,16 +129,16 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -143,16 +147,16 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
                         <div className='flex justify-between items-center border-[#99C8CD] border-2 p-2'>
                             <div className='flex items-center'>
 
-                                <img className="w-[63px] h-[63px] "src="sticky_note_2.svg"/>
+                                <img className="w-[63px] h-[63px] " src="sticky_note_2.svg" />
                                 <div>
                                     <p className='text-[34px]'>Title</p>
                                     <p className='text-[16px]'>Course Name</p>
@@ -161,16 +165,16 @@ export default function Profile() {
                             <div>Date: DD/MM/YYY</div>
 
                             <div className='mr-10 flex gap-[15px]'>
-                                <ThumbUpOffAltIcon className="text-[#42848A]"fontSize='large'/>
-                                <BookmarkBorderOutlinedIcon className= "text-[#DE8C73]"fontSize='large'/>
+                                <ThumbUpOffAltIcon className="text-[#42848A]" fontSize='large' />
+                                <BookmarkBorderOutlinedIcon className="text-[#DE8C73]" fontSize='large' />
 
                             </div>
-                            
+
                         </div>
 
                     </div>
-                    
-                    
+
+
                 </div>
                 <div className=' rounded-[20px] w-[293px] h-[494px] bg-gradient-to-b from-[#F2E1B4] to-[#E6A586]'>
                     <p className='bg-[#E1AB91] h-[76px] pl-8  rounded-t-[20px] flex items-center  text-[20px]'>CURRENT COURSES</p>
@@ -179,10 +183,10 @@ export default function Profile() {
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #2</div>
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #3</div>
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #4</div>
-                        
+
                     </div>
-                
-                    
+
+
                 </div>
             </div>
             <div className='flex gap-[31px] ml-auto mr-auto'>
@@ -200,7 +204,7 @@ export default function Profile() {
                 </div>
             </div>
 
-            <Footer/>
+            <Footer />
 
         </div>
     )

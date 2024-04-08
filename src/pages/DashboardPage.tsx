@@ -195,8 +195,8 @@ export default function DashboardPage() {
       )}
       {/*loading ? <CircularIndeterminate/> : <div></div>} */}
 
-      <div className="flex p-[0.5em] sm:p-[2em] ">
-        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
+      <div className="flex p-[0.5em] lg:p-[2em] ">
+        {isSideMenuOpen && <SideMenu classNameList={[]} />}
         <Calendar courses={courses} />
         <div>
           <div className=" hidden lg:block">{ToDoListComponent}</div>
@@ -224,6 +224,7 @@ export default function DashboardPage() {
         {stickyNotes.map((id) => (
           <StickyNote key={id} onClone={() => onClone(id)} />
         ))}
+
       </div>
     </div>
   );

@@ -91,12 +91,17 @@ body {
 }
 
 .event {
+
     background-color: #A2D9D1;
     font-size: 12px;
     border-radius: 5px;
     margin-top: 2px;
     width: 100%;
     box-sizing: border-box;
+    /* Ensure that text doesn't wrap and gets cut off when it overflows its container */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Display ellipsis (...) when text is cut off */
 }
 
 /* don't render events that are disabled */
@@ -120,7 +125,7 @@ body {
 
 .wrapper {
     height: auto;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 /* Media Queries */
