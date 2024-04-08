@@ -195,8 +195,8 @@ export default function DashboardPage() {
       )}
       {/*loading ? <CircularIndeterminate/> : <div></div>} */}
 
-      <div className="flex p-[0.5em] lg:p-[2em] ">
-        {isSideMenuOpen && <SideMenu classNameList={[]} />}
+      <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
+        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
         <Calendar courses={courses} />
         <div>
           <div className=" hidden lg:block">{ToDoListComponent}</div>
@@ -224,6 +224,12 @@ export default function DashboardPage() {
         {stickyNotes.map((id) => (
           <StickyNote key={id} onClone={() => onClone(id)} />
         ))}
+
+<!--         {/* Task button when a screen is minimized */}
+        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap font-['Quicksand']" >
+          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+        </div> -->
 
       </div>
     </div>
