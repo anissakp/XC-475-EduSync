@@ -4,10 +4,10 @@ import SideMenuButton from "./SideMenuButton";
 import { useNavigate } from "react-router-dom";
 
 
-interface DashboardHeaderProps {
+interface TasksPageHeaderProps {
     onClick: () => void;
 }
-export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
+export default function TasksPageHeader({ onClick }: TasksPageHeaderProps) {
 
     const navigate = useNavigate()
 
@@ -16,12 +16,16 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
         navigate('/EditProfile')
     }
 
+    const handleClick = () => {
+        navigate("/dashboard")
+    }
     return (
         <div className="bg-[#EBEDEC] h-[45px] lg:h-[90px] flex pl-[23px] justify-between items-center">
-
-            <div className="flex">
+            <div className="flex gap-4 sticky top-0 z-40">
                 <div><SideMenuButton onClick={onClick} /></div>
-                <div><p className="ml-4 text-2xl lg:text-4xl font-bold text-[32px]">Calendar</p></div>
+                <button onClick={handleClick} className="bg-[#1E1E26] text-[#D5D2DD]">{"< Dashboard"}</button>
+
+                <div><p className=" text-2xl lg:text-4xl font-bold text-[32px]">Tasks</p></div>
             </div>
 
 
