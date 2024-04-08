@@ -7,10 +7,11 @@ import ConnectPage from "./pages/ConnectPage";
 import AuthorizedPage from "./pages/AuthorizedPage";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
+import PiazzaPage from "./pages/PiazzaPage";
 import CoursesPage from "./pages/CoursesPage";
-import TasksPage from "./pages/TasksPage"
+import TasksPage from "./pages/TasksPage";
 
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
 
@@ -19,8 +20,8 @@ function App() {
   const [userID, setUserID] = useState("");
 
   // FUNCTION TO SET VALUES IN LOCAL STORAGE
-  const setStorageValue = (userID:string, aToken:string, rToken:string) =>{
-     //Sets New Access Token Onto Local Storage
+  const setStorageValue = (userID: string, aToken: string, rToken: string) => {
+    //Sets New Access Token Onto Local Storage
     localStorage.setItem(
       "data",
       JSON.stringify({
@@ -37,7 +38,7 @@ function App() {
         refreshToken: rToken,
       })
     );
-  }
+  };
 
   // 3L0: GETS TOKEN FOR USER BASED ON AUTHORIZATION CODE
   const getToken = async () => {
@@ -47,7 +48,7 @@ function App() {
       const refreshData = JSON.parse(refresh);
 
       //Get New Access Token Based On Refresh token
-      if (refreshData && refreshData.refreshToken){
+      if (refreshData && refreshData.refreshToken) {
         const bbRefreshTokenURL = import.meta.env.VITE_BB_REFRESH_TOKEN_URL;
 
         const response = await fetch(
@@ -59,26 +60,22 @@ function App() {
         setToken(data.access_token);
         setUserID(data.user_id);
 
-        setStorageValue(data.user_id, data.access_token, data.refresh_token)
-
-      }else{
+        setStorageValue(data.user_id, data.access_token, data.refresh_token);
+      } else {
         //Initial Access Token Retrieval When BB Connection Established
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
         const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
 
-        const response = await fetch(
-          `${bbTokenURL}?code=${code}`
-        );
+        const response = await fetch(`${bbTokenURL}?code=${code}`);
 
         const data = await response.json();
 
         setToken(data.access_token);
         setUserID(data.user_id);
 
-        setStorageValue(data.user_id, data.access_token, data.refresh_token)
+        setStorageValue(data.user_id, data.access_token, data.refresh_token);
       }
-
     } catch (error) {
       console.log("Inside GET TOKEN ERROR: ", error);
     }
@@ -96,10 +93,10 @@ function App() {
     ) {
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
-    }else{
-      // Invokes Get Token Function Since Access Token 
+    } else {
+      // Invokes Get Token Function Since Access Token
       // Not Available In Local Storage Or Token Expired
-      getToken()
+      getToken();
     }
   }, []);
 
@@ -113,9 +110,10 @@ function App() {
           <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursespage" element={<CoursesPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/piazza" element={<PiazzaPage />} />
           <Route path="/tasks" element={<TasksPage />} />
-          <Route path="/profile" element={<Profile/>} />
-          <Route path="/editProfile" element={<EditProfile/>} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/editProfile" element={<EditProfile />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
