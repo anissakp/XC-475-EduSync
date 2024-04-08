@@ -4,7 +4,7 @@ const StickyNote: React.FC<{ onClone: () => void }> = ({ onClone }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 1150, y: 550 });
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 1080, y: 550 });
   const stickyNoteRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const StickyNote: React.FC<{ onClone: () => void }> = ({ onClone }) => {
   return (
     <div
       ref={stickyNoteRef}
-      className="absolute w-48 h-48 bg-yellow-200 border border-black resize-both overflow-auto"
+      className="absolute w-[273px] h-[273px] resize-both overflow-auto"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? 'grabbing' : 'grab',
@@ -70,7 +70,7 @@ const StickyNote: React.FC<{ onClone: () => void }> = ({ onClone }) => {
       }}
     >
       <textarea
-        className={`bg-gradient-to-bl from-[#E9B69D] to-[#4aadba] w-full h-full p-2 ${isDragging ? 'pointer-events-none' : 'pointer-events-auto'}`}
+        className={`bg-[url(./assets/Stickynote-yellow.png)] w-full h-full p-2 ${isDragging ? 'pointer-events-none' : 'pointer-events-auto'}`}
         contentEditable={!isDragging}
         onChange={handleInputChange}
         onLoad={handleLoadContent}

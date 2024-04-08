@@ -125,26 +125,26 @@ export default function DashboardPage() {
   };
 
   // **************NEW *************************
-const fetchAssignmentsFromFirestore = async (userId: string) => {
-  console.log("fetchAssignmentsFromFirestore called", userId);
-  const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
-  const querySnapshot = await getDocs(userAssignmentsRef);
-  const assignments:any = [];
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    assignments.push({
-      date: data.dueDate.toDate(), 
-      event: `${data.courseName} ${data.name}`,
+  const fetchAssignmentsFromFirestore = async (userId: string) => {
+    console.log("fetchAssignmentsFromFirestore called", userId);
+    const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
+    const querySnapshot = await getDocs(userAssignmentsRef);
+    const assignments: any = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      assignments.push({
+        date: data.dueDate.toDate(),
+        event: `${data.courseName} ${data.name}`,
+      });
     });
-  });
-  console.log(assignments);
-  setCourses(assignments);
-};
-const [stickyNotes, setStickyNotes] = useState<number[]>([]);
-const onClone = (id: number) => {
-  const newId = Date.now(); // Generate a new ID for the cloned sticky note
-  setStickyNotes((prevStickyNotes) => [...prevStickyNotes, newId]); // Add the new ID to the stickyNotes state
-};
+    console.log(assignments);
+    setCourses(assignments);
+  };
+  const [stickyNotes, setStickyNotes] = useState<number[]>([]);
+  const onClone = (id: number) => {
+    const newId = Date.now(); // Generate a new ID for the cloned sticky note
+    setStickyNotes((prevStickyNotes) => [...prevStickyNotes, newId]); // Add the new ID to the stickyNotes state
+  };
 
   //*************************************NEW ******************************* */
   // for the new tasks' list button for when the screen is minimized
@@ -169,21 +169,23 @@ const onClone = (id: number) => {
         <Calendar courses={courses} />
         <div>
 
-        <div className=" hidden lg:block">{ToDoListComponent}</div>
+          <div className=" hidden lg:block">{ToDoListComponent}</div>
 
-{/* Task button when a screen is minimized */}
+          {/* Task button when a screen is minimized */}
 
-<div className="fixed bottom-5 right-5  lg:hidden flex flex-wrap " >
-  {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
-  <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
-</div>
-<button className="w-[90%] h-[5%] ml-8 mt-5" onClick={() => onClone(-1)}>Sticky Notes</button>
+          <div className="fixed bottom-5 right-5  lg:hidden flex flex-wrap " >
+            {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+            <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+          </div>
+
+          {/* creates responsiveness issues */}
+          <button className="hidden sm:block w-[90%] h-[5%] ml-8 mt-5" onClick={() => onClone(-1)}>Sticky Notes</button>
         </div>
-        
+
         {stickyNotes.map((id) => (
-        <StickyNote key={id} onClone={() => onClone(id)} />
-      ))}
-       
+          <StickyNote key={id} onClone={() => onClone(id)} />
+        ))}
+
       </div>
     </div>
   );

@@ -1,0 +1,37 @@
+// DashboardHeader.tsx
+import React, { useState } from "react";
+import SideMenuButton from "./SideMenuButton";
+import { useNavigate } from "react-router-dom";
+
+
+interface TasksPageHeaderProps {
+    onClick: () => void;
+}
+export default function TasksPageHeader({ onClick }: TasksPageHeaderProps) {
+
+    const navigate = useNavigate()
+
+    const goToProfile = () => {
+
+        navigate('/Profile')
+    }
+
+    const handleClick = () => {
+        navigate("/dashboard")
+    }
+    return (
+        <div className="bg-[#EBEDEC] h-[45px] lg:h-[90px] flex pl-[23px] justify-between items-center">
+            <div className="flex gap-4 sticky top-0 z-40">
+                <div><SideMenuButton onClick={onClick} /></div>
+                <button onClick={handleClick} className="bg-[#1E1E26] text-[#D5D2DD]">{"< Dashboard"}</button>
+
+                <div><p className=" text-2xl lg:text-4xl font-bold text-[32px]">Tasks</p></div>
+            </div>
+
+
+
+            <div onClick={goToProfile} className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
+
+        </div>
+    );
+}
