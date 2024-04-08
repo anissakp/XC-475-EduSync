@@ -28,6 +28,10 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
         navigate('/tasks')
     }
 
+    const goToPiazza = ():void => {
+        navigate('/piazza')
+    }
+
     return (
 
             <div className="absolute top-[90px] left-0 min-h-screen bg-custom-yellow z-10" style={{ width: "256px", padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -62,6 +66,13 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                         <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />
                         <span style={{ flex: '1' }}>
                             Tasks
+                        </span>
+                    </button>
+
+                    <button onClick={goToPiazza} style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
+                        <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />
+                        <span style={{ flex: '1' }}>
+                            Piazza 
                         </span>
                     </button>
                 </div>

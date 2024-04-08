@@ -17,6 +17,7 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
+import DropdownCalendarView from "./DropdownCalendarView";
 
 interface Course {
   date: Date;
@@ -81,11 +82,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
         days.push(
           <div
-            className={`column cell ${
-              !isSameMonth(day, monthStart)
-                ? "text-gray-400"
-                : ""
-            } ${i > 0 ? "border-l-2" : ""}`}
+            className={`column cell ${!isSameMonth(day, monthStart)
+              ? "text-gray-400"
+              : ""
+              } ${i > 0 ? "border-l-2" : ""}`}
             key={day.toString()}
           >
             <p className="number text-left m-0 pl-[5px] pb-[2px] font-bold text-[calc(0.5rem+1vw)]">{formattedDate}</p>
@@ -102,16 +102,15 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </div>
           </div>
         );
-        
+
         day = addDays(day, 1);
       }
 
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
-          className={`flex justify-between ${
-            day > endDate && rows.length > 4 ? "hidden" : ""
-          } ${isFirstRow ? "" : "border-t-2"}`}
+          className={`flex justify-between ${day > endDate && rows.length > 4 ? "hidden" : ""
+            } ${isFirstRow ? "" : "border-t-2"}`}
           key={day.toString()}
         >
           {days}
@@ -125,19 +124,24 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const renderWeeklyCells = () => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
-  
+
+
     const dateFormat = "d";
     const dayOfWeekFormat = "EEE";
     const days = [];
-  
+
+
     let day = weekStart;
-  
+
+
     for (let i = 0; i < 7; i++) {
       const formattedDate = format(day, dateFormat);
       const dayOfWeek = format(day, dayOfWeekFormat).toUpperCase();
-  
+
+
       const eventsForDay = courses.filter((event) => isSameDay(event.date, day));
-  
+
+
       days.push(
         <div
           className={`column cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
@@ -168,20 +172,19 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             })}
           </div>
           </div>
-          
+
+
         </div>
       );
       day = addDays(day, 1);
     }
-  
     return <div className="flex justify-between font-['Quicksand']">
+
       {days}
     </div>;
   };
 
-  
-
-  const renderDailyCells = () => {
+const renderDailyCells = () => {
     const currentDayOfWeek = format(selectedDate, 'EEE').toUpperCase();
     const startOfWeekDate = startOfWeek(selectedDate);
   
@@ -257,6 +260,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const dateFormat = "MMMM yyyy";
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  // calendar header code
   return (
     <div className="w-[1042px] h-[875px] bg-[#EBEDEC] ml-[-5px] rounded-[20px] font-['Quicksand']">
       <div className="calendar_header flex justify-between items-center h-auto p-[20px]">
@@ -293,12 +297,23 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
             </svg>
           </button>
         </div>
-        <div>
+
+        <div className="block lg:hidden">
+          <DropdownCalendarView
+            selectedView={selectedView}
+            setSelectedView={setSelectedView} />
+        </div>
+
+        <div className="hidden lg:block">
           <CalendarViewSwitcher
             selectedView={selectedView}
             setSelectedView={setSelectedView}
           />
         </div>
+
+
+
+
       </div>
 
       {/* MONTHLY CALENDAR VIEW */}
@@ -316,7 +331,8 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
           </div>
         </div>
       )}
-      
+
+
       {/* WEEKLY CALENDAR VIEW */}
       {selectedView === "Weekly" && (
         <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">

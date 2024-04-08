@@ -1,11 +1,10 @@
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function CircularIndeterminate() {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <div className="flex justify-center items-center">
       <CircularProgress />
-    </Box>
+    </div>
   );
 }

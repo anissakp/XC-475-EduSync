@@ -21,6 +21,7 @@ body {
 }
 
 .event {
+
     background-color: #A2D9D1;
     font-size: 12px;
     border-radius: 5px;
@@ -28,6 +29,10 @@ body {
     width: 100%;
     box-sizing: border-box;
     padding-left: 6px;
+    /* Ensure that text doesn't wrap and gets cut off when it overflows its container */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Display ellipsis (...) when text is cut off */
 }
 
 /* don't render events that are disabled */
@@ -35,7 +40,6 @@ body {
 .disabled .number {
     opacity: 0%;
 }
-
 
 /* Media Queries */
 @media screen and (max-width: 768px) {
