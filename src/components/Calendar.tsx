@@ -179,6 +179,8 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
     </div>;
   };
 
+  
+
   const renderDailyCells = () => {
     const currentDayOfWeek = format(selectedDate, 'EEE').toUpperCase();
     const startOfWeekDate = startOfWeek(selectedDate);
@@ -217,19 +219,29 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
         <div className="flex justify-between">
           <div className="w-1/3 p-4 bg-white border-r-2 border-gray-200">
             <h3 className="text-lg font-semibold text-center mb-4">ASSIGNMENTS</h3>
-            {assignments.map((event, index) => (
-              <div className="event text-left pl-2 pr-2 pt-2 pb-2 mt-2" key={index}>
-                {event.event}
-              </div>
-            ))}
+            {assignments.map((event, index) => {
+              const [className, assignmentName] = event.event.split(' ', 2);
+              return (
+                <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2 relative" key={index}>
+                  <span className="font-extrabold">{className}</span>
+                  <span>{assignmentName}</span>
+                  <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 absolute top-0 right-0 mr-2 mt-2" />
+                  </div>
+              );
+            })}
           </div>
           <div className="w-1/3 p-4 bg-white border-r-2 border-gray-200 h-[645px]">
             <h3 className="text-lg font-semibold text-center mb-4">EXAMS/QUIZZES</h3>
-            {quizzes.map((event, index) => (
-              <div className="event text-left pl-2 pr-2 pt-2 pb-2 mt-2" key={index}>
-                {event.event}
-              </div>
-            ))}
+            {quizzes.map((event, index) => {
+              const [className, quizName] = event.event.split(' ', 2);
+              return (
+                <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2 relative" key={index}>
+                  <span className="font-extrabold">{className}</span>
+                  <span>{quizName}</span>
+                  <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 absolute top-0 right-0 mr-2 mt-2" />
+                  </div>
+              );
+            })}
           </div>
           <div className="w-1/3 p-4 bg-white">
             <h3 className="text-lg font-semibold text-center mb-4">PERSONAL</h3>
@@ -240,7 +252,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
     );
   };
   
-  
+
   
   const dateFormat = "MMMM yyyy";
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
