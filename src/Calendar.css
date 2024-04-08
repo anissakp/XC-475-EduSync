@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
+body {
+    font-family: 'Quicksand';
+}
+
 .cell {
     display: flex;
     flex-direction: column;
@@ -7,6 +11,12 @@
     cursor: pointer;
     height: 125px;
     padding: 0;
+    width: 100%;
+}
+
+.date-container {
+    border-bottom: 2px solid #EBEDEC;
+    padding: 10px 0;
     width: 100%;
 }
 
@@ -25,6 +35,7 @@
 .disabled .number {
     opacity: 0%;
 }
+
 
 /* Media Queries */
 @media screen and (max-width: 768px) {

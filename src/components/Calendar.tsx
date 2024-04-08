@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarViewSwitcher from "./CalendarViewSwitcher";
 import "../Calendar.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
@@ -31,21 +31,33 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedView, setSelectedView] = useState("Monthly");
 
+  const [selectedDate, setSelectedDate] = useState(currentMonth); // Move the selectedDate state here
+
+  // Update selectedDate when currentMonth changes
+  useEffect(() => {
+    setSelectedDate(currentMonth);
+  }, [currentMonth]);
+
   const nextMonth = () => {
     if (selectedView === "Monthly") {
       setCurrentMonth(addMonths(currentMonth, 1));
     } else if (selectedView === "Weekly") {
       setCurrentMonth(addDays(currentMonth, 7));
+    } else if (selectedView === "Daily") {
+      setCurrentMonth(addDays(currentMonth, 1));
     }
   };
-
+  
   const prevMonth = () => {
     if (selectedView === "Monthly") {
       setCurrentMonth(subMonths(currentMonth, 1));
     } else if (selectedView === "Weekly") {
       setCurrentMonth(subDays(currentMonth, 7));
+    } else if (selectedView === "Daily") {
+      setCurrentMonth(subDays(currentMonth, 1));
     }
   };
+
 
   const renderCells = () => {
     const monthStart = startOfMonth(currentMonth);
@@ -166,8 +178,70 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       {days}
     </div>;
   };
-  
 
+  const renderDailyCells = () => {
+    const currentDayOfWeek = format(selectedDate, 'EEE').toUpperCase();
+    const startOfWeekDate = startOfWeek(selectedDate);
+  
+    // Filter events for the selected date
+    const eventsForSelectedDate = courses.filter((course) => isSameDay(course.date, selectedDate));
+  
+    // Separate events into assignments and quizzes
+    const assignments = eventsForSelectedDate.filter((event) => !event.event.toLowerCase().includes("quiz"));
+    const quizzes = eventsForSelectedDate.filter((event) => event.event.toLowerCase().includes("quiz"));
+  
+    return (
+      <div>
+        <div className="flex justify-between font-['Quicksand']">
+          {days.map((day, i) => {
+            const date = addDays(startOfWeekDate, i);
+            const formattedDate = format(date, 'd');
+            const isSelected = isSameDay(date, selectedDate);
+            return (
+              <div
+                key={day}
+                className={`column cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""} ${
+                  isSelected ? "bg-gradient-to-bl from-slate-400 to-emerald-200 text-white" : ""
+                }`}
+                onClick={() => setSelectedDate(date)}
+              >
+                <div className="date-container text-center">
+                  <span className="text-neutral-700 text-3xl font-medium">{formattedDate}</span>
+                  <br />
+                  <span className="text-neutral-700 text-xl font-medium">{day}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-between">
+          <div className="w-1/3 p-4 bg-white border-r-2 border-gray-200">
+            <h3 className="text-lg font-semibold text-center mb-4">ASSIGNMENTS</h3>
+            {assignments.map((event, index) => (
+              <div className="event text-left pl-2 pr-2 pt-2 pb-2 mt-2" key={index}>
+                {event.event}
+              </div>
+            ))}
+          </div>
+          <div className="w-1/3 p-4 bg-white border-r-2 border-gray-200 h-[645px]">
+            <h3 className="text-lg font-semibold text-center mb-4">EXAMS/QUIZZES</h3>
+            {quizzes.map((event, index) => (
+              <div className="event text-left pl-2 pr-2 pt-2 pb-2 mt-2" key={index}>
+                {event.event}
+              </div>
+            ))}
+          </div>
+          <div className="w-1/3 p-4 bg-white">
+            <h3 className="text-lg font-semibold text-center mb-4">PERSONAL</h3>
+            {/* List personal items here */}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  
+  
   const dateFormat = "MMMM yyyy";
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
@@ -236,6 +310,15 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
         <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
           <div className="wrapper h-auto p-[20px]">
             {renderWeeklyCells()}
+          </div>
+        </div>
+      )}
+
+      {/* DAILY CALENDAR VIEW */}
+      {selectedView === "Daily" && (
+        <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
+          <div className="wrapper h-auto p-[20px]">
+            {renderDailyCells()}
           </div>
         </div>
       )}
