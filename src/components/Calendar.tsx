@@ -149,7 +149,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
       days.push(
         <div
-          className={`column cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
+          className={`column cellTwo h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
           key={day.toString()}
         >
           <div className="date-container text-center">
@@ -211,7 +211,7 @@ const renderDailyCells = () => {
             return (
               <div
                 key={day}
-                className={`column cell h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""} ${
+                className={`column cellTwo h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""} ${
                   isSelected ? "bg-gradient-to-bl from-slate-400 to-emerald-200 text-white" : ""
                 }`}
                 onClick={() => setSelectedDate(date)}
