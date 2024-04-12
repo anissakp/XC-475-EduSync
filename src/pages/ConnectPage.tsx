@@ -10,7 +10,6 @@ import gradescopeLogo from "../assets/gradescopeLogo.png"
 import connectBlueBlob from "../assets/connectBlueBlob.png"
 import connectOrangeBlob from "../assets/connectOrangeBlob.png"
 
-
 import SideMenu from "../components/SideMenu";
 import ToDoList from "../components/ToDoList";
 

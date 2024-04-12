@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CalendarViewSwitcher from "./CalendarViewSwitcher";
 import "../Calendar.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
+import gradescopeLogo from "../assets/gradescopeLogo.png"
 import IconRight from "../assets/IconRight.png"
 
 import {
@@ -20,6 +21,7 @@ import {
 import DropdownCalendarView from "./DropdownCalendarView";
 
 interface Course {
+  source: SourceType;
   date: Date;
   event: string;
 }
@@ -28,11 +30,19 @@ interface Props {
   courses: Course[];
 }
 
+type SourceType = 'Blackboard' | 'Gradescope'; // Add more as needed
+
+
+const sourceLogoMap: { [key: string]: string | undefined } = {
+  Blackboard: blackboardLogo,
+  Gradescope: gradescopeLogo,
+  // Add more platforms and their logos as needed
+};
+
 const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedView, setSelectedView] = useState("Monthly");
-
-  const [selectedDate, setSelectedDate] = useState(currentMonth); // Move the selectedDate state here
+  const [selectedDate, setSelectedDate] = useState(currentMonth); 
 
   // Update selectedDate when currentMonth changes
   useEffect(() => {
@@ -125,22 +135,17 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
 
-
     const dateFormat = "d";
     const dayOfWeekFormat = "EEE";
     const days = [];
 
-
     let day = weekStart;
-
 
     for (let i = 0; i < 7; i++) {
       const formattedDate = format(day, dateFormat);
       const dayOfWeek = format(day, dayOfWeekFormat).toUpperCase();
 
-
       const eventsForDay = courses.filter((event) => isSameDay(event.date, day));
-
 
       days.push(
         <div
@@ -156,11 +161,12 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
           <div className="events w-[90%] mx-auto mt-[6px]">
             {eventsForDay.map((event, index) => {
               const [className, ...assignmentTitle] = event.event.split(' ');
+              const eventLogo = sourceLogoMap[event.source] || blackboardLogo; // Default to Blackboard logo if source not recognized
               return (
                 <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2" key={index}> 
                 <div className="flex justify-between items-center">
                   <span className="font-extrabold">{className}</span> 
-                  <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 ml-2" /> 
+                  <img src={eventLogo} alt={`${event.source} Logo`} className="w-6 h-6 ml-2" /> 
                 </div>
                 {assignmentTitle.join(' ')}
                 <button className="w-[83px] h-[30px] px-2.5 py-1 bg-cyan-800 rounded flex justify-start items-center mt-2 text-white text-[12px] font-medium font-['Quicksand'] uppercase leading-snug tracking-wide"> {/* Button under the assignment */}
@@ -224,11 +230,12 @@ const renderDailyCells = () => {
             <h3 className="text-lg font-semibold text-center mb-4">ASSIGNMENTS</h3>
             {assignments.map((event, index) => {
               const [className, assignmentName] = event.event.split(' ', 2);
+              const eventLogo = sourceLogoMap[event.source] || blackboardLogo; // Default to Blackboard logo if source not recognized
               return (
                 <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2 relative" key={index}>
                   <span className="font-extrabold">{className}</span>
                   <span>{assignmentName}</span>
-                  <img src={blackboardLogo} alt="Blackboard Logo" className="w-6 h-6 absolute top-0 right-0 mr-2 mt-2" />
+                  <img src={eventLogo} alt={`${event.source} Logo`} className="w-6 h-6 absolute top-0 right-0 mr-2 mt-2" />
                   </div>
               );
             })}
