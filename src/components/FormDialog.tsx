@@ -7,6 +7,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import gradescopeLogo from "../assets/gradescopeLogo.png"
+import Checkbox from '@mui/material/Checkbox';
+import { useNavigate } from 'react-router-dom';
+
 
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -16,13 +19,19 @@ interface Props{
   // courses: any[];
   // setCourses: React.Dispatch<React.SetStateAction<any[]>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  gradeScopeStatus: boolean
 }
 
 
 // REMOVED PROPS {courses, setCourses, setLoading}
-const FormDialog : React.FC<Props> = ({setLoading}) => {
+const FormDialog : React.FC<Props> = ({setLoading, gradeScopeStatus}) => {
+  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+  console.log("GRADESCOPE STATUS", gradeScopeStatus)
+
   
   const [open, setOpen] = React.useState(false);
+  const nav = useNavigate()
 
   function convertDateString(dateStr:any) {
     const months:any = {
@@ -59,7 +68,9 @@ const FormDialog : React.FC<Props> = ({setLoading}) => {
     <React.Fragment>
       <button className="bg-white flex items-center text-[20px]" onClick={handleClickOpen}>
         <img src={gradescopeLogo} alt="GradescopeLogo" className="w-8 h-8 mr-[1px]"/>
-        Gradescope
+       Gradescope
+        { gradeScopeStatus && <Checkbox {...label} defaultChecked color="success" />}
+
       </button>
       <Dialog
         open={open}
@@ -127,12 +138,14 @@ const FormDialog : React.FC<Props> = ({setLoading}) => {
             };
             if (user) {
               const userRef = doc(db, "users", user.uid); 
-              await setDoc(userRef, { gradescopeConnected: true }, { merge: true });
+              await setDoc(userRef, { gradescopeConnected: true, statusGS:true }, { merge: true });
               saveGradescopeAssignmentsToFirestore(user.uid, classes);
             }
 
             // setCourses(arr)
             setLoading(false)
+            nav("/dashboard")
+
           },
         }}
       >

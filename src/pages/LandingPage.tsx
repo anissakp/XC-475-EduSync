@@ -14,9 +14,11 @@ import calendar from "../assets/calendar.png"
 import aplus from "../assets/Aplus.png"
 import assignment from "../assets/assignment.png"
 import hat from "../assets/hat.png"
+import { useNavigate } from 'react-router-dom'
 
 
 export default function LandingPage() {
+  const nav = useNavigate()
   return (
     <>
       <Header buttonText="LOGIN" buttonLink="/login"/>
@@ -30,7 +32,7 @@ export default function LandingPage() {
         <div className="max-w-sm flex flex-col gap-3 ">
           <h2 className="text-2xl xl:text-4xl text-center md:text-left">Syd <span className="text-custom-orange">always</span> forgets <span className="text-custom-blue">important</span> academic dates</h2>
           <p className="text-center md:text-left">Are you like Syd? <br></br> We're here to help you!</p>
-          <button className="bg-custom-blue2 ">Get Started, it's Free!</button>
+          <button className="bg-custom-blue2 " onClick={()=> nav("/connect")}>Get Started, it's Free!</button>
         </div>
       </div>
       <div className=" flex justify-end md:justify-end items-center px-11 mt-20 ">
