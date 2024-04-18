@@ -149,21 +149,21 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
       days.push(
         <div
-          className={`column cellTwo h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
+          className={`column cursor-pointer p-0 w-full h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""}`}
           key={day.toString()}
         >
-          <div className="date-container text-center">
+          <div className="border-b-[2px] border-[#ebedec] py-2 w-full  text-center">
             <span className="text-neutral-700 text-3xl font-medium font-['Quicksand']">{formattedDate}</span>
             <br />
             <span className="text-neutral-700 text-xl font-medium font-['Quicksand']">{dayOfWeek}</span>
           </div>
           <div className="w-full h-[645px]">
-          <div className="events w-[90%] mx-auto mt-[6px]">
+          <div className=" w-[90%] mx-auto mt-[6px]">
             {eventsForDay.map((event, index) => {
               const [className, ...assignmentTitle] = event.event.split(' ');
               const eventLogo = sourceLogoMap[event.source] || blackboardLogo; // Default to Blackboard logo if source not recognized
               return (
-                <div className="event text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2" key={index}> 
+                <div className="bg-[#a2d9d1] text-[12px] rounded-[5px] overflow-hidden truncate  w-full text-left flex flex-col pl-2 pr-2 pt-2 pb-2 mt-2" key={index}> 
                 <div className="flex justify-between items-center">
                   <span className="font-extrabold">{className}</span> 
                   <img src={eventLogo} alt={`${event.source} Logo`} className="w-6 h-6 ml-2" /> 
@@ -194,10 +194,8 @@ const renderDailyCells = () => {
     const currentDayOfWeek = format(selectedDate, 'EEE').toUpperCase();
     const startOfWeekDate = startOfWeek(selectedDate);
   
-    // Filter events for the selected date
     const eventsForSelectedDate = courses.filter((course) => isSameDay(course.date, selectedDate));
   
-    // Separate events into assignments and quizzes
     const assignments = eventsForSelectedDate.filter((event) => !event.event.toLowerCase().includes("quiz"));
     const quizzes = eventsForSelectedDate.filter((event) => event.event.toLowerCase().includes("quiz"));
   
@@ -211,12 +209,12 @@ const renderDailyCells = () => {
             return (
               <div
                 key={day}
-                className={`column cellTwo h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""} ${
+                className={`column cursor-pointer p-0 w-full h-full flex flex-col justify-center items-center ${i > 0 ? "border-l-2" : ""} ${
                   isSelected ? "bg-gradient-to-bl from-slate-400 to-emerald-200 text-white" : ""
                 }`}
                 onClick={() => setSelectedDate(date)}
               >
-                <div className="date-container text-center">
+                <div className="border-b-[2px] border-[#ebedec] py-2 w-full text-center">
                   <span className="text-neutral-700 text-3xl font-medium">{formattedDate}</span>
                   <br />
                   <span className="text-neutral-700 text-xl font-medium">{day}</span>

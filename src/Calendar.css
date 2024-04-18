@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Quicksand');
 
-body {
-    font-family: 'Quicksand';
-}
 
 .cell {
     display: flex;
@@ -11,21 +7,6 @@ body {
     cursor: pointer;
     height: 125px;
     padding: 0;
-    width: 100%;
-}
-
-.cellTwo {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    cursor: pointer;
-    padding: 0;
-    width: 100%;
-}
-
-.date-container {
-    border-bottom: 2px solid #EBEDEC;
-    padding: 10px 0;
     width: 100%;
 }
 
@@ -38,19 +19,15 @@ body {
     width: 100%;
     box-sizing: border-box;
     padding-left: 6px;
-    /* Ensure that text doesn't wrap and gets cut off when it overflows its container */
     overflow: hidden;
     text-overflow: ellipsis;
-    /* Display ellipsis (...) when text is cut off */
 }
 
-/* don't render events that are disabled */
 .disabled .event,
 .disabled .number {
     opacity: 0%;
 }
 
-/* Media Queries */
 @media screen and (max-width: 768px) {
     .calendar {
         margin: 0px 0px 0px 10px;
