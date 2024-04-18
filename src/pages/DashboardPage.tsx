@@ -1,6 +1,4 @@
 import { useContext, useState, useEffect } from "react";
-
-import { NavLink } from "react-router-dom";
 import { AuthContext } from "../authContext";
 
 import Calendar from "../components/Calendar";
@@ -124,7 +122,6 @@ export default function DashboardPage() {
           name: assignment.name,
           dueDate: new Date(assignment.grading.due),
           courseName: classInfo.courseName,
-          source: "Blackboard",
         };
         // assignment document saved in user's assignments subcollection
         await setDoc(assignmentDocRef, assignmentData);
@@ -132,6 +129,8 @@ export default function DashboardPage() {
     }
   };
 
+  // THIS PULLS ALL THE EVENTS FROM THE DATABASE
+  // THE DATABASE GROUPS ALL THE ASSIGNMENTS TOGETHER (SOURCE OF ASSIGNMENT IS A SEPARATE FIELD)
   // **************NEW *************************
   const fetchAssignmentsFromFirestore = async (userId: string) => {
     console.log("fetchAssignmentsFromFirestore called", userId);
@@ -143,11 +142,13 @@ export default function DashboardPage() {
       assignments.push({
         date: data.dueDate.toDate(),
         event: `${data.courseName} ${data.name}`,
+        source: data.source, // IMPLEMENT THIS
       });
     });
     console.log(assignments);
     setCourses(assignments);
   };
+  
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {
     console.log(id)
@@ -200,7 +201,7 @@ export default function DashboardPage() {
           <StickyNote key={id} onClone={() => onClone(id)} />
         ))}
 
-       {/* Task button when a screen is minimized */}
+    {/* Task button when a screen is minimized */} 
         <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap font-['Quicksand']" >
           {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
           <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
