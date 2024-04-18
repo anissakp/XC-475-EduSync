@@ -49,8 +49,6 @@ export default function LandingPage() {
           <img className="animate-wiggle2 z-40 absolute top-[2rem] right-[0.5rem] lg:top-[3rem] lg:right-[-1rem] xl:top-[2.5rem] xl:right-[-2.5rem] w-8 sm:w-8 md:w-9 lg:w-12 xl:w-16 lg:mr-32 xl:mr-36" src={aplus} alt="Logo" />
           <img className="animate-wiggle3 z-40 absolute top-[8rem] right-[1rem] md:top-[11rem] md:right-[1rem] lg:top-[14rem] lg:right-[2rem] xl:top-[15rem] xl:right-[2rem] w-14 sm:w-14 md:w-20 lg:w-28 xl:w-32 lg:mr-32 xl:mr-36" src={assignment} alt="Logo" />
           <img className="animate-wiggle4 z-40 absolute top-[9rem] right-[5rem] md:top-[13rem] md:right-[7rem] lg:top-[16rem] lg:right-[9rem] xl:top-[18rem] xl:right-[11rem] w-14 sm:w-14 md:w-16 lg:w-20 xl:w-24 lg:mr-32 xl:mr-36" src={hat} alt="Logo" />
-
-
        </div>
       </div>
       <div className="flex justify-center mt-24 md:mt-28 lg:mt-32 xl:mt-36">
