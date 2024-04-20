@@ -11,6 +11,7 @@ import piazzaLogo from "../assets/piazzaLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
 import connectBlueBlob from "../assets/connectBlueBlob.png"
 import connectOrangeBlob from "../assets/connectOrangeBlob.png"
+
 import FormDialog from "../components/FormDialog";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import Checkbox from '@mui/material/Checkbox';
