@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./authContext";
 
-import { getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "./firebase";
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, setDoc, getDoc} from "firebase/firestore";
+import { app, db } from "./firebase";
 
 import DashboardPage from "./pages/DashboardPage";
 import ConnectPage from "./pages/ConnectPage";
@@ -20,87 +19,103 @@ import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
 
+import { debounce } from 'lodash';
 
 
 function App() {
   const [token, setToken] = useState("");
   const [userID, setUserID] = useState("");
+  const auth = getAuth(app);
+
 
   // FUNCTION TO SET VALUES IN LOCAL STORAGE
-  const setStorageValue = (userID: string, aToken: string, rToken: string) => {
+  const setStorageValue = (userID: string, aToken: string) => {
     //Sets New Access Token Onto Local Storage
     localStorage.setItem(
       "data",
       JSON.stringify({
         userID: userID,
         token: aToken,
-        expiresAt: new Date(new Date().getTime() + 7200000).toISOString(),
-      })
-    );
-
-    // Set New Refresh Token On Local Storage
-    localStorage.setItem(
-      "refresh",
-      JSON.stringify({
-        refreshToken: rToken,
+        // expiresAt: new Date(new Date().getTime() + 60000).toISOString(), // 1min
+        expiresAt: new Date(new Date().getTime() + 7200000).toISOString(), // 2hours
       })
     );
   };
 
-  // 3L0: GETS TOKEN FOR USER BASED ON AUTHORIZATION CODE
+  // FUNCTION TO UPDATE REFRESH TOKEN IN DATABASE
+  const updateRefreshToken = async (rToken: string) => {
+    const firebaseAuth = getAuth();
+    const firebaseAuthUser = firebaseAuth.currentUser;
+    if (firebaseAuthUser) {
+      console.log("refresh token stored in DB [ only happens when no token in local storage ] ")
+      const userDocRef = doc(db, 'users', firebaseAuthUser.uid); 
+      // assignment document saved in user's assignments subcollection
+      await setDoc(userDocRef, { refreshToken: rToken }, { merge: true } );
+    }
+  }
+
   const getToken = async () => {
-    try {
-      //Retrive Refresh Data From Local Storage
-      const refresh = localStorage.getItem("refresh")!;
-      const refreshData = JSON.parse(refresh);
+    try{
+      // Retrieve refresh token from database
+      onAuthStateChanged(auth, async (user: any) => {
+        const docRef = doc(db, `users/${user.uid}`);
+        const docSnap = await getDoc(docRef);
+        const data = docSnap.data();
 
-      //Get New Access Token Based On Refresh token
-      if (refreshData && refreshData.refreshToken) {
-        const bbRefreshTokenURL = import.meta.env.VITE_BB_REFRESH_TOKEN_URL;
+        // If refresh token exists 
+        if (data && data.refreshToken){
+          // Get new access token based on refresh token
+          const bbRefreshTokenURL = import.meta.env.VITE_BB_REFRESH_TOKEN_URL;
 
-        const response = await fetch(
-          `${bbRefreshTokenURL}?refreshToken=${refreshData.refreshToken}`
-        );
+          const response = await fetch(
+            `${bbRefreshTokenURL}?refreshToken=${data.refreshToken}`
+          );
 
-        const data = await response.json();
+          const data2 = await response.json();
 
-        setToken(data.access_token);
-        setUserID(data.user_id);
+          //EXAMINE DATA AND DOES REFRESH TOKEN CHNAGE???
+          console.log("GETTING NEW ACCESS TOKEN FROM REFRESH TOKEN", data2)
 
-        setStorageValue(data.user_id, data.access_token, data.refresh_token);
-      } else {
-        //Initial Access Token Retrieval When BB Connection Established
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
+          setToken(data2.access_token);
+          setUserID(data2.user_id);
 
-        const response = await fetch(`${bbTokenURL}?code=${code}`);
-
-        const data = await response.json();
-
-        setToken(data.access_token);
-        setUserID(data.user_id);
-
-        // ******* store refresh token in the database ********
-        const firebaseAuth = getAuth();
-        const firebaseAuthUser = firebaseAuth.currentUser;
-        if (firebaseAuthUser) {
-          console.log("refresh token stored in DB [ only happens when no token in local storage ] ")
-          const userDocRef = doc(db, 'users', firebaseAuthUser.uid); 
-          // assignment document saved in user's assignments subcollection
-          await setDoc(userDocRef, { refreshToken: data.refresh_token }, { merge: true } );
+          setStorageValue(data2.user_id, data2.access_token)
+        
+          // ******* store refresh token in the database ********
+          updateRefreshToken(data2.refresh_token)
         }
+        else {
+          // Else initial access token retrieval when BB connection established
+          console.log("GETTING INITIAL TOKEN")
 
-        // *** delete this line after storing refresh token in database ***
-        setStorageValue(data.user_id, data.access_token, data.refresh_token)
-      }
-    } catch (error) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const code = urlParams.get("code");
+          const bbTokenURL = import.meta.env.VITE_BB_TOKEN_URL;
+
+          const response = await fetch(`${bbTokenURL}?code=${code}`);
+
+          const data = await response.json();
+
+          setToken(data.access_token);
+          setUserID(data.user_id);
+
+          setStorageValue(data.user_id, data.access_token);
+
+          // ******* store refresh token in the database ********
+          updateRefreshToken(data.refresh_token)
+        }
+      });
+    }catch(error) {
       console.log("Inside GET TOKEN ERROR: ", error);
     }
-  };
+  }
+
+  // TO PREVENT GETTOKEN FROM BEING CALLED BACK TO BACK IMMEDIATELY
+  const debouncedGetToken = debounce(getToken, 500);
 
   // CHECK IF USERS HAS TOKEN ON INITIAL RENDER
   useEffect(() => {
+    console.log("INVOKED USEEFFECT")
     const data = localStorage.getItem("data")!;
     const localStorageData = JSON.parse(data);
     //Check If Access Token Exist On Local Storage
@@ -109,12 +124,14 @@ function App() {
       localStorageData.token &&
       new Date(localStorageData.expiresAt) > new Date()
     ) {
+      console.log("USING CURRENT ACCESS TOKEN")
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
     } else {
       // Invokes Get Token Function Since Access Token
       // Not Available In Local Storage Or Token Expired
-      getToken();
+      debouncedGetToken()
+      
     }
   }, []);
 

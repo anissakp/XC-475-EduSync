@@ -14,9 +14,11 @@ import calendar from "../assets/calendar.png"
 import aplus from "../assets/Aplus.png"
 import assignment from "../assets/assignment.png"
 import hat from "../assets/hat.png"
+import { useNavigate } from 'react-router-dom'
 
 
 export default function LandingPage() {
+  const nav = useNavigate()
   return (
     <>
       <Header buttonText="LOGIN" buttonLink="/login"/>
@@ -30,7 +32,7 @@ export default function LandingPage() {
         <div className="max-w-sm flex flex-col gap-3 ">
           <h2 className="text-2xl xl:text-4xl text-center md:text-left">Syd <span className="text-custom-orange">always</span> forgets <span className="text-custom-blue">important</span> academic dates</h2>
           <p className="text-center md:text-left">Are you like Syd? <br></br> We're here to help you!</p>
-          <button className="bg-custom-blue2 ">Get Started, it's Free!</button>
+          <button className="bg-custom-blue2 " onClick={()=> nav("/connect")}>Get Started, it's Free!</button>
         </div>
       </div>
       <div className=" flex justify-end md:justify-end items-center px-11 mt-20 ">
@@ -47,8 +49,6 @@ export default function LandingPage() {
           <img className="animate-wiggle2 z-40 absolute top-[2rem] right-[0.5rem] lg:top-[3rem] lg:right-[-1rem] xl:top-[2.5rem] xl:right-[-2.5rem] w-8 sm:w-8 md:w-9 lg:w-12 xl:w-16 lg:mr-32 xl:mr-36" src={aplus} alt="Logo" />
           <img className="animate-wiggle3 z-40 absolute top-[8rem] right-[1rem] md:top-[11rem] md:right-[1rem] lg:top-[14rem] lg:right-[2rem] xl:top-[15rem] xl:right-[2rem] w-14 sm:w-14 md:w-20 lg:w-28 xl:w-32 lg:mr-32 xl:mr-36" src={assignment} alt="Logo" />
           <img className="animate-wiggle4 z-40 absolute top-[9rem] right-[5rem] md:top-[13rem] md:right-[7rem] lg:top-[16rem] lg:right-[9rem] xl:top-[18rem] xl:right-[11rem] w-14 sm:w-14 md:w-16 lg:w-20 xl:w-24 lg:mr-32 xl:mr-36" src={hat} alt="Logo" />
-
-
        </div>
       </div>
       <div className="flex justify-center mt-24 md:mt-28 lg:mt-32 xl:mt-36">
