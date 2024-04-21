@@ -23,7 +23,8 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
     const navigate = useNavigate()
 
     const goToProfile = () => {
-        navigate('/EditProfile')
+
+        navigate('/Profile')
     }
 
     const handleLogout =()=>{
