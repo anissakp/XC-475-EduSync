@@ -14,12 +14,22 @@ import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
+import { getDoc } from "firebase/firestore";
 
 interface Props{
   // courses: any[];
   // setCourses: React.Dispatch<React.SetStateAction<any[]>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   gradeScopeStatus: boolean
+}
+
+interface GradescopeAssignmentData {
+  name: string;
+  dueDate: Date;
+  courseName: string;
+  // optional field
+  completed?: boolean;
+  source: string;
 }
 
 
@@ -120,20 +130,39 @@ const FormDialog : React.FC<Props> = ({setLoading, gradeScopeStatus}) => {
             const auth = getAuth();
             const user = auth.currentUser;
             const saveGradescopeAssignmentsToFirestore = async (userID: string, assignments: any[]) => {
-              console.log("gradescope assign saved to db")
               const userDocRef = doc(db, 'users', userID);
               for (const assign of assignments) {
-                console.log("this is the objecct" + assign);
+                console.log("gradescope assign saved to db:" + assign);
+
+                
                 const assignmentId = `${assign.course_name + assign.title}`;
-                /// ************** SHOULD WE SAVE IT TO ITS OWN SUBCOLLECTION OF JUST FIREBASE ASSIGN ************
                 const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
-                const assignmentData = {
+                //~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~ 
+                const docSnapshot = await getDoc(assignmentDocRef);
+
+                // ~~~ changed from const to let ~~~~
+                let assignmentData : GradescopeAssignmentData = {
                   name: assign.title,
                   dueDate: new Date(convertDateString(assign.due_date)),
                   courseName: assign.course_name,
                   source: "Gradescope",
                 };
-                await setDoc(assignmentDocRef, assignmentData);
+
+                
+                //~~~~~ check if the document already exists ~~~~~~~
+                // if the doc doesn't already exist, we can just set completed to false
+                if (!docSnapshot.exists()) {
+                  assignmentData['completed'] = false;
+                } else {
+                  // if doc exists already, merge and don't overwrite completed
+                  assignmentData = {
+                    ...docSnapshot.data(),
+                    ...assignmentData
+                  };
+                }
+
+
+                await setDoc(assignmentDocRef, assignmentData, { merge: true });
               }
             };
             if (user) {
