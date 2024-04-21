@@ -13,7 +13,7 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
 
     const goToProfile = () => {
 
-        navigate('/EditProfile')
+        navigate('/Profile')
     }
 
     return (

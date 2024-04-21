@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -41,4 +39,41 @@
 
 .read-the-docs {
   color: #888;
+}
+
+
+.event {
+
+  background-color: #A2D9D1;
+  font-size: 12px;
+  border-radius: 5px;
+  margin-top: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.disabled .event,
+.disabled .number {
+  opacity: 0%;
+}
+
+@media screen {
+  .calendar {
+      margin: 0px 0px 0px 10px;
+      padding: 15px 20px 20px 20px;
+      border-radius: 20px;
+      height: auto;
+      width: 65vw;
+      color: #353638;
+      background-color: #EBEDEC;
+  }
+
+  .month_name {
+      font-weight: bold;
+      font-size: calc(1rem + 1vw);
+      padding: 10px;
+  }
 }

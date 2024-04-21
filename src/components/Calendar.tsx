@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CalendarViewSwitcher from "./CalendarViewSwitcher";
-import "../Calendar.css";
+import "../App.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
 import IconRight from "../assets/IconRight.png"
@@ -92,16 +92,15 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
 
         days.push(
           <div
-            className={`column cell ${!isSameMonth(day, monthStart)
+            className={`flex flex-col   cursor-pointer h-[125px] w-full p-2  ${!isSameMonth(day, monthStart)
               ? "text-gray-400"
               : ""
               } ${i > 0 ? "border-l-2" : ""}`}
             key={day.toString()}
           >
             <p className="number text-left m-0 pl-[5px] pb-[2px] font-bold text-[calc(0.5rem+1vw)]">{formattedDate}</p>
-            <div className="events w-[90%] mx-auto mt-[6px]">
+            <div className="w-[90%] mx-auto mt-[6px]">
               {eventsForDay.map((event, index) => {
-                // Split the event string into class name and assignment name
                 const [className, assignmentName] = event.event.split(' ', 2);
                 return (
                   <div className="event" key={index}>
@@ -119,7 +118,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
-          className={`flex justify-between ${day > endDate && rows.length > 4 ? "hidden" : ""
+          className={`flex justify-between w-full h-full  ${day > endDate && rows.length > 4 ? "hidden" : ""
             } ${isFirstRow ? "" : "border-t-2"}`}
           key={day.toString()}
         >
@@ -267,8 +266,8 @@ const renderDailyCells = () => {
 
   // calendar header code
   return (
-    <div className="w-[1042px] h-[875px] bg-[#EBEDEC] ml-[-5px] rounded-[20px] font-['Quicksand']">
-      <div className="calendar_header flex justify-between items-center h-auto p-[20px]">
+    <div className="p-8 bg-[#EBEDEC] ml-[-5px] rounded-[20px] font-['Quicksand'] w-full min-h-screen">
+      <div className="flex justify-between items-center h-auto p-[20px]">
         <div>
           <button className="chevronButton p-[5px] bg-transparent border-none" onClick={prevMonth}>
             <svg
@@ -323,11 +322,11 @@ const renderDailyCells = () => {
 
       {/* MONTHLY CALENDAR VIEW */}
       {selectedView === "Monthly" && (
-        <div className="bg-white w-[1004px] h-[774px] mx-auto rounded-[20px] ">
-          <div className="wrapper h-auto p-[20px]">
-            <div className="day_of_week_name flex justify-between pt-[30px] pb-[20px] font-semibold text-[calc(0.5rem+1vw)] gap-[10px]">
+        <div className="bg-white mx-auto rounded-[20px] w-full h-screen">
+          <div className="wrapper h-full p-[20px] ">
+            <div className="flex justify-between pt-[30px] pb-[20px] font-semibold text-[calc(0.5rem+1vw)] gap-[10px] mb-8">
               {days.map((day) => (
-                <div className="column column flex-[calc(100%/7)] text-center mr-0" key={day}>
+                <div className="column flex-[calc(100%/7)] text-center mr-0" key={day}>
                   {day}
                 </div>
               ))}
