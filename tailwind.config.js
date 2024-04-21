@@ -8,6 +8,10 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
+        blink: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0.3 } // Adjusted minimum opacity
+        },
         wiggle1: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
@@ -26,6 +30,7 @@ module.exports = {
         },
       },
       animation: {
+        blink: 'blink 2s ease-in-out infinite',
         wiggle1: 'wiggle1 2s ease-in-out infinite',
         wiggle2: 'wiggle2 2.5s ease-in-out infinite',
         wiggle3: 'wiggle3 3s ease-in-out infinite',

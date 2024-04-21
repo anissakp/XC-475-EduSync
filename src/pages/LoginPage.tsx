@@ -1,8 +1,9 @@
-import { useEffect } from "react";
-import { getAuth } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { app } from "../firebase";
 import logo from '../assets/edusync-logo.png';
+import { useNavigate } from "react-router-dom";
 
 import * as firebaseui from "firebaseui";
 // import "firebaseui/dist/firebaseui.css";
@@ -10,13 +11,16 @@ import "../custom-firebaseui.css";
 import Header from '../components/Header';
 
 export default function LoginPage() {
+    const navigate = useNavigate()
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(getAuth(app));
+        const auth = getAuth(app);
+
         
         ui.start('#firebase-button', {
             // popup instead of redirect
             signInFlow: 'popup', 
-            signInSuccessUrl: '/connect',
+            // signInSuccessUrl: redirect,
             signInOptions: [
                 {
                     //google login
@@ -30,7 +34,28 @@ export default function LoginPage() {
             //google one tap sign in
             credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
         });
+
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const { creationTime, lastSignInTime } = user.metadata;
+                console.log("CREATION", creationTime, lastSignInTime)
+
+                // Redirect based on the user's login history
+                if (creationTime === lastSignInTime) {
+                    navigate("/connect"); // First time user
+                } else {
+                    navigate("/dashboard"); // Returning user
+                }
+            } else {
+                navigate("/login"); // No user is signed in
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
+
 
     return (
         <>
