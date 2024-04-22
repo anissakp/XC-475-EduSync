@@ -14,6 +14,9 @@ import CircularIndeterminate from "../components/CircularIndeterminate";
 import SideMenuButton from "../components/SideMenuButton";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 import StickyNote from "../components/StickyNotes";
+import NewStickynotes from "../components/NewStickynotes";
+
+
 
 
 export default function DashboardPage() {
@@ -90,9 +93,9 @@ export default function DashboardPage() {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        const userRef = doc(db, "users", user.uid); 
+        const userRef = doc(db, "users", user.uid);
 
-        
+
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
           console.log("if 1");
@@ -108,7 +111,7 @@ export default function DashboardPage() {
           await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
-        } 
+        }
         else {
           console.log("if 3");
           await getAssignments(user.uid);
@@ -179,7 +182,7 @@ export default function DashboardPage() {
     console.log(assignments);
     setCourses(assignments);
   };
-  
+
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {
     console.log(id)
@@ -199,46 +202,37 @@ export default function DashboardPage() {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
       <DashBoardHeader onClick={toggleSideMenu} />
-      
-      
-      
-      <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
-        {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
-        <Calendar courses={courses} />
-        <div>
-          <div className=" hidden lg:block">{ToDoListComponent}</div>
 
-          {/* Task button when a screen is minimized */}
 
-          <div className="fixed bottom-5 right-5  lg:hidden flex flex-wrap ">
-            {isToDoListVisible && ToDoListComponent}{" "}
-            {/* Pass courses as props */}
-            <button
-              className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]"
-              onClick={toggleToDoListVisibility}
-            >
-              Tasks
-            </button>
+      <div className="grid justify-center">
+        <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
+          {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
+          <Calendar courses={courses} />
+          <div className=" justify-items-center ml-4">
+            <div className="hidden justify-self-center lg:block">{ToDoListComponent}</div>
+
+
+            <div className="justify-self-center mt-4">
+              <NewStickynotes />
+            </div>
           </div>
-          <button
-            className="w-[90%] h-[5%] ml-8 mt-5"
-            onClick={() => onClone(-1)}
-          >
-            Sticky Notes
-          </button>
+
         </div>
 
-        {stickyNotes.map((id) => (
-          <StickyNote key={id} onClone={() => onClone(id)} />
-        ))}
-
-    {/* Task button when a screen is minimized */} 
-        <div className="fixed bottom-5 right-5 block lg:hidden flex flex-wrap font-['Quicksand']" >
-          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
-          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
-        </div> 
 
       </div>
+
+
+
+
+
+      {/* Task button when a screen is minimized */}
+      <div className="fixed bottom-5 right-5 lg:hidden flex flex-wrap font-['Quicksand']" >
+        {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+        <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+      </div>
+
+
     </div>
   );
 }

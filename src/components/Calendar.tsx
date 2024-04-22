@@ -116,6 +116,7 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
         day = addDays(day, 1);
       }
 
+      
       const isFirstRow = rows.length === 0;
       rows.push(
         <div
