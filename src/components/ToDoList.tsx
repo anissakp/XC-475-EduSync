@@ -53,7 +53,7 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
         setShowInput(false);
     };
     return (
-        <div className='ml-[2em] bg-[#a0d7d0] w-[316px] h-[460px] rounded-[20px] pl-[25px] pt-[10px] pr-[25px] '>
+        <div className='bg-[#a0d7d0] w-[316px] h-[460px] rounded-[20px] pl-[25px] pt-[10px] pr-[25px] '>
             <div className='flex justify-between items-center'>
                 <p className='text'>Tasks</p>
 
@@ -62,9 +62,9 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
             <hr className="border-[#6fb0b6] border-[1px] border-b-0 mt-[10px]" />
             {showInput && (
                 <div className='flex flex-col gap-[5px]'>
-                    <input className="bg-[#d2efed] rounded-[30px] p-[10px] mt-[5px] "type="text" value={newTask} onChange={handleInputChange} />
-                    <input className="bg-[#d2efed] rounded-[30px] p-[10px]"type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
-                    <button className="bg-[#d2efed] rounded-[30px] p-[10px]"onClick={addTaskAndHideInput}>Add</button>
+                    <input className="bg-[#d2efed] rounded-[30px] p-[10px] mt-[5px] " type="text" value={newTask} onChange={handleInputChange} />
+                    <input className="bg-[#d2efed] rounded-[30px] p-[10px]" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                    <button className="bg-[#d2efed] rounded-[30px] p-[10px]" onClick={addTaskAndHideInput}>Add</button>
                 </div>
             )}
             <ul id="h-[365px] overflow-y-auto p-0 mt-0" className={showInput ? "h-[220px]" : ""}>

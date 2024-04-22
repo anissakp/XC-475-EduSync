@@ -11,6 +11,7 @@ import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 import StickyNote from "../components/StickyNotes";
+import NewStickynotes from "../components/NewStickynotes";
 
 
 
@@ -63,7 +64,7 @@ export default function DashboardPage() {
 
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
-  }; 
+  };
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
@@ -72,9 +73,9 @@ export default function DashboardPage() {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        const userRef = doc(db, "users", user.uid); 
+        const userRef = doc(db, "users", user.uid);
 
-        
+
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
           console.log("if 1");
@@ -90,7 +91,7 @@ export default function DashboardPage() {
           await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
-        } 
+        }
         else {
           console.log("if 3");
           await getAssignments(user.uid);
@@ -101,7 +102,7 @@ export default function DashboardPage() {
         setLoading(false);
       }
     });
-  }, [auth.token, auth.userID]); 
+  }, [auth.token, auth.userID]);
 
 
   // function to save assignments to database, userID is from Firebase Auth
@@ -145,7 +146,7 @@ export default function DashboardPage() {
     console.log(assignments);
     setCourses(assignments);
   };
-  
+
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {
     console.log(id)
@@ -165,8 +166,8 @@ export default function DashboardPage() {
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] min-h-screen">
       {stickyNotes.map((id) => (
-          <StickyNote  key={id} onClone={() => onClone(id)} />
-        ))}
+        <StickyNote key={id} onClone={() => onClone(id)} />
+      ))}
       {<DashBoardHeader onClick={toggleSideMenu} />}
       <div className="flex min-h-screen ">
         <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
@@ -174,31 +175,30 @@ export default function DashboardPage() {
         </div>
         <div className="flex justify-between w-full h-full  pr-10 mt-10 min-h-screen">
           <Calendar courses={courses} />
-          <div>
-            <div className="hidden lg:block">{ToDoListComponent}</div>
-            <button
-              className="w-[90%] h-[5%] ml-8 mt-5"
-              onClick={() => onClone(-1)}
-            >
-                Sticky Notes
-            </button>
-        </div>
+          <div className=" justify-items-center ml-4">
+            <div className="hidden justify-self-center lg:block">{ToDoListComponent}</div>
+
+
+            <div className="justify-self-center mt-4">
+              <NewStickynotes />
+            </div>
+          </div>
 
         </div>
-        
+
 
       </div>
-      
 
-        
 
-    {/* Task button when a screen is minimized */} 
-        <div className="fixed bottom-5 right-5 lg:hidden flex flex-wrap font-['Quicksand']" >
-          {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
-          <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
-        </div> 
 
-      
+
+      {/* Task button when a screen is minimized */}
+      <div className="fixed bottom-5 right-5 lg:hidden flex flex-wrap font-['Quicksand']" >
+        {isToDoListVisible && ToDoListComponent} {/* Pass courses as props */}
+        <button className="bg-gradient-to-r from-[#E1AB91]-500 to-[#F7E2B3]-500 ] w-[316px] text-gray-700 fixed bottom-5 right-5 order-first bg-blue-500 text-white rounded-[15px]" onClick={toggleToDoListVisibility}>Tasks</button>
+      </div>
+
+
     </div>
   );
 }

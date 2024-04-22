@@ -69,7 +69,7 @@ const NewStickynotes: FunctionComponent = () => {
     return (
         <div>
             {/* stickynotes */}
-            <div style={{ backgroundColor: notes[currentNoteIndex].color }} className="w-[316px] h-[316px] rounded-[20px]">
+            <div style={{ backgroundColor: notes[currentNoteIndex].color, fontFamily: 'Quicksand, sans-serif' }} className="w-[316px] h-[316px] rounded-[20px]">
                 {/* stickynotes child */}
                 <div className="" />
                 {/* stickynotes item */}
@@ -85,7 +85,7 @@ const NewStickynotes: FunctionComponent = () => {
                         </div>
                         {/* View all notes button */}
                         <div className="self-center">
-                            <div className="">view all notes</div>
+                            <div className="">View All Notes</div>
                         </div>
                         {/* Add icon */}
                         <div className="">
