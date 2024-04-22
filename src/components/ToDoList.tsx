@@ -1,10 +1,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import "../ToDoList.css"
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
+
+
 import { Link } from 'react-router-dom';
 interface Course {
     date: Date;
     event: string;
+    completed: boolean;
+    id: string;
 }
 interface Props {
     courses: Course[];
@@ -14,6 +21,7 @@ type Task = {
     text: string;
     completed: boolean;
     dueDate: any;
+    id: string;
 }
 
 const ToDoList: React.FC<Props> = ({ courses }: Props) => {
@@ -26,21 +34,37 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
         if (courses && courses.length > 0) {
             const initialTasks = courses.map(elem => ({
                 text: elem.event,
-                completed: false,
-                dueDate: elem.date.toString()
+                completed: elem.completed,
+                dueDate: elem.date.toString(),
+                id: elem.id,
             }));
             setTasks(initialTasks);
         }
     }, [courses]);
 
-    const setTaskCompleted = (index: number): void => {
+    // ~~~~~~ NEW : made it async fxn and void -> Promise<void> ~~~~~~~~~~~
+    const setTaskCompleted = async (index: number): Promise<void> => {
         const tempTasks = [...tasks]
-        tempTasks[index].completed = !tempTasks[index].completed
+
+        // ~~~~~~~~~ NEW : commented this out and added ~~~~~~~~~~~
+        // tempTasks[index].completed = !tempTasks[index].completed
+        const task = tempTasks[index];
+        task.completed = !task.completed;
+
         setTasks(tempTasks)
+
+        // ~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+            //  ~~ need to make sure every task has an ID ~~
+            const taskDocRef = doc(db, `users/${user.uid}/assignments`, task.id);
+            await setDoc(taskDocRef, { completed: task.completed }, { merge: true });
+        } 
     }
 
     const addTask = (): void => {
-        const newTaskTemp = { text: newTask, completed: false, dueDate: dueDate }
+        const newTaskTemp = { text: newTask, completed: false, dueDate: dueDate, id: newTask + dueDate }
         setnewTask("")
         setTasks([...tasks, newTaskTemp])
     }
