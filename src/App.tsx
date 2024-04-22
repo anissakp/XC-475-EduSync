@@ -17,10 +17,10 @@ import TasksPage from "./pages/TasksPage";
 
 import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
-import { Edit } from "@mui/icons-material";
 
 import { debounce } from 'lodash';
 
+import "./App.css"
 
 function App() {
   const [token, setToken] = useState("");
