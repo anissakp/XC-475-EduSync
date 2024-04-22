@@ -19,7 +19,7 @@ export default function Profile() {
         <div className='flex flex-col gap-[33px]'>
             <div>
                 <div className=" w-full flex justify-between items-center  px-8 py-4 mb-0">
-                    <img className="mt-auto  h-[65px]" src="mainLogo2.png"></img>
+                    <img className="w-[238px] mt-auto  h-[83px]" src="mainLogo2.png"></img>
                     <button onClick={goToDashboard} className='bg-black text-white'>{"< Dashboard"}</button>
                 </div>
                 <div className='relative'>
