@@ -4,7 +4,7 @@ const StickyNote: React.FC<{ onClone: () => void }> = ({ onClone }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 1175, y: 700 });
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 1080, y: 550 });
   const stickyNoteRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
