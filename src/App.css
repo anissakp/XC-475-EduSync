@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
+html, body {
+  font-family: 'Quicksand', sans-serif; /* Apply Quicksand font throughout the site */
+  margin: 0;
+  padding: 0;
+}
+
 #root {
   margin: 0 auto;
   text-align: center;
