@@ -82,7 +82,7 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
 
                     )}
                     {/* <ul id="list" className={showInput ? "shorter-list" : ""}> */}
-                    <ul id="h-[365px] overflow-y-auto p-0 mt-0" className={showInput ? "h-[220px]" : ""}>
+                    <ul id="h-[365px] overflow-y-auto p-0 mt-0" className={showInput ? "h-[220px] overflow-y-auto" : "overflow-y-auto"} style={{ maxHeight: '365px' }}>
                         {tasks.map((task, index) => (
                             <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                 {/* <div className="task">
