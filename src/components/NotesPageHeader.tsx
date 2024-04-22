@@ -21,7 +21,7 @@ export default function NotesPageHeader({ onClick }: NotesPageHeaderProps) {
     }
     return (
         <div className="bg-[#EBEDEC] h-[45px] lg:h-[90px] flex pl-[23px] justify-between items-center">
-            <div className="flex gap-4 sticky top-0 z-40">
+            <div className="flex gap-4  top-0 z-40">
                 <div><SideMenuButton onClick={onClick} /></div>
                 <button onClick={handleClick} className="bg-[#1E1E26] text-[#D5D2DD]">{"< Dashboard"}</button>
 
