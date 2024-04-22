@@ -9,6 +9,9 @@ import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
+import FormDialog from "../components/FormDialog";
+import CircularIndeterminate from "../components/CircularIndeterminate";
+import SideMenuButton from "../components/SideMenuButton";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 import StickyNote from "../components/StickyNotes";
 import NewStickynotes from "../components/NewStickynotes";
@@ -22,6 +25,8 @@ export default function DashboardPage() {
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
   const [classNameList, setClassNameList] = useState<string[]>([]);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
 
@@ -164,16 +169,13 @@ export default function DashboardPage() {
   const ToDoListComponent = <ToDoList courses={courses} />;
 
   return (
-    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] min-h-screen">
-      {stickyNotes.map((id) => (
-        <StickyNote key={id} onClone={() => onClone(id)} />
-      ))}
-      {<DashBoardHeader onClick={toggleSideMenu} />}
-      <div className="flex min-h-screen ">
+    <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
+      <DashBoardHeader onClick={toggleSideMenu} />
+
+
+      <div className="grid justify-center">
         <div className="flex p-[0.5em] sm:p-[2em] font-['Quicksand']">
           {isSideMenuOpen && <SideMenu classNameList={classNameList} />}
-        </div>
-        <div className="flex justify-between w-full h-full  pr-10 mt-10 min-h-screen">
           <Calendar courses={courses} />
           <div className=" justify-items-center ml-4">
             <div className="hidden justify-self-center lg:block">{ToDoListComponent}</div>
@@ -188,6 +190,7 @@ export default function DashboardPage() {
 
 
       </div>
+
 
 
 
