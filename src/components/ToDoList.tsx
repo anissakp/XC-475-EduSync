@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import "../ToDoList.css"
+import { Link } from 'react-router-dom';
 interface Course {
     date: Date;
     event: string;
@@ -58,7 +59,7 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
             <div className='flex justify-between items-center'>
                 <div id="toDoList" className=''>
                     <div id="header">
-                        <p className='text'>Tasks</p>
+                        <Link to="/tasks" className='text hover:underline'>Tasks</Link>
 
                         <button className='w-[40px] h-[40px] text-[2em] bg-transparent border-0' onClick={toggleInputVisibility}>+</button>
 
