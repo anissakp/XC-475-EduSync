@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react"
 import { useLocation } from 'react-router-dom';
 import { app, db } from "../firebase";
-import { collection, getDocs, getDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+  format,
+  addDays,
+  isWithinInterval
+} from "date-fns";
 
 import Announcement from "../components/Announcement"
 import StudentForum from "../components/StudentForum"
@@ -10,6 +15,7 @@ import Assignment from "../components/Assignment"
 import ProgressBar from "../components/ProgressBar"
 import Document from "../components/Document"
 import CoursePageHeader from "../components/CoursePageHeader"
+import { Today } from "@mui/icons-material";
 
 
 export default function CoursesPage() {
@@ -22,13 +28,8 @@ export default function CoursesPage() {
   // SET STATE FOR COURSE ID
   const [courseID, setCourseID]= useState<string>(id || "")
   const [courseName, setCourseName] = useState<string>(name || "")
-
   const [weeklyPercentDone, setWeeklyPercentDone] = useState<number>(0);
 
-
-  // ~~~~~~~#######################~~~~~~~~~~~~~~~~ NEW NEED TO TEST THIS ~~~~~~~~~~~~~~~#############################~~~~~~~~~~~~~
-  // iterate through the user's assignments to calculate percent done for this week in this class
-  // future improvement: implementing a react context to get the courses from the dashboard page instead of having to fetch from db
   const getWeeklyPercentDone = async () => {
     const auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
@@ -38,38 +39,43 @@ export default function CoursesPage() {
           const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
           const querySnapshot = await getDocs(userAssignmentsRef);
 
+          const start_day : Date = new Date();
+          const end_day : Date = addDays(start_day, 7);
+
           let total = 0;
           let numCompleted = 0;
           querySnapshot.forEach((doc) => {
             const data = doc.data();
-            // ~~~~~~~~~~~ ********* NOT SURE IF courseName == courseID *************** ~~~~~~~~~~ 
-            // only look at assign for this course
-            console.log("courseName: " + data.courseName)
-            console.log("courseID: " + courseName)
 
+            // look at assignments for this specific course for this week and calc percent done 
             if (data.courseName == courseName) {
-              if (data.completed) {
+              const dueThisWeekBoolean = isWithinInterval(data.dueDate.toDate(), {
+                start: start_day,
+                end: end_day
+              })
 
-                numCompleted = numCompleted + 1;
+              if (dueThisWeekBoolean) {
+                if (data.completed==true) {
+                  numCompleted = numCompleted + 1;
+                }
+                total = total + 1;
               }
-              total = total + 1;
             }
           });
 
           let percent: number;
           if (total == 0) {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ display that there's no assignments due in upcoming week ~~~~~~~~~~~~~~~~~~~~
             percent = 100;
           }
           else {
             // maybe we should round
             console.log("done " + numCompleted)
             console.log("total " + numCompleted)
-            percent = (numCompleted/total) * 100;
+            percent = Math.floor((numCompleted/total) * 100);
           }
 
-          
           setWeeklyPercentDone(percent);
-          console.log("percent " + percent);
         }
       else {
         console.log("User is not signed in");
@@ -77,7 +83,6 @@ export default function CoursesPage() {
     });
   };
 
-  // ~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~
   useEffect(() => {
       getWeeklyPercentDone();
   });

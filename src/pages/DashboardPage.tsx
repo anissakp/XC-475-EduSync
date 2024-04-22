@@ -60,8 +60,6 @@ export default function DashboardPage() {
     console.log("classname", className);
     setClassNameList(className);
 
-
-    // ~~~~~~~~~~~~~ PROBLEM : DO WE NEED TO CHECK IF THE BB ASSIGN IS ALREADY IN DB HERE AND FETCH ITS COMPLETED STATUS ~~~~~~~~~~~~~
     let arr: any = [];
     for (let i = 0; i < classes.length; i++) {
       const newArr = classes[i].assignments.map((det: any) => {
@@ -77,6 +75,8 @@ export default function DashboardPage() {
 
       arr = [...arr, ...newArr];
     }
+
+    console.log("courses from getAssign" + arr);
     setCourses(arr);
 
     // puts assignments into database
