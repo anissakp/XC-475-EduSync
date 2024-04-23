@@ -93,7 +93,7 @@ export default function NotesPage() {
                         />
                     </form>
                 </div>
-                {/*  */}
+                {/* Notes area */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-items-center p-8 gap-9 overflow-auto">
                     {filteredNotes.map(note => (
                         <div key={note.id} className="overflow-auto relative w-[200px] h-[200px] transition ease-in-out hover:scale-110 rounded-[0.9375rem]" style={{ backgroundColor: note.color }} onClick={() => openNote(note.id)}>
