@@ -82,7 +82,6 @@ export default function NotesPage() {
             <div className="object-center w-full md:w-[50rem] lg:w-[85.9375rem] h-dvh bg-white rounded-[1.25rem] overflow-auto">
                 <div className="flex flex-row p-3.5 gap-2 bg-[#EBEDEC] h-[4.25rem] rounded-t-[1.25rem]">
                     <button className="w-[2.5rem] h-[2.5rem] rounded-[0.625rem]" onClick={addNote}><AddIcon /></button>
-                    <button className="w-[2.5rem] h-[2.5rem] rounded-[0.625rem]"><FilterAltIcon /></button>
                     <form className="relative flex items-center">
                         <input
                             type="text"
