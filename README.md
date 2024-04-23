@@ -8,8 +8,9 @@ Username: xysugino <br/>
 Password: xysugino 
 
 ## Team members <br/>
-Zai Sugino <br/>
-Anissa Patel <br/>
-Samantha Pang <br/>
-Shaimaa Sabbagh <br/>
-Emily Doherty 
+Anissa Patel: Innovator - Technical <br/>
+Shaimaa Sabbagh: Innovator - UX Design <br/>
+Zai Sugino: Teammate - Technical <br/>
+Samantha Pang: Teammate - Technical <br/>
+Emily Doherty: Teammate - Technical
+ 
