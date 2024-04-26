@@ -10,10 +10,10 @@ import SideMenu from "../components/SideMenu";
 export default function PiazzaPage() {
 
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const [selectedAnnouncement, setSelectedAnnouncement] = useState<string | null>(null);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<{title: string, content: string} | null>(null);
 
-  const handleAnnouncementClick = (announcement:string) => {
-    setSelectedAnnouncement(announcement);
+  const handleAnnouncementClick = (content: string, title: string) => {
+    setSelectedAnnouncement({title, content});
   };
 
  
@@ -110,15 +110,17 @@ export default function PiazzaPage() {
     encoded_text_plain = encoded_text_plain.replace(/-/g, "+").replace(/_/g, "/");
     encoded_text_plain += "=".repeat((4 - (encoded_text_plain.length % 4)) % 4);
     let decoded_text_plain = atob(encoded_text_plain);
+
+    const title = elem.payload.headers[33].value.split("on Piazza")[0]; // Get the title
+
     const arr = decoded_text_plain.split(" ");
-
-
+    
     if (arr[0] === "Instructor") {
       return (
-          <div onClick={() => handleAnnouncementClick(decoded_text_plain)} 
+          <div onClick={() => handleAnnouncementClick(title,decoded_text_plain)} 
                className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-15px] overflow-hidden cursor-pointer">
           <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
-            {elem.payload.headers[33].value.split("on Piazza")[0]}
+              {title}
           </div>
           <div className="text-black text-sm font-normal font-['Quicksand'] leading-tight leading-snug tracking-tight line-clamp-4">
             {decoded_text_plain.split("Go to https://piazza")[0]}
@@ -158,9 +160,10 @@ export default function PiazzaPage() {
             </div>
             {selectedAnnouncement && (
                 <div className="w-[501px] h-[580px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
-                  <p className="text-black text-sm font-normal font-['Quicksand']">
-                    {selectedAnnouncement}
-                  </p>
+                  <h3 className="text-black text-xl font-bold font-['Quicksand']">
+                    {selectedAnnouncement.content}
+                  </h3>
+                  <p className="text-sm font-normal">{selectedAnnouncement.title}</p>
                 </div>
             )}
         </div>
