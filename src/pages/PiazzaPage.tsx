@@ -137,7 +137,7 @@ export default function PiazzaPage() {
 
       <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] overflow-y mb-2">
           <SideMenuButton  onClick={toggleSideMenu} />
-          <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< CALENDAR'}</button>
+          <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< DASHBOARD'}</button>
           <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
       </div>
 
