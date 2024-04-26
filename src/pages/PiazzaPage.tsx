@@ -12,6 +12,12 @@ import SideMenu from "../components/SideMenu";
 export default function PiazzaPage() {
 
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<string | null>(null);
+
+  const handleAnnouncementClick = (announcement:string) => {
+    setSelectedAnnouncement(announcement);
+  };
+
  
   const toggleSideMenu = () => {
       setIsSideMenuOpen(!isSideMenuOpen);
@@ -103,17 +109,16 @@ export default function PiazzaPage() {
 
   const display = piazzaData.map((elem: any) => {
     let encoded_text_plain = elem.payload.parts[0].parts[0].body.data;
-    encoded_text_plain = encoded_text_plain
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+    encoded_text_plain = encoded_text_plain.replace(/-/g, "+").replace(/_/g, "/");
     encoded_text_plain += "=".repeat((4 - (encoded_text_plain.length % 4)) % 4);
     let decoded_text_plain = atob(encoded_text_plain);
-
     const arr = decoded_text_plain.split(" ");
+
 
     if (arr[0] === "Instructor") {
       return (
-          <div className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-10px] overflow-hidden">
+          <div onClick={() => handleAnnouncementClick(decoded_text_plain)} 
+               className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-12px] overflow-hidden cursor-pointer">
           <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
             {elem.payload.headers[33].value.split("on Piazza")[0]}
           </div>
@@ -121,7 +126,6 @@ export default function PiazzaPage() {
             {decoded_text_plain.split("Go to https://piazza")[0]}
           </div>
         </div>
-
       );
     }
   });
@@ -132,7 +136,7 @@ export default function PiazzaPage() {
     
     <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
 
-      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px]">
+      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] mb-0">
           <SideMenuButton  onClick={toggleSideMenu} />
           <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< CALENDAR'}</button>
           <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
@@ -148,8 +152,28 @@ export default function PiazzaPage() {
       {loading ? (
         <CircularIndeterminate />
       ) : (
-        <div className="flex flex-col gap-9 px-9">{display}</div>
+        <div className="flex flex-col items-center px-9 mt-0"> 
+
+        <div className = "flex pt-0">
+
+        <div className="w-[465px] h-[869px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
+          <div className="flex flex-col gap-9 px-9">
+            {display}
+          </div>
+        </div>
+
+
+        {selectedAnnouncement && (
+              <div className="w-[501px] h-[561px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
+                <p className="text-black text-sm font-normal font-['Quicksand']">
+                  {selectedAnnouncement}
+                </p>
+              </div>
+          )}
+      </div>
+      </div>
       )}
     </div>
+
   );
 }
