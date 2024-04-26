@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function NotesPage() {
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-    const [selectedNote, setSelectedNote] = useState(null);
+    const [selectedNote, setSelectedNote]: [any, any] = useState(null);
 
     const toggleSideMenu = () => {
         setIsSideMenuOpen(!isSideMenuOpen);
@@ -79,7 +79,7 @@ export default function NotesPage() {
     };
 
     const openNote = (id: number) => {
-        const note = notes.find(note => note.id === id);
+        const note:any = notes.find(note => note.id === id);
         setSelectedNote(note);
     };
 
