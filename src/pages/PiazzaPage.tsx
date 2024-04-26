@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 import SideMenuButton from "../components/SideMenuButton";
 import SideMenu from "../components/SideMenu";
 
-
-
 export default function PiazzaPage() {
 
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -133,47 +131,41 @@ export default function PiazzaPage() {
   console.log("display", display);
 
   return (
-    
     <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
 
-      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] mb-0">
+      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] overflow-y mb-2">
           <SideMenuButton  onClick={toggleSideMenu} />
           <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< CALENDAR'}</button>
           <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
       </div>
 
       <div className="flex mt-[25px] h-full">
-                {isSideMenuOpen && <SideMenu classNameList={[]} />}
-            </div>
+          {isSideMenuOpen && <SideMenu classNameList={[]} />}
+      </div>
 
-      <div className="flex justify-center gap-6 mb-10">
+      <div className="flex justify-center gap-6 mb-4">
         {authorized && <button onClick={handleLogin}>Authorize</button>}
       </div>
       {loading ? (
         <CircularIndeterminate />
       ) : (
-        <div className="flex flex-col items-center px-9 mt-0"> 
-
-        <div className = "flex pt-0">
-
-        <div className="w-[465px] h-[869px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
-          <div className="flex flex-col gap-9 px-9">
-            {display}
-          </div>
-        </div>
-
-
-        {selectedAnnouncement && (
-              <div className="w-[501px] h-[561px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
-                <p className="text-black text-sm font-normal font-['Quicksand']">
-                  {selectedAnnouncement}
-                </p>
+        <div className="flex flex-col items-center px-4"> 
+          <div className = "flex pt-0">
+            <div className="w-[465px] h-[869px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
+              <div className="flex flex-col gap-9">
+                {display}
               </div>
-          )}
-      </div>
+            </div>
+            {selectedAnnouncement && (
+                <div className="w-[501px] h-[561px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
+                  <p className="text-black text-sm font-normal font-['Quicksand']">
+                    {selectedAnnouncement}
+                  </p>
+                </div>
+            )}
+        </div>
       </div>
       )}
     </div>
-
   );
 }
