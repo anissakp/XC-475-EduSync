@@ -4,8 +4,24 @@ import { doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import { useNavigate } from "react-router-dom";
+import SideMenuButton from "../components/SideMenuButton";
+import SideMenu from "../components/SideMenu";
+
+
 
 export default function PiazzaPage() {
+
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+ 
+  const toggleSideMenu = () => {
+      setIsSideMenuOpen(!isSideMenuOpen);
+  };
+
+  const navigate = useNavigate() 
+  const goToCalendar = (): void => {
+    navigate('/dashboard')
+  }
+
   // Set initial states
   const [userID, setUserID] = useState("");
   const [authorized, setAuthorized] = useState(false);
@@ -107,11 +123,19 @@ export default function PiazzaPage() {
   console.log("display", display);
 
   return (
-    <div>
-      <button className="m-5" onClick={handleClick}>Dashboard</button>
-      <h2 className="text-5xl text-center mb-10 mt-5">
-        Piazza Instructor Announcements
-      </h2>
+    
+    <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
+
+      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px]">
+          <SideMenuButton  onClick={toggleSideMenu} />
+          <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< CALENDAR'}</button>
+          <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
+      </div>
+
+      <div className="flex mt-[25px] h-full">
+                {isSideMenuOpen && <SideMenu classNameList={[]} />}
+            </div>
+
       <div className="flex justify-center gap-6 mb-10">
         {authorized && <button onClick={handleLogin}>Authorize</button>}
       </div>

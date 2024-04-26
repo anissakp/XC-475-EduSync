@@ -18,6 +18,7 @@ import NewStickynotes from "../components/NewStickynotes";
 
 
 
+
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
   const auth = useContext(AuthContext);
@@ -29,6 +30,15 @@ export default function DashboardPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+
+  interface AssignmentData {
+    name: string;
+    dueDate: Date;
+    courseName: string;
+    // optional field
+    completed?: boolean;
+  }
+
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -60,11 +70,16 @@ export default function DashboardPage() {
         return {
           date: new Date(det.grading.due),
           event: `${classes[i].courseName} ${det.name}`,
+          source: "Blackboard",
+          completed: false,
+          id: det.id,
         };
       });
 
       arr = [...arr, ...newArr];
     }
+
+    console.log("courses from getAssign" + arr);
     setCourses(arr);
 
     // puts assignments into database
@@ -116,25 +131,39 @@ export default function DashboardPage() {
     for (const classInfo of classes) {
       for (const assignment of classInfo.assignments) {
         const assignmentId = assignment.id;
-        const assignmentDocRef = doc(
-          db,
-          `users/${userID}/assignments`,
-          assignmentId
-        );
-        const assignmentData = {
+        const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
+
+        //~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~ 
+        const docSnapshot = await getDoc(assignmentDocRef);
+
+
+        // ~~~ changed from const to let ~~~
+        let assignmentData : AssignmentData = {
           name: assignment.name,
           dueDate: new Date(assignment.grading.due),
           courseName: classInfo.courseName,
         };
+
+        //~~~~~ check if the document already exists ~~~~~~~
+        // if the doc doesn't already exist, we can just set completed to false
+        if (!docSnapshot.exists()) {
+          assignmentData['completed'] = false;
+        } else {
+          // if doc exists already, merge and don't overwrite completed
+          assignmentData = {
+            ...docSnapshot.data(),
+            ...assignmentData
+          };
+        }
+
         // assignment document saved in user's assignments subcollection
-        await setDoc(assignmentDocRef, assignmentData);
+        await setDoc(assignmentDocRef, assignmentData, { merge: true });
       }
     }
   };
 
   // THIS PULLS ALL THE EVENTS FROM THE DATABASE
   // THE DATABASE GROUPS ALL THE ASSIGNMENTS TOGETHER (SOURCE OF ASSIGNMENT IS A SEPARATE FIELD)
-  // **************NEW *************************
   const fetchAssignmentsFromFirestore = async (userId: string) => {
     console.log("fetchAssignmentsFromFirestore called", userId);
     const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
@@ -145,7 +174,9 @@ export default function DashboardPage() {
       assignments.push({
         date: data.dueDate.toDate(),
         event: `${data.courseName} ${data.name}`,
-        source: data.source, // IMPLEMENT THIS
+        source: data.source, 
+        completed: data.completed,
+        id: doc.id,
       });
     });
     console.log(assignments);

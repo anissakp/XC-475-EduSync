@@ -4,6 +4,9 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const NewStickynotes: FunctionComponent = () => {
     const [notes, setNotes] = useState<{ text: string; color: string }[]>([
@@ -66,6 +69,11 @@ const NewStickynotes: FunctionComponent = () => {
     const fontColor = isColorDark(notes[currentNoteIndex].color) ? "#F0F0F0" : "#333";
     const arrowColor = isColorDark(notes[currentNoteIndex].color) ? "#F0F0F0" : "#333";
 
+    const navigate = useNavigate()
+
+    const goToNotesPage = () => {
+        navigate('/NotesPage')
+    }
     return (
         <div>
             {/* stickynotes */}
@@ -85,7 +93,7 @@ const NewStickynotes: FunctionComponent = () => {
                         </div>
                         {/* View all notes button */}
                         <div className="self-center">
-                            <div className="">View All Notes</div>
+                            <div onClick={goToNotesPage} className="hover:underline">View All Notes</div>
                         </div>
                         {/* Add icon */}
                         <div className="">
@@ -115,7 +123,7 @@ const NewStickynotes: FunctionComponent = () => {
                 {/* chevron right filled */}
                 <div style={{ color: arrowColor }} className="ml-2">{currentNoteIndex + 1}/{notes.length}</div>
             </div>
-        </div>
+        </div >
     );
 };
 

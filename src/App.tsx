@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./authContext";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, setDoc, getDoc} from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { app, db } from "./firebase";
 
 import DashboardPage from "./pages/DashboardPage";
@@ -18,6 +18,7 @@ import TasksPage from "./pages/TasksPage";
 import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
+import NotesPage from "./pages/NotesPage";
 
 import { debounce } from 'lodash';
 
@@ -49,14 +50,14 @@ function App() {
     const firebaseAuthUser = firebaseAuth.currentUser;
     if (firebaseAuthUser) {
       console.log("refresh token stored in DB [ only happens when no token in local storage ] ")
-      const userDocRef = doc(db, 'users', firebaseAuthUser.uid); 
+      const userDocRef = doc(db, 'users', firebaseAuthUser.uid);
       // assignment document saved in user's assignments subcollection
-      await setDoc(userDocRef, { refreshToken: rToken }, { merge: true } );
+      await setDoc(userDocRef, { refreshToken: rToken }, { merge: true });
     }
   }
 
   const getToken = async () => {
-    try{
+    try {
       // Retrieve refresh token from database
       onAuthStateChanged(auth, async (user: any) => {
         const docRef = doc(db, `users/${user.uid}`);
@@ -64,7 +65,7 @@ function App() {
         const data = docSnap.data();
 
         // If refresh token exists 
-        if (data && data.refreshToken){
+        if (data && data.refreshToken) {
           // Get new access token based on refresh token
           const bbRefreshTokenURL = import.meta.env.VITE_BB_REFRESH_TOKEN_URL;
 
@@ -81,7 +82,7 @@ function App() {
           setUserID(data2.user_id);
 
           setStorageValue(data2.user_id, data2.access_token)
-        
+
           // ******* store refresh token in the database ********
           updateRefreshToken(data2.refresh_token)
         }
@@ -106,7 +107,7 @@ function App() {
           updateRefreshToken(data.refresh_token)
         }
       });
-    }catch(error) {
+    } catch (error) {
       console.log("Inside GET TOKEN ERROR: ", error);
     }
   }
@@ -132,7 +133,7 @@ function App() {
       // Invokes Get Token Function Since Access Token
       // Not Available In Local Storage Or Token Expired
       debouncedGetToken()
-      
+
     }
   }, []);
 
@@ -150,6 +151,7 @@ function App() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/editProfile" element={<EditProfile />} />
+          <Route path="/notesPage" element={<NotesPage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
