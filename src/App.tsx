@@ -19,6 +19,7 @@ import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
 import NotesPage from "./pages/NotesPage";
+import AboutUs from "./pages/AboutUs"
 
 import { debounce } from 'lodash';
 
@@ -152,6 +153,7 @@ function App() {
           <Route path="/Profile" element={<Profile />} />
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/notesPage" element={<NotesPage />} />
+          <Route path="/about" element={<AboutUs />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
