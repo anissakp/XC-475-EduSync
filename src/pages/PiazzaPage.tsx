@@ -116,7 +116,7 @@ export default function PiazzaPage() {
     if (arr[0] === "Instructor") {
       return (
           <div onClick={() => handleAnnouncementClick(decoded_text_plain)} 
-               className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-12px] overflow-hidden cursor-pointer">
+               className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-15px] overflow-hidden cursor-pointer">
           <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
             {elem.payload.headers[33].value.split("on Piazza")[0]}
           </div>
@@ -151,13 +151,13 @@ export default function PiazzaPage() {
       ) : (
         <div className="flex flex-col items-center px-4"> 
           <div className = "flex pt-0">
-            <div className="w-[465px] h-[869px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
+            <div className="w-[465px] h-[580px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
               <div className="flex flex-col gap-9">
                 {display}
               </div>
             </div>
             {selectedAnnouncement && (
-                <div className="w-[501px] h-[561px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
+                <div className="w-[501px] h-[580px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
                   <p className="text-black text-sm font-normal font-['Quicksand']">
                     {selectedAnnouncement}
                   </p>
