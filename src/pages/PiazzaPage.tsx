@@ -110,12 +110,18 @@ export default function PiazzaPage() {
     let decoded_text_plain = atob(encoded_text_plain);
 
     const arr = decoded_text_plain.split(" ");
+
     if (arr[0] === "Instructor") {
       return (
-        <div className="border border-black rounded-xl p-5">
-          <div>{elem.payload.headers[33].value.split("on Piazza")[0]}</div>
-          <div>{decoded_text_plain.split("Go to https://piazza")[0]}</div>
+          <div className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-10px] overflow-hidden">
+          <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
+            {elem.payload.headers[33].value.split("on Piazza")[0]}
+          </div>
+          <div className="text-black text-sm font-normal font-['Quicksand'] leading-tight leading-snug tracking-tight line-clamp-4">
+            {decoded_text_plain.split("Go to https://piazza")[0]}
+          </div>
         </div>
+
       );
     }
   });
