@@ -25,7 +25,7 @@ const ProgressBar : React.FC<Props> = ({weeklyPercent}) => {
         text={
           ({value}) => `${value}% \n completed`
         }
-        sx={(theme) => ({
+        sx={() => ({
           [`& .${gaugeClasses.valueArc}`]: {
             fill: '#353638',
           },

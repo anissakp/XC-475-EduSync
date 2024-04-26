@@ -7,7 +7,7 @@ import SideMenu from '../components/SideMenu';
 
 export default function NotesPage() {
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-    const [selectedNote, setSelectedNote] = useState(null);
+    const [selectedNote, setSelectedNote]: [any, any] = useState(null);
     const [searchValue, setSearchValue] = useState('');
     const [classNameList, setClassNameList] = useState<string[]>([]);
 
@@ -18,6 +18,7 @@ export default function NotesPage() {
         { id: 4, title: "Title 4", content: "Note 4", color: "#DE8C73" },
         { id: 5, title: "Title 5", content: "Note 5", color: "#6FB0B6" }
     ]);
+
 
     const toggleSideMenu = () => {
         setIsSideMenuOpen(!isSideMenuOpen);
@@ -40,7 +41,7 @@ export default function NotesPage() {
     };
 
     const openNote = (id: number) => {
-        const note = notes.find(note => note.id === id);
+        const note:any = notes.find(note => note.id === id);
         setSelectedNote(note);
     };
 
