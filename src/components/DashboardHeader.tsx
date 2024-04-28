@@ -78,12 +78,12 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
             <div className="flex items-center gap-4">
                 <div onClick={handleLogout}>Logout</div>
                 {connected && tutorial ? <button onClick={()=>navigate("/connect")} className="animate-blink">Connect</button> :
-                <button className = "bg-[#F7E2B3]" onClick={()=>navigate("/connect")} >Connect</button>}
+                <button onClick={()=>navigate("/connect")} >Connect</button>}
 
                 <div onClick={goToProfile} className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
             </div>
             {connected && tutorial && <div className="absolute bottom-[-9rem] right-[10rem]">
-                <div className="border max-w-sm p-8 bg-[#F7E2B3] rounded-3xl">No data right now! Click here to connect with different learning platforms</div>
+                <div className="border max-w-sm p-8 bg-orange-200 rounded-3xl">No data right now! Click here to connect with different learning platforms</div>
                 <CallMadeIcon  sx={{ fontSize: 60 }} className="absolute top-[-3.5rem] right-[-1rem]"/>
             </div>}
 

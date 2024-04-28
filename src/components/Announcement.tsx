@@ -24,7 +24,6 @@ const Announcement: React.FC<Props> = ({courseID}) => {
     console.log("ANNOUNCEMENT DATA", data.results)
   }
 
-
   useEffect(() => {
     console.log(auth.token);
     if (auth.token) {
