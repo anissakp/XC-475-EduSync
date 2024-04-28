@@ -99,7 +99,7 @@ export default function TasksPage() {
     };
 
     const handleNewTask = (index: number): void => {
-        setEditTaskIndex(index)
+        setEditTaskIndex(index);
         setShowInput(!showInput);
         const newTask = {
             title: '',
@@ -108,7 +108,10 @@ export default function TasksPage() {
             dueDate: '',
             labels: [],
         };
-        setEditTask(newTask)
+        setEditTask(newTask);
+        const updatedTasks = [...tasks];
+        updatedTasks[index] = newTask ; 
+        setTasks(updatedTasks) 
         
     };
     
@@ -178,12 +181,20 @@ export default function TasksPage() {
         setTasks(updatedTasks);
     };
 
-    const addLabel = (label: string):void => {
+    const addLabel = (label: string): void => {
+
         const updatedTasks = [...tasks];
-        const labels = [...updatedTasks[editTaskIndex].labels, label];
-        updatedTasks[editTaskIndex].labels = labels;
+        const task = updatedTasks[editTaskIndex];
+        const labels = task.labels.includes(label)
+            ? task.labels.filter((l) => l !== label)
+            : [...task.labels, label];
+        task.labels = labels;
         setTasks(updatedTasks);
-    }
+        setEditTask(task)
+
+    };
+    
+    
 
     useEffect(() => {
         console.log(tasks)
@@ -211,6 +222,8 @@ export default function TasksPage() {
         navigate('/dashboard')
     }
 
+    console.log(editTask?.labels)
+
     
 
     const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(searchValue.toLowerCase()));
@@ -236,7 +249,7 @@ export default function TasksPage() {
                             <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                 <div onClick={() => showAndEdit(index)} className="task">
                                     <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                        <p className=' text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90%'>{task.title}</p>
+                                    <p className={`text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90% ${task.title ? 'block' : 'hidden'}`}>{task.title}</p>
                                     </div>
                                 </div>
                             </li>
