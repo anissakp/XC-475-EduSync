@@ -18,6 +18,11 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 
+import { app, db } from "../firebase";
+import { collection, getDocs, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, setDoc, addDoc } from "firebase/firestore";
+
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -207,10 +212,6 @@ export default function TasksPage() {
         // const collectionRef = db.collection('cities');
         // const snapshot = await collectionRef.count().get();
         // console.log(snapshot.data().count);
-
-
-
-
             querySnapshot.forEach((doc) => {
             const data = doc.data();
             tasks.push({
@@ -235,25 +236,32 @@ export default function TasksPage() {
         };
 
     useEffect(() => {
-        console.log(tasks)
-        console.log(tasksDueToday)
-        const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        const tasksDueTodayTemp = tasks.filter(task => {
-            const taskDueDate = new Date(task.dueDate);
-            const taskDueDateEST = new Date(taskDueDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-            console.log(taskDueDateEST)
-            console.log("this is today")
-            console.log(yesterday)
-            return (
-                taskDueDate.getFullYear() === yesterday.getFullYear() &&
-                taskDueDate.getMonth() === yesterday.getMonth() &&
-                taskDueDate.getDate() === yesterday.getDate()
-            );
+        const auth = getAuth(app);
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await fetchTasksFromFirestore(user.uid)
+                console.log("we fetched tasks: " + tasks)
+
+                console.log(tasksDueToday)
+                const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                const tasksDueTodayTemp = tasks.filter(task => {
+                    const taskDueDate = new Date(task.dueDate);
+                    const taskDueDateEST = new Date(taskDueDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                    console.log(taskDueDateEST)
+                    console.log("this is today")
+                    console.log(yesterday)
+                    return (
+                        taskDueDate.getFullYear() === yesterday.getFullYear() &&
+                        taskDueDate.getMonth() === yesterday.getMonth() &&
+                        taskDueDate.getDate() === yesterday.getDate()
+                    );
+                });
+                setTasksDueToday(tasksDueTodayTemp);
+            }
         });
-        setTasksDueToday(tasksDueTodayTemp);
-    }, [tasks]);
+    }, []);
 
     const navigate = useNavigate()
     const goToCalendar = (): void => {
