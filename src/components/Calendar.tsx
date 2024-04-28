@@ -172,6 +172,10 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
                   <img src={eventLogo} alt={`${event.source} Logo`} className="w-6 h-6 ml-2" /> 
                 </div>
                 {assignmentTitle.join(' ')}
+                <button className="w-[83px] h-[30px] px-2.5 py-1 bg-cyan-800 rounded flex justify-start items-center mt-2 text-white text-[12px] font-medium font-['Quicksand'] uppercase leading-snug tracking-wide"> {/* Button under the assignment */}
+                  More
+                  <img src={IconRight} alt="Icon" className="w-4 h-4" /> 
+                </button>
               </div>
               );
             })}

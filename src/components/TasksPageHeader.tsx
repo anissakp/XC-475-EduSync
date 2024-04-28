@@ -27,6 +27,9 @@ export default function TasksPageHeader({ onClick }: TasksPageHeaderProps) {
 
                 <div><p className=" text-2xl lg:text-4xl font-bold text-[32px]">Tasks</p></div>
             </div>
+
+
+
             <div onClick={goToProfile} className="mr-10 bg-gray-300 h-[40px] w-[40px] rounded-full hover:cursor-pointer" ></div>
 
         </div>
