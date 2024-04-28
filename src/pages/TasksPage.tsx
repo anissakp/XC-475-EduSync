@@ -195,6 +195,44 @@ export default function TasksPage() {
     };
     
     
+        // ~~~~~~~~~~~~~~~~~~~~~~~ NEW - we need to make sure they fit tasks syntax - description and labels are iffy ~~~~~~~~~~~~~~~~~~~~~
+    const fetchTasksFromFirestore = async (userId: string) => {
+        console.log("fetchTasksFromFirestore called", userId);
+        const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
+        const querySnapshot = await getDocs(userAssignmentsRef);
+        const tasks: any = [];
+
+        // ~~~~~~~~~~ NEW - we need to make sure we are setting it up so edittaksk points to next index ~~~~~~~~~~~~~~~~
+        // !!!!! NOT SURE WE NEED THIS !!!!!!!!!!!!!!!
+        // const collectionRef = db.collection('cities');
+        // const snapshot = await collectionRef.count().get();
+        // console.log(snapshot.data().count);
+
+
+
+
+            querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            tasks.push({
+                title: `${data.courseName} ${data.name}`,
+                completed:  data.completed,
+                dueDate: data.dueDate.toDate(),
+                labels: [],
+                id: doc.id,
+            });
+            });
+            console.log(tasks);
+            // setTasks(tasks);
+
+            setTasks(prevTasks => {
+                const updatedTasks = tasks;
+
+                // *************************************~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                console.log("updated tasks FROM FIRESTORE ***** " + updatedTasks);
+                setEditTaskIndex(updatedTasks.length - 1); // Set editTaskIndex to the index of the new task
+                return updatedTasks;
+            });
+        };
 
     useEffect(() => {
         console.log(tasks)
