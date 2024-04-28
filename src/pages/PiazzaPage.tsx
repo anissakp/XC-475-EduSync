@@ -107,17 +107,18 @@ export default function PiazzaPage() {
 
   const display = piazzaData.map((elem: any) => {
     let encoded_text_plain = elem.payload.parts[0].parts[0].body.data;
-    encoded_text_plain = encoded_text_plain.replace(/-/g, "+").replace(/_/g, "/");
+    encoded_text_plain = encoded_text_plain
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
     encoded_text_plain += "=".repeat((4 - (encoded_text_plain.length % 4)) % 4);
     let decoded_text_plain = atob(encoded_text_plain);
 
     const title = elem.payload.headers[33].value.split("on Piazza")[0]; // Get the title
 
     const arr = decoded_text_plain.split(" ");
-    
     if (arr[0] === "Instructor") {
       return (
-          <div onClick={() => handleAnnouncementClick(title,decoded_text_plain)} 
+          <div onClick={() => handleAnnouncementClick(title, decoded_text_plain)} 
                className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-15px] overflow-hidden cursor-pointer">
           <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
               {title}
@@ -144,15 +145,16 @@ export default function PiazzaPage() {
       <div className="flex mt-[25px] h-full">
           {isSideMenuOpen && <SideMenu classNameList={[]} />}
       </div>
-
       <div className="flex justify-center gap-6 mb-4">
-        {authorized && <button onClick={handleLogin}>Authorize</button>}
+        {authorized && <button className="bg-[#DE8C73]" onClick={handleLogin}>Authorize</button>}
       </div>
       {loading ? (
         <CircularIndeterminate />
       ) : (
         <div className="flex flex-col items-center px-4"> 
           <div className = "flex pt-0">
+
+          
             <div className="w-[465px] h-[580px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
               <div className="flex flex-col gap-9">
                 {display}
@@ -166,6 +168,8 @@ export default function PiazzaPage() {
                   <p className="text-sm font-normal">{selectedAnnouncement.title}</p>
                 </div>
             )}
+
+
         </div>
       </div>
       )}
