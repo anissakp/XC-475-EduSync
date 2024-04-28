@@ -3,6 +3,7 @@ import CalendarViewSwitcher from "./CalendarViewSwitcher";
 import "../Calendar.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
+import edusyncLogo from "../assets/edusyncLogoSmall.png"
 import IconRight from "../assets/IconRight.png"
 
 import {
@@ -30,12 +31,13 @@ interface Props {
   courses: Course[];
 }
 
-type SourceType = 'Blackboard' | 'Gradescope'; // Add more as needed
+type SourceType = 'Blackboard' | 'Gradescope' | 'EduSync'; // Add more as needed
 
 
 const sourceLogoMap: { [key: string]: string | undefined } = {
   Blackboard: blackboardLogo,
   Gradescope: gradescopeLogo,
+  EduSync: edusyncLogo,
   // Add more platforms and their logos as needed
 };
 

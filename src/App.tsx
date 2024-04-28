@@ -19,6 +19,10 @@ import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
 import { Edit } from "@mui/icons-material";
 import NotesPage from "./pages/NotesPage";
+<<<<<<< HEAD
+=======
+import AboutUs from "./pages/AboutUs"
+>>>>>>> e9ad0dafc77a367f6ba9ca50b4bdd653ee40d8d7
 
 import { debounce } from 'lodash';
 
@@ -152,6 +156,10 @@ function App() {
           <Route path="/Profile" element={<Profile />} />
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/notesPage" element={<NotesPage />} />
+<<<<<<< HEAD
+=======
+          <Route path="/about" element={<AboutUs />} />
+>>>>>>> e9ad0dafc77a367f6ba9ca50b4bdd653ee40d8d7
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
