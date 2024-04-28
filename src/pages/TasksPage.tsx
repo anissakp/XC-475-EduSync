@@ -63,13 +63,33 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 }));
 
 
+// type Task = {
+//     title: string;
+//     description: string ; 
+//     completed: boolean;
+//     dueDate: any;
+//     labels: string[]
+// }
+
+// NEW
 type Task = {
     title: string;
-    description: string ; 
     completed: boolean;
     dueDate: any;
     labels: string[]
+    description: string; 
+    id?: string;
 }
+
+interface AssignmentData {
+    name: string;
+    dueDate: Date;
+    courseName: string;
+    // optional field
+    completed?: boolean;
+    source: string;
+}
+
 
 export default function TasksPage() {
 
@@ -203,7 +223,7 @@ export default function TasksPage() {
     
     
     // ~~~~~~~~~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    const saveTaskToFirestore = async (editTask) => {
+    const saveTaskToFirestore = async (editTask : Task) => {
         try {
             if (editTask) {
                 const auth = getAuth();
@@ -214,16 +234,29 @@ export default function TasksPage() {
 
                     // &&&&&&&&&&&&&&&&&& NEWLY ADDED THESE - FIRESTORE WILL CREATE THE ID &&&&&&&&&&&&&&&&&&&&&&&
                     const taskCollectionRef = collection(db, `users/${userID}/assignments`);
-                    
-                    // ~~ issue => no course names ~~~~
                     let assignmentData : AssignmentData = {
-                        name: editTask.title,
-                        dueDate: new Date(editTask.dueDate),
-                        courseName: 'Personal',
-                        source: 'EduSync',
-                        completed: false,
-                    };
-                    const docRef = await addDoc(taskCollectionRef, assignmentData);
+                            name: editTask.title,
+                            dueDate: new Date(editTask.dueDate),
+                            courseName: '',
+                            source: 'EduSync',
+                            completed: false,
+                        };
+
+                    // check if task has an id already => if it does then its an existing task
+                    // we will just update it 
+                    if (editTask.id) {
+                        const taskDocRef = doc(db, `users/${userID}/assignments`, editTask.id);
+                        try {
+                            await setDoc(taskDocRef, assignmentData, { merge: true });
+                            console.log("Task updated with ID: ", editTask.id);
+                        } catch (e) {
+                            console.error("Error updating document: ", e);
+                        }
+                    }
+
+                    else {
+                        const docRef = await addDoc(taskCollectionRef, assignmentData);
+                    }
                 }
             }
         } catch (e) {
