@@ -174,9 +174,11 @@ export default function TasksPage() {
         setShowInput(!showInput);
     };
     const addTaskAndHideInput = (): void => {
-        addTask(editTaskIndex);
-        setShowInput(false);
-
+        if (editTask && editTask.title) {
+            addTask(editTaskIndex);
+            saveTaskToFirestore(editTask);
+            setShowInput(false);
+        }
     };
 
     const setTaskDueDate = (dueDate: any): void => {
@@ -200,7 +202,22 @@ export default function TasksPage() {
     };
     
     
-        // ~~~~~~~~~~~~~~~~~~~~~~~ NEW - we need to make sure they fit tasks syntax - description and labels are iffy ~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    const saveTaskToFirestore = async (task) => {
+        const tasksCollectionRef = collection(db, "tasks"); // Ensure 'tasks' is the correct collection path
+        try {
+            const docRef = await addDoc(tasksCollectionRef, task);
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    };
+
+
+
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~ NEW - we need to make sure they fit tasks syntax - description and labels are iffy ~~~~~~~~~~~~~~~~~~~~~
     const fetchTasksFromFirestore = async (userId: string) => {
         console.log("fetchTasksFromFirestore called", userId);
         const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
