@@ -4,8 +4,28 @@ import { doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import { useNavigate } from "react-router-dom";
+import SideMenuButton from "../components/SideMenuButton";
+import SideMenu from "../components/SideMenu";
 
 export default function PiazzaPage() {
+
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<{title: string, content: string} | null>(null);
+
+  const handleAnnouncementClick = (content: string, title: string) => {
+    setSelectedAnnouncement({title, content});
+  };
+
+ 
+  const toggleSideMenu = () => {
+      setIsSideMenuOpen(!isSideMenuOpen);
+  };
+
+  const navigate = useNavigate() 
+  const goToCalendar = (): void => {
+    navigate('/dashboard')
+  }
+
   // Set initial states
   const [userID, setUserID] = useState("");
   const [authorized, setAuthorized] = useState(false);
@@ -93,12 +113,19 @@ export default function PiazzaPage() {
     encoded_text_plain += "=".repeat((4 - (encoded_text_plain.length % 4)) % 4);
     let decoded_text_plain = atob(encoded_text_plain);
 
+    const title = elem.payload.headers[33].value.split("on Piazza")[0]; // Get the title
+
     const arr = decoded_text_plain.split(" ");
     if (arr[0] === "Instructor") {
       return (
-        <div className="border border-black rounded-xl p-5">
-          <div>{elem.payload.headers[33].value.split("on Piazza")[0]}</div>
-          <div>{decoded_text_plain.split("Go to https://piazza")[0]}</div>
+          <div onClick={() => handleAnnouncementClick(title, decoded_text_plain)} 
+               className="w-[430px] h-[112px] bg-white rounded-[15px] p-3 mb-[-15px] overflow-hidden cursor-pointer">
+          <div className="text-black text-sm font-bold font-['Quicksand'] leading-tight tracking-tight">
+              {title}
+          </div>
+          <div className="text-black text-sm font-normal font-['Quicksand'] leading-tight leading-snug tracking-tight line-clamp-4">
+            {decoded_text_plain.split("Go to https://piazza")[0]}
+          </div>
         </div>
       );
     }
@@ -107,18 +134,44 @@ export default function PiazzaPage() {
   console.log("display", display);
 
   return (
-    <div>
-      <button className="m-5" onClick={handleClick}>Dashboard</button>
-      <h2 className="text-5xl text-center mb-10 mt-5">
-        Piazza Instructor Announcements
-      </h2>
-      <div className="flex justify-center gap-6 mb-10">
-        {authorized && <button onClick={handleLogin}>Authorize</button>}
+    <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
+
+      <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] overflow-y mb-2">
+          <SideMenuButton  onClick={toggleSideMenu} />
+          <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< DASHBOARD'}</button>
+          <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
+      </div>
+
+      <div className="flex mt-[25px] h-full">
+          {isSideMenuOpen && <SideMenu classNameList={[]} />}
+      </div>
+      <div className="flex justify-center gap-6 mb-4">
+        {authorized && <button className="bg-[#DE8C73]" onClick={handleLogin}>Authorize</button>}
       </div>
       {loading ? (
         <CircularIndeterminate />
       ) : (
-        <div className="flex flex-col gap-9 px-9">{display}</div>
+        <div className="flex flex-col items-center px-4"> 
+          <div className = "flex pt-0">
+
+          
+            <div className="w-[465px] h-[580px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
+              <div className="flex flex-col gap-9">
+                {display}
+              </div>
+            </div>
+            {selectedAnnouncement && (
+                <div className="w-[501px] h-[580px] bg-white rounded-[20px] ml-4 p-3 overflow-auto">
+                  <h3 className="text-black text-xl font-bold font-['Quicksand']">
+                    {selectedAnnouncement.content}
+                  </h3>
+                  <p className="text-sm font-normal">{selectedAnnouncement.title}</p>
+                </div>
+            )}
+
+
+        </div>
+      </div>
       )}
     </div>
   );

@@ -17,8 +17,6 @@ interface Props {
 }
 
 const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
-    const calendarViews = ["Daily View", "Weekly View", "Monthly View", "Yearly View"];
-
     const handleSelect = () => {
         console.log("this has been selected");
     };
@@ -49,19 +47,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                         buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                         listStyle={{ listStyle: 'none' }}
                         listItemStyle={{ padding: "10px", cursor: "pointer", paddingLeft: '35px' }} />
-                    <Dropdown 
-                        name={
-                            <div style={{ display: 'flex', marginLeft: "-2px" }}>
-                                <img src={calendarIcon} alt="Calendar" style={{ marginRight: "20px" }} />
-                                Calendar
-                            </div>
-                        }
-                        options={calendarViews} onSelect={handleSelect}
-                        containerStyle={{ width: "240px" }}
-                        buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
-                        listStyle={{ listStyle: 'none' }}
-                        listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '58px' }} />
-                        
+  
                     <button onClick={goToTasks} style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
                         <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />
                         <span style={{ flex: '1' }}>
@@ -76,9 +62,7 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                         </span>
                     </button>
                 </div>
-            
         </div>
-
     );
 }
 
