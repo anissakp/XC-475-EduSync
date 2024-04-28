@@ -203,19 +203,34 @@ export default function TasksPage() {
     
     
     // ~~~~~~~~~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    const saveTaskToFirestore = async (task) => {
-        const tasksCollectionRef = collection(db, "tasks"); // Ensure 'tasks' is the correct collection path
+    const saveTaskToFirestore = async (editTask) => {
         try {
-            const docRef = await addDoc(tasksCollectionRef, task);
-            console.log("Document written with ID: ", docRef.id);
+            if (editTask) {
+                const auth = getAuth();
+                const user = auth.currentUser;
+                if (user) {
+                    const userID = user.uid;
+                    const userDocRef = doc(db, "users", userID);
+
+                    // &&&&&&&&&&&&&&&&&& NEWLY ADDED THESE - FIRESTORE WILL CREATE THE ID &&&&&&&&&&&&&&&&&&&&&&&
+                    const taskCollectionRef = collection(db, `users/${userID}/assignments`);
+                    
+                    // ~~ issue => no course names ~~~~
+                    let assignmentData : AssignmentData = {
+                        name: editTask.title,
+                        dueDate: new Date(editTask.dueDate),
+                        courseName: 'Personal',
+                        source: 'EduSync',
+                        completed: false,
+                    };
+                    const docRef = await addDoc(taskCollectionRef, assignmentData);
+                }
+            }
         } catch (e) {
             console.error("Error adding document: ", e);
         }
     };
-
-
-
-
+    
 
     // ~~~~~~~~~~~~~~~~~~~~~~~ NEW - we need to make sure they fit tasks syntax - description and labels are iffy ~~~~~~~~~~~~~~~~~~~~~
     const fetchTasksFromFirestore = async (userId: string) => {
