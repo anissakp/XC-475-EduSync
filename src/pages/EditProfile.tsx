@@ -57,7 +57,7 @@ export default function EditProfile() {
                 </div>
 
                 <div className='flex flex-col gap-[35px]'>
-                    <TextField className="h-[48px] rounded-[15px]" label="Preffered Name" disabled={isSaved || disabledFields} />
+                    <TextField className="h-[48px] rounded-[15px]" label="Preferred Name" disabled={isSaved || disabledFields} />
                     <TextField className="h-[48px] rounded-[15px]" label="Email" disabled={isSaved || disabledFields} />
                     {/* <TextField className="h-[48px] rounded-[15px]" label="Password" disabled={isSaved || disabledFields} /> */}
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

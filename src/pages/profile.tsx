@@ -49,7 +49,7 @@ export default function Profile() {
                     readOnly: true,
                     sx: { borderRadius: '20px' }
                 }}
-                    className='w-[1232px] bg-[#D9D9D9] rounded-[20px]' defaultValue="Descrption" />
+                    className='w-[1232px] bg-[#D9D9D9] rounded-[20px]' defaultValue="Description" />
             </div>
             <div className='flex ml-auto mr-auto gap-[30px]'>
                 <div className='w-[909px] h-[494px] rounded-t-[20px] bg-white overflow-y-auto'>
