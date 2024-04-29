@@ -49,13 +49,18 @@ const SideMenu: React.FC<Props> = ({ classNameList }: Props) => {
                         buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
                         listStyle={{ listStyle: 'none' }}
                         listItemStyle={{ padding: "10px", cursor: "pointer", paddingLeft: '35px' }} />
-
-                    <button onClick={goToPiazza} style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
-                        <img src={piazzaIcon} alt="Tasks" style={{ marginRight: "7px", filter: "grayscale(100%)", width: "25px", height: "auto"}} />
-                        <span style={{ flex: '1' }}>
-                            Announcements
-                        </span>
-                    </button>
+                    {/*<Dropdown 
+                        name={
+                            <div style={{ display: 'flex', marginLeft: "-2px" }}>
+                                <img src={calendarIcon} alt="Calendar" style={{ marginRight: "20px" }} />
+                                Calendar
+                            </div>
+                        }
+                        options={calendarViews} onSelect={handleSelect}
+                        containerStyle={{ width: "240px" }}
+                        buttonStyle={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left' }}
+                        listStyle={{ listStyle: 'none' }}
+                    listItemStyle={{ padding: '10px', cursor: "pointer", paddingLeft: '58px' }} />*/}
                         
                     <button onClick={goToTasks} style={{ backgroundColor: '#FBE6B7', fontSize: '16px', padding: "8px 16px", border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "240px", textAlign: 'left', fontFamily: 'quicksand' }}>
                         <img src={tasksIcon} alt="Tasks" style={{ marginRight: "9px" }} />

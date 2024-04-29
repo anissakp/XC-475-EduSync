@@ -113,7 +113,7 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
                                     <input className="checkbox" */}
                                 <div className="flex text-[20px] mt-[10px]">
                                     <input className=" mr-[15px]"
-
+                                        
                                         type="checkbox"
                                         checked={task.completed}
                                         onChange={() => setTaskCompleted(index)}
