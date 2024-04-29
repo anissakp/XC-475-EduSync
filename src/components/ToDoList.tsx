@@ -124,11 +124,8 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
                                     <div className={`${task.dueDate ? 'flex flex-col' : 'flex items-center'}`}>
                                         <p className='m-0'>{task.text}</p>
                                         {task.dueDate && <p className={`m-0 bg-[#ebedec] rounded-[5px] p-[10px] mt-[10px] text-[14px] text-center ${task.dueDate ? '' : 'hidden'}`}>{task.dueDate}</p>}
-
                                     </div>
-
                                 </div>
-
                             </li>
                         ))}
                     </ul>
