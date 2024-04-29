@@ -8,7 +8,6 @@ import SideMenuButton from "../components/SideMenuButton";
 import SideMenu from "../components/SideMenu";
 
 export default function PiazzaPage() {
-
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<{title: string, content: string} | null>(null);
 
@@ -16,12 +15,12 @@ export default function PiazzaPage() {
     setSelectedAnnouncement({title, content});
   };
 
- 
   const toggleSideMenu = () => {
       setIsSideMenuOpen(!isSideMenuOpen);
   };
 
   const navigate = useNavigate() 
+
   const goToCalendar = (): void => {
     navigate('/dashboard')
   }
@@ -117,7 +116,6 @@ export default function PiazzaPage() {
 
     decoded_text_plain = decoded_text_plain.replace(/Go to https:\/\/piazza[\s\S]*$/, '');
 
-
     const arr = decoded_text_plain.split(" ");
     if (arr[0] === "Instructor") {
       return (
@@ -138,13 +136,11 @@ export default function PiazzaPage() {
 
   return (
     <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
-
       <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] overflow-y mb-2">
           <SideMenuButton  onClick={toggleSideMenu} />
           <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< DASHBOARD'}</button>
           <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
       </div>
-
       <div className="flex mt-[25px] h-full">
           {isSideMenuOpen && <SideMenu classNameList={[]} />}
       </div>
@@ -156,8 +152,6 @@ export default function PiazzaPage() {
       ) : (
         <div className="flex flex-col items-center px-4"> 
           <div className = "flex pt-0">
-
-          
             <div className="w-[465px] h-[580px] pt-5 pb-8 bg-[#DE8C73] rounded-[20px] flex flex-col items-center overflow-auto py-3">
               <div className="flex flex-col gap-9">
                 {display}
