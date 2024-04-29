@@ -306,7 +306,7 @@ export default function TasksPage() {
 
                     </div>
 
-                    <ul id="list" className={showInput ? "shorter-list" : ""}>
+                    <ul className={showInput ? "shorter-list" : ""}>
                         {filteredTasks.map((task, index) => (
                             <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                 <div onClick={() => showAndEdit(index)} className="task">
