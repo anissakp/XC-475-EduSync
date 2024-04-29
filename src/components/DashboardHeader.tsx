@@ -23,7 +23,7 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
     const navigate = useNavigate()
 
     const goToProfile = () => {
-        navigate('/EditProfile')
+        navigate('/profile')
     }
 
     const handleLogout =()=>{
@@ -85,8 +85,6 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
                 <div className="border max-w-sm p-8 bg-[#F7E2B3] rounded-3xl">No data right now! Click here to connect with different learning platforms</div>
                 <CallMadeIcon  sx={{ fontSize: 60 }} className="absolute top-[-3.5rem] right-[-1rem]"/>
             </div>}
-
-
         </div>
     );
 }
