@@ -115,6 +115,9 @@ export default function PiazzaPage() {
 
     const title = elem.payload.headers[33].value.split("on Piazza")[0]; // Get the title
 
+    decoded_text_plain = decoded_text_plain.replace(/Go to https:\/\/piazza[\s\S]*$/, '');
+
+
     const arr = decoded_text_plain.split(" ");
     if (arr[0] === "Instructor") {
       return (
