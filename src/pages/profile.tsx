@@ -19,7 +19,7 @@ export default function Profile() {
         <div className='flex flex-col gap-[33px]'>
             <div>
                 <div className=" w-full flex justify-between items-center  px-8 py-4 mb-0">
-                    <img className="w-[238px] mt-auto  h-[83px]" src="mainLogo2.png"></img>
+                    <img className="w-[12%] h-auto mt-auto" src="mainLogo2.png"></img>
                     <button onClick={goToDashboard} className='bg-black text-white'>{"< Dashboard"}</button>
                 </div>
                 <div className='relative'>
@@ -32,7 +32,6 @@ export default function Profile() {
                             <div className='ml-60 mt-4'>
                                 <p className='text-[34px]'>Shaimaa Sabbagh</p>
                                 <p>Computer Science - Senior</p>
-                                <p className='font-extrabold'>SHARED NOTES: 133 LIKES: 500 FRIENDS: 12</p>
                             </div>
 
                         </div>
@@ -183,10 +182,7 @@ export default function Profile() {
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #2</div>
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #3</div>
                         <div className='bg-white rounded-[15px] h-[44px] w-[258px] flex items-center justify-center'>Course #4</div>
-
                     </div>
-
-
                 </div>
             </div>
             <div className='flex gap-[31px] ml-auto mr-auto'>
@@ -203,9 +199,7 @@ export default function Profile() {
                     <div className=''></div>
                 </div>
             </div>
-
             <Footer />
-
         </div>
     )
 }

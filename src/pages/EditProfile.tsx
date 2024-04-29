@@ -61,7 +61,7 @@ export default function EditProfile() {
                     <TextField className="h-[48px] rounded-[15px]" label="Email" disabled={isSaved || disabledFields} />
                     {/* <TextField className="h-[48px] rounded-[15px]" label="Password" disabled={isSaved || disabledFields} /> */}
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateField label="🥳 Birthday" disabled={isSaved || disabledFields} />
+                        <DateField label="Birthday" disabled={isSaved || disabledFields} />
                     </LocalizationProvider>
 
                     <div className='flex gap-[20px] '>

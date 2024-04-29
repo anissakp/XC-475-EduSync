@@ -18,11 +18,11 @@ export default function AboutUs() {
                 <div className="flex flex-col lg:flex-row gap-4">
                     <div>
                         <div className="bg-[#99C8CD] w-full lg:w-96 p-2.5 rounded-md font-bold ">Our Story</div>
-                        <p className="w-96 p-4 "> As students, we've noticed we use numerous websites for school tasks  each year. Many serve just one purpose, like forums or homework  submission. Professors often use different platforms, making it hard to  keep track. We believe there should be a simpler way to stay organized  and manage school information.</p>
+                        <p className="w-96 p-4 "> As students, we find ourselves using a variety of platforms for academic tasks each year. Many of these platforms are specialized, serving singular functions such as forums or homework submission. Professors frequently choose different platforms, which complicates our ability to keep track of everything. We think there should be an easier method to stay organized and manage school-related information.</p>
                     </div>
                     <div>
                         <div className="bg-[#E1AB91] w-full lg:w-96 p-2.5 rounded-md font-bold">Our Mission</div>
-                        <p className="w-96 p-4">Our goal is to help student reach academic success. By providing one place where students can see all their course information, our solution helps students stay organized, reduce stress and have more time to focus on their school work rather than managing different student platforms </p>
+                        <p className="w-96 p-4">Our goal is to assist students in achieving academic success. Our solution offers a single location where students can access all their course information, helping them stay organized and reduce stress. This allows them more time to concentrate on their studies instead of juggling various learning platforms.</p>
                     </div>
                 </div>
 

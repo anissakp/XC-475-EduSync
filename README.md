@@ -63,11 +63,11 @@ To build the application for production, run these commands in the root director
    ```
 
 ## Team Members
-- Zai Sugino
-- Anissa Patel
-- Samantha Pang
-- Shaimaa Sabbagh
-- Emily Doherty
+- Anissa Patel: Innovator - Technical
+- Shaimaa Sabbagh: Innovator - UX Design
+- Zai Sugino: Technical Teammate
+- Samantha Pang: Technical Teammate
+- Emily Doherty: Technical Teammate
 
 ## More Information
 For more details about using or contributing to the EduSync project, please visit our project site: [EduSync Site](https://edusync-e6e17.web.app/).

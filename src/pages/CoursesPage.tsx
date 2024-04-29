@@ -95,7 +95,9 @@ export default function CoursesPage() {
       <div className="grid grid-cols-1 grid-rows-5 gap-4 sm:grid-cols-2 sm:grid-rows-3 md:grid-cols-8 md:grid-rows-2 p-6 bg-gradient-custom md:h-[calc(100vh-5rem)]" >
         <Announcement courseID={courseID}/>
         <Document/>
-        <ProgressBar weeklyPercent = {weeklyPercentDone}/>
+        <ProgressBar 
+        weeklyPercent = {weeklyPercentDone}
+        />
         <Assignment/>
         <StudentForum/>     
       </div> 

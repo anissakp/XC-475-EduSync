@@ -3,6 +3,7 @@ import CalendarViewSwitcher from "./CalendarViewSwitcher";
 import "../Calendar.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
+import edusyncLogo from "../assets/edusyncLogoSmall.png"
 import IconRight from "../assets/IconRight.png"
 
 import {
@@ -30,12 +31,13 @@ interface Props {
   courses: Course[];
 }
 
-type SourceType = 'Blackboard' | 'Gradescope'; // Add more as needed
+type SourceType = 'Blackboard' | 'Gradescope' | 'EduSync'; // Add more as needed
 
 
 const sourceLogoMap: { [key: string]: string | undefined } = {
   Blackboard: blackboardLogo,
   Gradescope: gradescopeLogo,
+  EduSync: edusyncLogo,
   // Add more platforms and their logos as needed
 };
 
@@ -170,10 +172,6 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
                   <img src={eventLogo} alt={`${event.source} Logo`} className="w-6 h-6 ml-2" /> 
                 </div>
                 {assignmentTitle.join(' ')}
-                <button className="w-[83px] h-[30px] px-2.5 py-1 bg-cyan-800 rounded flex justify-start items-center mt-2 text-white text-[12px] font-medium font-['Quicksand'] uppercase leading-snug tracking-wide"> {/* Button under the assignment */}
-                  More
-                  <img src={IconRight} alt="Icon" className="w-4 h-4" /> 
-                </button>
               </div>
               );
             })}

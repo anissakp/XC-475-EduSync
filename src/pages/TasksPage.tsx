@@ -1,14 +1,7 @@
 import TasksPageHeader from "../components/TasksPageHeader"
 import SideMenu from "../components/SideMenu";
 import React, { useState, useEffect } from 'react';
-
-import SideMenuButton from "../components/SideMenuButton";
-
-import Switch from '@mui/joy/Switch';
-
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
@@ -16,7 +9,10 @@ import MuiAccordionSummary, {
     AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
+import { app, db } from "../firebase";
+import { collection, getDocs, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, setDoc, addDoc } from "firebase/firestore";
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -57,14 +53,27 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 
 }));
 
-
+// NEW
 type Task = {
     title: string;
-    description: string ; 
+    courseName: string;
+    assignmentName: string;
     completed: boolean;
     dueDate: any;
     labels: string[]
+    description: string; 
+    id?: string;
 }
+
+interface AssignmentData {
+    name: string;
+    dueDate: Date;
+    courseName: string;
+    // optional field
+    completed?: boolean;
+    source: string;
+}
+
 
 export default function TasksPage() {
 
@@ -72,8 +81,8 @@ export default function TasksPage() {
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-            console.log(event)
             setExpanded(newExpanded ? panel : false);
+            console.log(event);
         };
 
 
@@ -99,16 +108,21 @@ export default function TasksPage() {
     };
 
     const handleNewTask = (index: number): void => {
-        setEditTaskIndex(index)
+        setEditTaskIndex(index);
         setShowInput(!showInput);
         const newTask = {
             title: '',
+            assignmentName: '',
+            courseName: '',
             description: '',
             completed: false,
             dueDate: '',
             labels: [],
         };
-        setEditTask(newTask)
+        setEditTask(newTask);
+        const updatedTasks = [...tasks];
+        updatedTasks[index] = newTask ; 
+        setTasks(updatedTasks) 
         
     };
     
@@ -131,7 +145,7 @@ export default function TasksPage() {
     const addTask = (index: number): void => {
         if (index !== null) {
             const updatedTasks = [...tasks];
-            updatedTasks[index] = editTask || { title: newTask, description: "", completed: false, dueDate: dueDate, labels: [] };
+            updatedTasks[index] = editTask || { title: newTask, description: "", completed: false, dueDate: dueDate, labels: [], courseName: '', assignmentName: newTask };
             setTasks(updatedTasks);
             setEditTask(updatedTasks[index]);
         }
@@ -143,6 +157,7 @@ export default function TasksPage() {
         const tempTask = editTask 
         if (tempTask !== null) {
             tempTask.title = event.target.value;
+            tempTask.assignmentName = event.target.value;
         } 
 
         setEditTask(tempTask)
@@ -156,19 +171,13 @@ export default function TasksPage() {
 
         setEditTask(tempTask)
     }
-    const showInputVisibility = (): void => {
-        setShowInput(true);
-    };
-    const hideInputVisibility = (): void => {
-        setShowInput(false);
-    };
-    const toggleInputVisibility = (): void => {
-        setShowInput(!showInput);
-    };
+    
     const addTaskAndHideInput = (): void => {
-        addTask(editTaskIndex);
-        setShowInput(false);
-
+        if (editTask && editTask.assignmentName) {
+            addTask(editTaskIndex);
+            saveTaskToFirestore(editTask);
+            setShowInput(false);
+        }
     };
 
     const setTaskDueDate = (dueDate: any): void => {
@@ -178,40 +187,106 @@ export default function TasksPage() {
         setTasks(updatedTasks);
     };
 
-    const addLabel = (label: string):void => {
+    const addLabel = (label: string): void => {
+
         const updatedTasks = [...tasks];
-        const labels = [...updatedTasks[editTaskIndex].labels, label];
-        updatedTasks[editTaskIndex].labels = labels;
+        const task = updatedTasks[editTaskIndex];
+        const labels = task.labels.includes(label)
+            ? task.labels.filter((l) => l !== label)
+            : [...task.labels, label];
+        task.labels = labels;
         setTasks(updatedTasks);
-    }
+        setEditTask(task)
+
+    };
+
+    const saveTaskToFirestore = async (editTask : Task) => {
+        try {
+            if (editTask) {
+                const auth = getAuth();
+                const user = auth.currentUser;
+                if (user) {
+                    const userID = user.uid;
+                    const userDocRef = doc(db, "users", userID);
+
+                    const taskCollectionRef = collection(db, `users/${userID}/assignments`);
+                    let assignmentData : AssignmentData = {
+                            name: editTask.assignmentName,
+                            dueDate: new Date(editTask.dueDate),
+                            courseName: 'Task',
+                            source: 'EduSync',
+                            completed: false,
+                        };
+
+                    // check if task has an id already => if it does then its an existing task
+                    // we will just update it 
+                    if (editTask.id) {
+                        const taskDocRef = doc(db, `users/${userID}/assignments`, editTask.id);
+                        try {
+                            await setDoc(taskDocRef, assignmentData, { merge: true });
+                        } catch (e) {
+                            console.error("Error updating document: ", e);
+                        }
+                    }
+
+                    else {
+                        const docRef = await addDoc(taskCollectionRef, assignmentData);
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    };
+    
+    const fetchTasksFromFirestore = async (userId: string) => {
+        const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
+        const querySnapshot = await getDocs(userAssignmentsRef);
+        const tasks: any = [];
+            querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            tasks.push({
+                title: `${data.courseName} ${data.name}`,
+                courseName: data.courseName,
+                assignmentName: data.name, 
+                completed:  data.completed,
+                dueDate: data.dueDate.toDate(),
+                labels: [],
+                id: doc.id,
+            });
+            });
+            setTasks(() => {
+                setEditTaskIndex(tasks.length - 1);
+                return tasks;
+            });
+        };
 
     useEffect(() => {
-        console.log(tasks)
-        console.log(tasksDueToday)
-        const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        const tasksDueTodayTemp = tasks.filter(task => {
-            const taskDueDate = new Date(task.dueDate);
-            const taskDueDateEST = new Date(taskDueDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-            console.log(taskDueDateEST)
-            console.log("this is today")
-            console.log(yesterday)
-            return (
-                taskDueDate.getFullYear() === yesterday.getFullYear() &&
-                taskDueDate.getMonth() === yesterday.getMonth() &&
-                taskDueDate.getDate() === yesterday.getDate()
-            );
+        const auth = getAuth(app);
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await fetchTasksFromFirestore(user.uid)
+                const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                const tasksDueTodayTemp = tasks.filter(task => {
+                    const taskDueDate = new Date(task.dueDate);
+                    const taskDueDateEST = new Date(taskDueDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                    return (
+                        taskDueDate.getFullYear() === yesterday.getFullYear() &&
+                        taskDueDate.getMonth() === yesterday.getMonth() &&
+                        taskDueDate.getDate() === yesterday.getDate()
+                    );
+                });
+                setTasksDueToday(tasksDueTodayTemp);
+            }
         });
-        setTasksDueToday(tasksDueTodayTemp);
-    }, [tasks]);
+    }, []);
 
     const navigate = useNavigate()
     const goToCalendar = (): void => {
         navigate('/dashboard')
     }
-
-    
 
     const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(searchValue.toLowerCase()));
     return (
@@ -236,7 +311,7 @@ export default function TasksPage() {
                             <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                 <div onClick={() => showAndEdit(index)} className="task">
                                     <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                        <p className=' text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90%'>{task.title}</p>
+                                    <p className={`text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90% ${task.title ? 'block' : 'hidden'}`}>{task.title}</p>
                                     </div>
                                 </div>
                             </li>
@@ -247,7 +322,7 @@ export default function TasksPage() {
                 <div className="w-[551px] mr-[30px] ml-[28px] mt-[32px] p-[23px]">
                     {showInput && (
                         <div id="addNewAssignment">
-                            <input placeholder="title" className="rounded-md w-full h-[56px] p-[12px] border" type="text" value={editTask?.title ?? newTask} onChange={handleInputChange} />
+                            <input placeholder="title" className="rounded-md w-full h-[56px] p-[12px] border" type="text" value={editTask?.assignmentName ?? newTask} onChange={handleInputChange} />
                             <textarea placeholder="description" className="mt-[20px] resize-y w-full h-32 p-2 border rounded-md" value={editTask?.description ?? newTask} onChange={handleDescriptionInputChange} ></textarea>
                             <p className="mt-4">Due date</p>
                             <input className="p-4 mt-2 rounded-md bg-[#E1AB91]" type="date" value={editTask?.dueDate ?? newTask} onChange={(e) => setTaskDueDate(e.target.value)} />
@@ -310,7 +385,7 @@ export default function TasksPage() {
                                 <li className="list-none" key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                     <div className="task">
                                         <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                            <p className='text-center w-[330px] p-[5px] bg-[#FFF7E4] rounded-md'>{task.title}</p>
+                                            <p className='text-center w-[330px] p-[5px] bg-[#FFF7E4] rounded-md'>{`${task.courseName} ${task.assignmentName}`}</p>
                                         </div>
 
                                     </div>
@@ -328,7 +403,7 @@ export default function TasksPage() {
                                     <div className="task">
                                         <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
                                             <div className="">
-                                                <p className='text-center w-[330px] p-[5px] bg-[#FFD6C2] rounded-md'>{task.title}</p>
+                                                <p className='text-center w-[330px] p-[5px] bg-[#FFD6C2] rounded-md'>{`${task.courseName} ${task.assignmentName}`}</p>
                                             </div>
 
                                         </div>
