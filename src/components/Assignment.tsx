@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-import { AuthContext } from "../authContext";
+import { AuthContext } from "../contexts/authContext";
 
 import homework from "../assets/Homwork.png"
 
