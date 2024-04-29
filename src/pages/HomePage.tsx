@@ -3,12 +3,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { app, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-
 import SideMenu from "../components/SideMenu";
-// import SyncToOtherSitesPage from "./SyncToOtherSitesPage";
-
 import ToDoList from "../components/ToDoList";
-
 
 export default function HomePage() {
   const [htmlContent, setHtmlContent] = useState("");
@@ -60,7 +56,6 @@ export default function HomePage() {
     auth.signOut();
   }
   console.log(user);
-
     return (
     <>
       <div>
