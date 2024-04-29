@@ -59,9 +59,11 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 
 
 type Task = {
-    text: string;
+    title: string;
+    description: string ; 
     completed: boolean;
     dueDate: any;
+    labels: string[]
 }
 
 export default function TasksPage() {
@@ -86,30 +88,102 @@ export default function TasksPage() {
     const [showInput, setShowInput] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [tasksDueToday, setTasksDueToday] = useState<Task[]>([]);
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    const [editTask, setEditTask] = useState<Task | null>(null);
+    const [editTaskIndex, setEditTaskIndex] =useState<number>(0) ; 
+
+
+    const handleEditTask = (index: number): void => {
+        setEditTask(tasks[index]);
+    };
+
+    const handleNewTask = (index: number): void => {
+        setEditTaskIndex(index)
+        setShowInput(!showInput);
+        const newTask = {
+            title: '',
+            description: '',
+            completed: false,
+            dueDate: '',
+            labels: [],
+        };
+        setEditTask(newTask)
+        
+    };
+    
+    const showAndEdit = (index:number): void => {
+        setEditTaskIndex(index) 
+        setShowInput(true);
+        handleEditTask(index) ; 
+    };
     const setTaskCompleted = (index: number): void => {
         const tempTasks = [...tasks]
         tempTasks[index].completed = !tempTasks[index].completed
         setTasks(tempTasks)
     }
 
-    const addTask = (): void => {
-        const newTaskTemp = { text: newTask, completed: false, dueDate: dueDate }
-        setnewTask("")
-        setTasks([...tasks, newTaskTemp])
+    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setSearchValue(event.target.value);
     }
+    
+
+    const addTask = (index: number): void => {
+        if (index !== null) {
+            const updatedTasks = [...tasks];
+            updatedTasks[index] = editTask || { title: newTask, description: "", completed: false, dueDate: dueDate, labels: [] };
+            setTasks(updatedTasks);
+            setEditTask(updatedTasks[index]);
+        }
+        setnewTask("");
+    };
+    
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setnewTask(event.target.value)
+        const tempTask = editTask 
+        if (tempTask !== null) {
+            tempTask.title = event.target.value;
+        } 
+
+        setEditTask(tempTask)
     }
+    const handleDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+        setnewTask(event.target.value)
+        const tempTask = editTask 
+        if (tempTask !== null) {
+            tempTask.description = event.target.value;
+        } 
+
+        setEditTask(tempTask)
+    }
+    const showInputVisibility = (): void => {
+        setShowInput(true);
+    };
+    const hideInputVisibility = (): void => {
+        setShowInput(false);
+    };
     const toggleInputVisibility = (): void => {
         setShowInput(!showInput);
     };
     const addTaskAndHideInput = (): void => {
-        addTask();
+        addTask(editTaskIndex);
         setShowInput(false);
 
-
-
     };
+
+    const setTaskDueDate = (dueDate: any): void => {
+        const updatedTasks = [...tasks];
+        updatedTasks[editTaskIndex].dueDate = dueDate;
+        setDueDate(dueDate) 
+        setTasks(updatedTasks);
+    };
+
+    const addLabel = (label: string):void => {
+        const updatedTasks = [...tasks];
+        const labels = [...updatedTasks[editTaskIndex].labels, label];
+        updatedTasks[editTaskIndex].labels = labels;
+        setTasks(updatedTasks);
+    }
 
     useEffect(() => {
         console.log(tasks)
@@ -137,6 +211,9 @@ export default function TasksPage() {
         navigate('/dashboard')
     }
 
+    
+
+    const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(searchValue.toLowerCase()));
     return (
         <div >
 
@@ -147,29 +224,21 @@ export default function TasksPage() {
                 <div className="w-[417px] h-[1024px] bg-[#EBEDEC]">
                     <div className="bg-[#F7E2B3] w-[417px] h-[77px] flex justify-center items-center gap-2">
 
-                        <input className="p-[12px]  rounded-md bg-[#EEEEEE] h-[48px] w-[250px] " type='text' placeholder="search "></input>
+                        <input onChange={handleSearchInputChange} className="p-[12px]  rounded-md bg-[#EEEEEE] h-[48px] w-[250px] " type='text' placeholder="search "></input>
 
                         <img className="bg-[#EBEDEC] p-[10px] cursor-pointer w-[48px] h-[48px]  rounded-md" src="tune.svg" />
-                        <button className="w-[48px] h-[48px]  bg-[#EBEDEC] rounded-md" onClick={toggleInputVisibility}>+</button>
+                        <button className="w-[48px] h-[48px]  bg-[#EBEDEC] rounded-md" onClick={() => handleNewTask(tasks.length)}>+</button>
 
                     </div>
 
                     <ul id="list" className={showInput ? "shorter-list" : ""}>
-                        {tasks.map((task, index) => (
+                        {filteredTasks.map((task, index) => (
                             <li key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
-                                <div className="task">
-                                    {/* checkbox element */}
-                                    {/* <input className="checkbox"
-                                        type="checkbox"
-                                        checked={task.completed}
-                                        onChange={() => setTaskCompleted(index)}
-                                    /> */}
+                                <div onClick={() => showAndEdit(index)} className="task">
                                     <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                        <p className=' text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90%'>{task.text}</p>
+                                        <p className=' text-center w-[417px] p-1 bg-gradient-to-r from-[#A2D9D1] to-[#F7E2B3] hover:from-[#E1AB91] hover:from-5% hover:to-[#F7E2B3] hover:to-90%'>{task.title}</p>
                                     </div>
-
                                 </div>
-
                             </li>
                         ))}
                     </ul>
@@ -178,34 +247,50 @@ export default function TasksPage() {
                 <div className="w-[551px] mr-[30px] ml-[28px] mt-[32px] p-[23px]">
                     {showInput && (
                         <div id="addNewAssignment">
-                            <input placeholder="title" className="rounded-md w-full h-[56px] p-[12px] border" type="text" value={newTask} onChange={handleInputChange} />
-                            <textarea placeholder="description" className="mt-[20px] resize-y w-full h-32 p-2 border rounded-md"></textarea>
+                            <input placeholder="title" className="rounded-md w-full h-[56px] p-[12px] border" type="text" value={editTask?.title ?? newTask} onChange={handleInputChange} />
+                            <textarea placeholder="description" className="mt-[20px] resize-y w-full h-32 p-2 border rounded-md" value={editTask?.description ?? newTask} onChange={handleDescriptionInputChange} ></textarea>
                             <p className="mt-4">Due date</p>
-                            <input className="p-4 mt-2 rounded-md bg-[#E1AB91]" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                            <input className="p-4 mt-2 rounded-md bg-[#E1AB91]" type="date" value={editTask?.dueDate ?? newTask} onChange={(e) => setTaskDueDate(e.target.value)} />
                             <div className="flex flex-col gap-2 items-start">
                                 <p className="mt-4">Labels</p>
                                 <label>
-                                    <input className="mr-2" type="checkbox" />
+                                    <input 
+                                    className="mr-2" 
+                                    type="checkbox" 
+                                    onChange={() => addLabel('Classwork')}
+                                    checked={editTask?.labels.includes('Classwork')}
+                                    />
                                     Classwork
                                 </label>
                                 <label>
-                                    <input className="mr-2" type="checkbox" />
+                                    <input 
+                                    className="mr-2" 
+                                    type="checkbox" 
+                                    onChange={() => addLabel('Homework')}
+                                    checked={editTask?.labels.includes('Homework')}
+                                    />
                                     Homework
                                 </label>
                                 <label>
-                                    <input className="mr-2" type="checkbox" />
+                                    <input 
+                                    className="mr-2" 
+                                    type="checkbox" 
+                                    onChange={() => addLabel('Exam/Quiz')}
+                                    checked={editTask?.labels.includes('Exam/Quiz')}
+                                    />
                                     Exam/Quiz
                                 </label>
                                 <label>
-                                    <input className="mr-2" type="checkbox" />
+                                    <input 
+                                    className="mr-2" 
+                                    type="checkbox" 
+                                    onChange={() => addLabel('Personal')}
+                                    checked={editTask?.labels.includes('Personal')}
+                                    />
                                     Personal
                                 </label>
 
 
-                            </div>
-                            <div className="flex items-center mt-4">
-                                <Switch />
-                                <span className="ml-2 ">Notifications</span>
                             </div>
 
 
@@ -225,7 +310,7 @@ export default function TasksPage() {
                                 <li className="list-none" key={index} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
                                     <div className="task">
                                         <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
-                                            <p className='text-center w-[330px] p-[5px] bg-[#FFF7E4] rounded-md'>{task.text}</p>
+                                            <p className='text-center w-[330px] p-[5px] bg-[#FFF7E4] rounded-md'>{task.title}</p>
                                         </div>
 
                                     </div>
@@ -243,7 +328,7 @@ export default function TasksPage() {
                                     <div className="task">
                                         <div className={`assignmentDetails ${task.dueDate ? 'with-due-date' : 'without-due-date'}`}>
                                             <div className="">
-                                                <p className='text-center w-[330px] p-[5px] bg-[#FFD6C2] rounded-md'>{task.text}</p>
+                                                <p className='text-center w-[330px] p-[5px] bg-[#FFD6C2] rounded-md'>{task.title}</p>
                                             </div>
 
                                         </div>
