@@ -20,7 +20,7 @@ export default function PiazzaPage() {
   };
 
   const navigate = useNavigate() 
-  
+
   const goToCalendar = (): void => {
     navigate('/dashboard')
   }
@@ -136,13 +136,11 @@ export default function PiazzaPage() {
 
   return (
     <div className="min-h-screen" style={{background: 'linear-gradient(135deg, #E1AB91, #DE8C73)'}}>
-
       <div className="bg-[#EBEDEC] h-[90px] flex items-center pl-[23px] overflow-y mb-2">
           <SideMenuButton  onClick={toggleSideMenu} />
           <button className="bg-black text-white ml-6 " onClick={goToCalendar}>{'< DASHBOARD'}</button>
           <p className="ml-[30px] font-bold text-[32px] ">Piazza Announcements</p>
       </div>
-
       <div className="flex mt-[25px] h-full">
           {isSideMenuOpen && <SideMenu classNameList={[]} />}
       </div>
