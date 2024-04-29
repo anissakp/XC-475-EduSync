@@ -20,6 +20,7 @@ export default function PiazzaPage() {
   };
 
   const navigate = useNavigate() 
+  
   const goToCalendar = (): void => {
     navigate('/dashboard')
   }
