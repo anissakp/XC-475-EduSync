@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import * as firebaseui from "firebaseui";
 // import "firebaseui/dist/firebaseui.css";
-import "../custom-firebaseui.css";
+import "../css_files/custom-firebaseui.css";
 import Header from '../components/Header';
 
 export default function LoginPage() {

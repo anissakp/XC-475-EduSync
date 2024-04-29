@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../authContext";
+import { AuthContext } from "../contexts/authContext";
 
 import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";

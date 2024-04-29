@@ -1,4 +1,4 @@
-import { AuthContext } from "../authContext" ;
+import { AuthContext } from "../contexts/authContext" ;
 import { useContext, useEffect, useState } from "react";
 import parse from 'html-react-parser';
 
