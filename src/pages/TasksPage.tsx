@@ -72,6 +72,7 @@ interface AssignmentData {
     name: string;
     dueDate: Date;
     courseName: string;
+    description: string;
     // optional field
     completed?: boolean;
     source: string;
@@ -241,6 +242,7 @@ export default function TasksPage() {
                             name: editTask.assignmentName,
                             dueDate: new Date(editTask.dueDate),
                             courseName: 'Task',
+                            description: editTask.description,
                             source: 'EduSync',
                             completed: false,
                         };
@@ -276,6 +278,7 @@ export default function TasksPage() {
                 title: `${data.courseName} ${data.name}`,
                 courseName: data.courseName,
                 assignmentName: data.name, 
+                description: data.description,
                 completed:  data.completed,
                 dueDate: data.dueDate.toDate(),
                 labels: [],
