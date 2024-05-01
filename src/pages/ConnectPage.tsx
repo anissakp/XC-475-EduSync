@@ -3,23 +3,15 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { app } from "../firebase";
 import {  getDoc } from "firebase/firestore";
-
 import Header from '../components/Header';
 import connectBlob from "../assets/connectBlob.png"
 import blackboardLogo from "../assets/blackboardLogo.png"
 import piazzaLogo from "../assets/piazzaLogo.png"
-import gradescopeLogo from "../assets/gradescopeLogo.png"
 import connectBlueBlob from "../assets/connectBlueBlob.png"
 import connectOrangeBlob from "../assets/connectOrangeBlob.png"
-
 import FormDialog from "../components/FormDialog";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import Checkbox from '@mui/material/Checkbox';
-
-
-import SideMenu from "../components/SideMenu";
-import ToDoList from "../components/ToDoList";
-
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -80,6 +72,7 @@ const handleConnectCLK = async () => {
       console.log("CALLED STATUS")
       const auth = getAuth(app);
       onAuthStateChanged(auth, async (user: any) => {
+        console.log(user.uid) 
         const docRef = doc(db, `users/${user.uid}`);
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();

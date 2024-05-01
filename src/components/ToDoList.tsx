@@ -35,7 +35,7 @@ const ToDoList: React.FC<Props> = ({ courses }: Props) => {
             const initialTasks = courses.map(elem => ({
                 text: elem.event,
                 completed: elem.completed,
-                dueDate: elem.date.toString(),
+                dueDate: new Date(elem.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
                 id: elem.id,
             }));
             setTasks(initialTasks);

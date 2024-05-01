@@ -15,7 +15,6 @@ import Assignment from "../components/Assignment"
 import ProgressBar from "../components/ProgressBar"
 import Document from "../components/Document"
 import CoursePageHeader from "../components/CoursePageHeader"
-import { Today } from "@mui/icons-material";
 
 
 export default function CoursesPage() {

@@ -1,23 +1,16 @@
 import { useContext, useState, useEffect } from "react";
+
 import { AuthContext } from "../contexts/authContext";
 
 import Calendar from "../components/Calendar";
 import ToDoList from "../components/ToDoList";
-
 import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
-import FormDialog from "../components/FormDialog";
-import CircularIndeterminate from "../components/CircularIndeterminate";
-import SideMenuButton from "../components/SideMenuButton";
 import { collection, getDocs, getDoc } from "firebase/firestore";
-import StickyNote from "../components/StickyNotes";
 import NewStickynotes from "../components/NewStickynotes";
-
-
-
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT

@@ -1,6 +1,6 @@
 import TasksPageHeader from "../components/TasksPageHeader"
 import SideMenu from "../components/SideMenu";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -13,6 +13,9 @@ import { app, db } from "../firebase";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, addDoc } from "firebase/firestore";
+
+import FilterBox from "../components/FilterBox";
+import { filter } from "lodash";
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -78,6 +81,8 @@ interface AssignmentData {
 export default function TasksPage() {
 
     const [expanded, setExpanded] = React.useState<string | false>('panel1');
+    const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -101,6 +106,8 @@ export default function TasksPage() {
 
     const [editTask, setEditTask] = useState<Task | null>(null);
     const [editTaskIndex, setEditTaskIndex] =useState<number>(0) ; 
+
+    const [filterOptions, setfilterOptions] = useState<string[]>([])
 
 
     const handleEditTask = (index: number): void => {
@@ -140,6 +147,15 @@ export default function TasksPage() {
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setSearchValue(event.target.value);
     }
+
+
+    const handleFilterInputChange = (option: string ): void => {
+        if (!filterOptions.includes(option)) {
+            setfilterOptions([...filterOptions, option]);
+        }
+    }
+
+    
     
 
     const addTask = (index: number): void => {
@@ -151,7 +167,10 @@ export default function TasksPage() {
         }
         setnewTask("");
     };
-    
+    const toggleFilterModal = () => {
+        setIsFilterModalOpen(!isFilterModalOpen);
+        console.log(isFilterModalOpen)
+    };
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setnewTask(event.target.value)
         const tempTask = editTask 
@@ -181,24 +200,32 @@ export default function TasksPage() {
     };
 
     const setTaskDueDate = (dueDate: any): void => {
+        
         const updatedTasks = [...tasks];
         updatedTasks[editTaskIndex].dueDate = dueDate;
         setDueDate(dueDate) 
         setTasks(updatedTasks);
     };
-
     const addLabel = (label: string): void => {
-
         const updatedTasks = [...tasks];
-        const task = updatedTasks[editTaskIndex];
-        const labels = task.labels.includes(label)
-            ? task.labels.filter((l) => l !== label)
-            : [...task.labels, label];
-        task.labels = labels;
-        setTasks(updatedTasks);
-        setEditTask(task)
-
+        if (editTaskIndex >= 0 && editTaskIndex < updatedTasks.length) {
+            const task = updatedTasks[editTaskIndex];
+            const labels = task.labels.includes(label)
+                ? task.labels.filter((l) => l !== label)
+                : [...task.labels, label];
+            task.labels = labels;
+            setTasks(updatedTasks);
+            setEditTask(task);
+    
+            const updatedLabels = selectedLabels.includes(label)
+                ? selectedLabels.filter((l) => l !== label)
+                : [...selectedLabels, label];
+            setSelectedLabels(updatedLabels);
+        }
     };
+    
+
+   
 
     const saveTaskToFirestore = async (editTask : Task) => {
         try {
@@ -284,11 +311,16 @@ export default function TasksPage() {
     }, []);
 
     const navigate = useNavigate()
+
     const goToCalendar = (): void => {
         navigate('/dashboard')
     }
-
-    const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(searchValue.toLowerCase()));
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const filteredTasks = tasks.filter((task) => {
+        const matchesSearch = task.title.toLowerCase().includes(searchValue.toLowerCase());
+        const matchesLabels = filterOptions.length === 0 || filterOptions.some((label) => task.labels.includes(label));
+        return matchesSearch && matchesLabels;
+    });
     return (
         <div >
 
@@ -301,7 +333,12 @@ export default function TasksPage() {
 
                         <input onChange={handleSearchInputChange} className="p-[12px]  rounded-md bg-[#EEEEEE] h-[48px] w-[250px] " type='text' placeholder="search "></input>
 
-                        <img className="bg-[#EBEDEC] p-[10px] cursor-pointer w-[48px] h-[48px]  rounded-md" src="tune.svg" />
+                        
+                        <button ref={buttonRef} onClick={toggleFilterModal} className="bg-[#EBEDEC] p-[10px] cursor-pointer w-[48px] h-[48px]  rounded-md">
+                            <img className="bg-[#EBEDEC] cursor-pointer w-[48px] h-[48px]  rounded-md" src="tune.svg" />
+                        </button>
+                        <FilterBox isOpen={isFilterModalOpen} onClose={toggleFilterModal} labels={filterOptions} onChange={setfilterOptions}/>
+                        
                         <button className="w-[48px] h-[48px]  bg-[#EBEDEC] rounded-md" onClick={() => handleNewTask(tasks.length)}>+</button>
 
                     </div>
