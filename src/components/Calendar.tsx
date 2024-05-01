@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import CalendarViewSwitcher from "./CalendarViewSwitcher";
-import "../Calendar.css";
+import "../css_files/Calendar.css";
 import blackboardLogo from "../assets/blackboardLogo.png"
 import gradescopeLogo from "../assets/gradescopeLogo.png"
-import edusyncLogo from "../assets/edusyncLogoSmall.png"
+import edusyncLogo from "../assets/edusyncIcon.png"
 import IconRight from "../assets/IconRight.png"
 
 import {
