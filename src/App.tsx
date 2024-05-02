@@ -17,7 +17,6 @@ import TasksPage from "./pages/TasksPage";
 
 import Profile from "./pages/profile";
 import EditProfile from "./pages/EditProfile";
-import { Edit } from "@mui/icons-material";
 import NotesPage from "./pages/NotesPage";
 import AboutUs from "./pages/AboutUs"
 
@@ -28,8 +27,6 @@ function App() {
   const [token, setToken] = useState("");
   const [userID, setUserID] = useState("");
   const auth = getAuth(app);
-  //REVERT
-
 
   // FUNCTION TO SET VALUES IN LOCAL STORAGE
   const setStorageValue = (userID: string, aToken: string) => {
@@ -50,7 +47,7 @@ function App() {
     const firebaseAuth = getAuth();
     const firebaseAuthUser = firebaseAuth.currentUser;
     if (firebaseAuthUser) {
-      console.log("refresh token stored in DB [ only happens when no token in local storage ] ")
+      //refresh token stored in DB [ only happens when no token in local storage ] 
       const userDocRef = doc(db, 'users', firebaseAuthUser.uid);
       // assignment document saved in user's assignments subcollection
       await setDoc(userDocRef, { refreshToken: rToken }, { merge: true });
@@ -76,15 +73,12 @@ function App() {
 
           const data2 = await response.json();
 
-          //EXAMINE DATA AND DOES REFRESH TOKEN CHNAGE???
-          console.log("GETTING NEW ACCESS TOKEN FROM REFRESH TOKEN", data2)
-
           setToken(data2.access_token);
           setUserID(data2.user_id);
 
           setStorageValue(data2.user_id, data2.access_token)
 
-          // ******* store refresh token in the database ********
+          // store refresh token in the database
           updateRefreshToken(data2.refresh_token)
         }
         else {
@@ -104,7 +98,7 @@ function App() {
 
           setStorageValue(data.user_id, data.access_token);
 
-          // ******* store refresh token in the database ********
+          // store refresh token in the database
           updateRefreshToken(data.refresh_token)
         }
       });
@@ -118,7 +112,6 @@ function App() {
 
   // CHECK IF USERS HAS TOKEN ON INITIAL RENDER
   useEffect(() => {
-    console.log("INVOKED USEEFFECT")
     const data = localStorage.getItem("data")!;
     const localStorageData = JSON.parse(data);
     //Check If Access Token Exist On Local Storage
@@ -127,7 +120,7 @@ function App() {
       localStorageData.token &&
       new Date(localStorageData.expiresAt) > new Date()
     ) {
-      console.log("USING CURRENT ACCESS TOKEN")
+      //using current access token
       setToken(localStorageData.token);
       setUserID(localStorageData.userID);
     } else {
