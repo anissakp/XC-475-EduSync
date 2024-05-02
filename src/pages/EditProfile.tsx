@@ -11,6 +11,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { app, db } from "../firebase";
+import { getAuth} from "firebase/auth";
+import { collection, getDocs, getDoc } from "firebase/firestore";
+
 export default function EditProfile() {
     const [selectedImage, setSelectedImage] = useState('profile pic.svg');
     const [isSaved, setIsSaved] = useState(false);
@@ -35,6 +40,8 @@ export default function EditProfile() {
         setIsSaved(false);
         setDisabledFields(false);
     };
+
+    
 
     return (
         <div className='flex flex-col '>

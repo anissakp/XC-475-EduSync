@@ -14,6 +14,7 @@ import NewStickynotes from "../components/NewStickynotes";
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
+
   const auth = useContext(AuthContext);
 
   // SET INITIAL STATE
@@ -39,7 +40,6 @@ export default function DashboardPage() {
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async (userId: string) => {
-    console.log("BB getAssignments called")
     const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
     const result = await fetch(bbCoursesUrl, {
       headers: {
@@ -71,8 +71,6 @@ export default function DashboardPage() {
 
       arr = [...arr, ...newArr];
     }
-
-    console.log("courses from getAssign" + arr);
     setCourses(arr);
 
     // puts assignments into database
@@ -91,7 +89,6 @@ export default function DashboardPage() {
 
         if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
-          console.log("if 1");
           await getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
@@ -99,19 +96,16 @@ export default function DashboardPage() {
         }
 
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
-          console.log("if 2 no get assignments ");
           // if user pressed connect to Blackboard, fetch and update assignments
           await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
         }
         else {
-          console.log("if 3");
           await getAssignments(user.uid);
           await fetchAssignmentsFromFirestore(user.uid);
         }
       } else {
-        console.log("User is not signed in");
         setLoading(false);
       }
     });
@@ -126,11 +120,8 @@ export default function DashboardPage() {
         const assignmentId = assignment.id;
         const assignmentDocRef = doc(db, `users/${userID}/assignments`, assignmentId);
 
-        //~~~~~~~~~~~~~ NEW ~~~~~~~~~~~~~~~~ 
         const docSnapshot = await getDoc(assignmentDocRef);
 
-
-        // ~~~ changed from const to let ~~~
         let assignmentData : AssignmentData = {
           name: assignment.name,
           dueDate: new Date(assignment.grading.due),
@@ -148,8 +139,6 @@ export default function DashboardPage() {
             ...assignmentData
           };
         }
-
-        // assignment document saved in user's assignments subcollection
         await setDoc(assignmentDocRef, assignmentData, { merge: true });
       }
     }
@@ -158,7 +147,6 @@ export default function DashboardPage() {
   // THIS PULLS ALL THE EVENTS FROM THE DATABASE
   // THE DATABASE GROUPS ALL THE ASSIGNMENTS TOGETHER (SOURCE OF ASSIGNMENT IS A SEPARATE FIELD)
   const fetchAssignmentsFromFirestore = async (userId: string) => {
-    console.log("fetchAssignmentsFromFirestore called", userId);
     const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
     const querySnapshot = await getDocs(userAssignmentsRef);
     const assignments: any = [];
@@ -214,10 +202,6 @@ export default function DashboardPage() {
 
 
       </div>
-
-
-
-
 
       {/* Task button when a screen is minimized */}
       <div className="fixed bottom-5 right-5 lg:hidden flex flex-wrap font-['Quicksand']" >
