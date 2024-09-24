@@ -87,9 +87,11 @@ export default function DashboardPage() {
         const userRef = doc(db, "users", user.uid);
 
 
-        if (userDoc.exists() && userDoc.data().blackboardConnected && userDoc.data().gradescopeConnected) {
+        if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard and connect to gradescope
-          await getAssignments(user.uid);
+
+          // GET ASSIGNMENTS IS ONLY FOR BLACKBOARD 
+          //await getAssignments(user.uid);
           await setDoc(userRef, { blackboardConnected: false }, { merge: true });
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
@@ -97,12 +99,12 @@ export default function DashboardPage() {
 
         else if (userDoc.exists() && userDoc.data().gradescopeConnected) {
           // if user pressed connect to Blackboard, fetch and update assignments
-          await getAssignments(user.uid);
+          //await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
         }
         else {
-          await getAssignments(user.uid);
+          //await getAssignments(user.uid);
           await fetchAssignmentsFromFirestore(user.uid);
         }
       } else {

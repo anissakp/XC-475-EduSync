@@ -148,6 +148,8 @@ const FormDialog : React.FC<Props> = ({setLoading, gradeScopeStatus}) => {
                   source: "Gradescope",
                 };
 
+                console.log(assignmentData)
+
                 
                 //~~~~~ check if the document already exists ~~~~~~~
                 // if the doc doesn't already exist, we can just set completed to false
