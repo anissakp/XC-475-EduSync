@@ -214,7 +214,6 @@ export const exchangeToken = onRequest(async (req, res) => {
     });
 
     const data = await tokenResponse.json();
-    console.log("DATAAAA", data);
 
     const expirationSeconds = data.expires_in;
     const expirationDate = new Date();
@@ -222,11 +221,9 @@ export const exchangeToken = onRequest(async (req, res) => {
 
     const userDocRef = admin.firestore().doc(`users/${userID}`);
 
-    // Check if the user document exists
     const userDoc = await userDocRef.get();
 
     if (userDoc.exists) {
-      // If the document exists, update it
       await userDocRef.update({
         gmailApiAccessToken: data.access_token,
         gmailApiAccessTokenExpiration: expirationDate,
