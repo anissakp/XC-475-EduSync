@@ -32,7 +32,7 @@ export default function LandingPage() {
         <div className="max-w-sm flex flex-col gap-3 ">
           <h2 className="text-2xl xl:text-4xl text-center md:text-left">Syd <span className="text-custom-orange">always</span> forgets <span className="text-custom-blue">important</span> academic dates</h2>
           <p className="text-center md:text-left">Are you like Syd? <br></br> We're here to help you!</p>
-          <button className="bg-custom-blue2 " onClick={()=> nav("/connect")}>Get Started, it's Free!</button>
+          <button className="bg-custom-blue2 " onClick={()=> nav("/syllabusUpload")}>Get Started, it's Free!</button>
         </div>
       </div>
       <div className=" flex justify-end md:justify-end items-center px-11 mt-20 ">

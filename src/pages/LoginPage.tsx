@@ -42,7 +42,7 @@ export default function LoginPage() {
 
                 // Redirect based on the user's login history
                 if (creationTime === lastSignInTime) {
-                    navigate("/connect"); // First time user
+                    navigate("/syllabusUpload"); // First time user
                 } else {
                     navigate("/dashboard"); // Returning user
                 }

@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
 import PiazzaPage from "./pages/PiazzaPage";
 import CoursesPage from "./pages/CoursesPage";
+import SyllabusUploadPage from "./pages/SyllabusUploadPage"
 import TasksPage from "./pages/TasksPage";
 
 import Profile from "./pages/profile";
@@ -147,6 +148,7 @@ function App() {
           <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/notesPage" element={<NotesPage />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/syllabusUpload" element={<SyllabusUploadPage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

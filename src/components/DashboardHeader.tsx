@@ -77,8 +77,8 @@ export default function DashBoardHeader({ onClick }: DashboardHeaderProps) {
             </div>
             <div className="flex items-center gap-4">
                 <div onClick={handleLogout}>Logout</div>
-                {connected && tutorial ? <button onClick={()=>navigate("/connect")} className="animate-blink bg-[#F7E2B3]">Connect</button> :
-                <button className="bg-[#F7E2B3]" onClick={()=>navigate("/connect")} >Connect</button>}
+                {connected && tutorial ? <button onClick={()=>navigate("/syllabusUpload")} className="animate-blink bg-[#F7E2B3]">Connect</button> :
+                <button className="bg-[#F7E2B3]" onClick={()=>navigate("/syllabusUpload")} >Connect</button>}
                 <div onClick={goToProfile} className="mr-10 h-[40px] w-[40px] rounded-full hover:cursor-pointer" >
                   <img src="profile pic.svg" className='w-[40px] h-[40px] bg-gray-300 rounded-full'></img>
                 </div>
