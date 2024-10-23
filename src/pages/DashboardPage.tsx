@@ -39,23 +39,71 @@ export default function DashboardPage() {
   };
 
   // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
-  const fetchFlaskData = async () => {
-    console.log('Called the method to fetch flask data')
-    fetch('http://127.0.0.1:5000/data') // this is the basic endpoint we used at first
-    .then(response => {
-      if(!response.ok) {
-        throw new Error('HTTP error! Status: ${response.status}');
-      }
-      console.log("response from flask", response)
-      return response.json();
-    })
-    .then(data => {
-      console.log("data from flask", data) // this is where data is
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  }
+  // Updated to accept syllabus data instead of a File object
+  // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
+  const fetchFlaskData = async (syllabus) => {
+    console.log('Called the method to fetch flask data');
+    
+    try {
+        // Fetch the PDF from the URL
+        const pdfResponse = await fetch(syllabus.url);
+        
+        if (!pdfResponse.ok) {
+            throw new Error(`Failed to fetch PDF: ${pdfResponse.status}`);
+        }
+        
+        // Convert the response into a Blob
+        const pdfBlob = await pdfResponse.blob();
+        
+        // Create a FormData object to hold the file
+        const formData = new FormData();
+        formData.append('syllabus', pdfBlob, syllabus.fileName); // Use the appropriate field name expected by your Flask backend
+        
+        // Send the FormData to Flask
+        const response = await fetch('http://127.0.0.1:5000/data', {
+            method: 'POST',
+            body: formData,
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log("Data from Flask:", data); // Handle the response data as needed
+        // Call a function to add the data to Firebase
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
+
+  // Function to retrieve all syllabi for a user
+  const fetchAllSyllabi = async (userID: string) => {
+    console.log('fetching all sylabi')
+    try {
+        const syllabiCollectionRef = collection(db, `users/${userID}/syllabi`);
+        const querySnapshot = await getDocs(syllabiCollectionRef);
+        
+        const syllabi: any = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            syllabi.push(data); // Push the syllabus data into the array
+        });
+        console.log('number of syllabi:', syllabi.length, syllabi[0])
+        // Get the course details for each syllabus
+        for (let i = 0; i < syllabi.length; i++) {
+            await fetchFlaskData(syllabi[i]);
+        }
+
+        // return syllabi; // Return the array of syllabus data
+        return
+    } catch (error) {
+        console.error('Error fetching syllabi:', error);
+        return [];
+    }
+  };
+
+
 
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async (userId: string) => {
@@ -98,10 +146,10 @@ export default function DashboardPage() {
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
-    fetchFlaskData();       // TODO: update this -- just used to test right now
     const auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        fetchAllSyllabi(user.uid);
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         const userRef = doc(db, "users", user.uid);
@@ -183,6 +231,52 @@ export default function DashboardPage() {
     console.log(assignments);
     setCourses(assignments);
   };
+
+  // Function to retrieve all syllabi for a user
+  // const fetchAllSyllabi = async (userID: string) => {
+  //     try {
+  //         const syllabiCollectionRef = collection(db, `users/${userID}/syllabi`);
+  //         const querySnapshot = await getDocs(syllabiCollectionRef);
+          
+  //         const syllabi: any = [];
+  //         querySnapshot.forEach((doc) => {
+  //             const data = doc.data();
+  //             syllabi.push(data); // Push the syllabus data into the array
+  //         });
+
+  //         // get the course details for each syllabus
+  //         for(let i = 0; i < syllabi.length; i++) {
+  //           await fetchFlaskData(syllabi[i]);
+  //         }
+
+  //         return syllabi; // Return the array of syllabus data
+  //     } catch (error) {
+  //         console.error('Error fetching syllabi:', error);
+  //         return [];
+  //     }
+  // };
+
+  // const handleFetchAllSyllabi = async () => {
+  //   const userID = 'user-id'; // Replace with the actual user ID
+  //   const syllabi = await fetchAllSyllabi(userID);
+    
+  //   if (syllabi.length > 0) {
+  //       // Assuming you have a way to let users choose a syllabus
+  //       const syllabusURL = syllabi[0].url; // For example, just taking the first one
+        
+  //       // Create a link to download the PDF
+  //       const link = document.createElement('a');
+  //       link.href = syllabusURL;
+  //       link.target = '_blank'; // Open in a new tab
+  //       link.download = syllabi[0].fileName; // Suggest a filename for download
+  //       document.body.appendChild(link);
+  //       link.click(); // Simulate a click to trigger download
+  //       document.body.removeChild(link); // Clean up
+  //   } else {
+  //       console.error('No syllabi found for this user.');
+  //   }
+  // };
+
 
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {
