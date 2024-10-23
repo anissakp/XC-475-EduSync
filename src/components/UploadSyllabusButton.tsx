@@ -58,12 +58,11 @@ const UploadSyllabusButton: React.FC = () => {
 
     return (
         <div>
-        <input type="file" accept=".pdf" onChange={handleFileChange}>
+        <input type="file" accept=".pdf" onChange={handleFileChange} />
         <button className="button" onClick={handleUpload} disabled={loading}>
             { loading ? 'Uploading...' : 'Upload Syllabus' }
         </button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-        </input>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 }

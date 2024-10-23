@@ -38,6 +38,25 @@ export default function DashboardPage() {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
 
+  // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
+  const fetchFlaskData = async () => {
+    console.log('Called the method to fetch flask data')
+    fetch('http://127.0.0.1:5000/data') // this is the basic endpoint we used at first
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('HTTP error! Status: ${response.status}');
+      }
+      console.log("response from flask", response)
+      return response.json();
+    })
+    .then(data => {
+      console.log("data from flask", data) // this is where data is
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
   // RETRIEVE ASSIGNMENT FROM BB API
   const getAssignments = async (userId: string) => {
     const bbCoursesUrl = import.meta.env.VITE_BB_COURSES_URL;
@@ -79,6 +98,7 @@ export default function DashboardPage() {
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
+    fetchFlaskData();
     const auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
