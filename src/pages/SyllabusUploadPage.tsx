@@ -14,6 +14,7 @@ import CircularIndeterminate from "../components/CircularIndeterminate";
 import Checkbox from '@mui/material/Checkbox';
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import UploadSyllabusButton from '../components/UploadSyllabusButton.tsx';
 
 
 export default function ConnectPage() {
@@ -21,6 +22,13 @@ export default function ConnectPage() {
   const[user, setUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [piazzaStatus, setPiazzaStatus] = useState(false)
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [syllabusLoading, setSyllabusLoading] = useState(false);
+
+  // just added ********
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
 
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -61,6 +69,51 @@ export default function ConnectPage() {
     checkStatus();
   }, []);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+          setSelectedFile(file);
+      }
+  };
+
+  const handleUpload = async () => {
+      if (!selectedFile) {
+          setError('Please select a file');
+          return;
+      }
+
+      setSyllabusLoading(true);
+      setError(null);
+      setResult(null);
+
+      try {
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+
+          // the endpoint of our cloud function
+          const response = await fetch('YOUR_FIREBASE_CLOUD_FUNCTION_ENDPOINT', {
+              method: 'POST',
+              body: formData,
+          });
+
+          if (!response.ok) {
+              throw new Error('Failed to upload file');
+          }
+
+          // File successfully uploaded
+          console.log('File uploaded successfully');
+          const resultData = await response.text();
+          setResult(resultData);
+
+
+          } catch (error) {
+              setError('Failed to upload file');
+              console.error(error);
+          } finally {
+              setSyllabusLoading(false);
+      }
+  };
+
   function handleClickSignOut() {
     const auth = getAuth(app);
     auth.signOut();
@@ -91,11 +144,43 @@ export default function ConnectPage() {
             )) || (
               <>
                 {/* TODO: add onclick function for uploading file */}
-                <button className="mt-5 bg-white flex items-center text-[20px]" onClick={()=>navigate("/dashboard")}>
-                  {/* <img src={piazzaLogo} alt="PiazzaLogo" className="w-6 h-6 mr-[1px]"/> */}
-                  Syllabus
-                  {/* {piazzaStatus && <Checkbox {...label} defaultChecked color="success" />} */}
-                </button>
+                <div>
+                  {/* Hidden file input */}
+                  {/* Hidden file input */}
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}  // Hides the file input
+                  id="file-upload"
+                />
+
+                {/* Custom styled button to match the previous button */}
+                <label
+                  htmlFor="file-upload"
+                  style={{
+                    marginTop: '20px',
+                    backgroundColor: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    color: 'black',
+                    borderRadius: '20px',
+                    // border: '1px solid black',
+                    transition: 'background-color 0.3s ease',
+                  }}
+                  // onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
+                  // onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
+                >
+                  Syllabus {selectedFile && <Checkbox {...label} defaultChecked color="success" />}
+                </label>
+
+
+                  {error && <p style={{ color: 'red' }}>{error}</p>}
+                </div>
+
                 <button className="mt-5 bg-white flex items-center text-[20px]" onClick={()=>navigate("/connect")}>
                   {/* <img src={piazzaLogo} alt="PiazzaLogo" className="w-6 h-6 mr-[1px]"/> */}
                   Learning Modules
@@ -104,6 +189,7 @@ export default function ConnectPage() {
                 <button className="mt-5 bg-white text-[15px]" onClick={()=>navigate("/dashboard")}>
                   Connect Later
                 </button>
+
               </>
             )}
           </div>
