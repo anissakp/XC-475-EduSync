@@ -12,6 +12,80 @@ import requests
 import io
 import PyPDF2
 
+# Your sample JSON data
+sample_data = [
+    {
+        "date": "10/23/2024",
+        "event": "CS101 Assignment 1",
+        "source": "Other",
+        "completed": False,
+        "id": "A1-001"
+    },
+    {
+        "date": "10/25/2024",
+        "event": "MATH241 Quiz 3",
+        "source": "Other",
+        "completed": False,
+        "id": "Q3-201"
+    },
+    {
+        "date": "10/27/2024",
+        "event": "HIST331 Midterm Exam",
+        "source": "Other",
+        "completed": False,
+        "id": "EXAM-101"
+    },
+    {
+        "date": "10/30/2024",
+        "event": "CS101 Project Milestone",
+        "source": "Other",
+        "completed": True,
+        "id": "PM-001"
+    },
+    {
+        "date": "11/01/2024",
+        "event": "ENG202 Essay Draft",
+        "source": "Other",
+        "completed": False,
+        "id": "ESSAY-202"
+    },
+    {
+        "date": "11/03/2024",
+        "event": "BIO150 Lab Report",
+        "source": "Other",
+        "completed": True,
+        "id": "LR-150"
+    },
+    {
+        "date": "11/05/2024",
+        "event": "CHEM101 Final Project",
+        "source": "Other",
+        "completed": False,
+        "id": "FP-101"
+    },
+    {
+        "date": "11/07/2024",
+        "event": "CS101 Final Exam",
+        "source": "Other",
+        "completed": False,
+        "id": "EXAM-101-FINAL"
+    },
+    {
+        "date": "11/10/2024",
+        "event": "PSY102 Research Paper",
+        "source": "Other",
+        "completed": False,
+        "id": "RP-102"
+    },
+    {
+        "date": "11/12/2024",
+        "event": "MATH241 Homework 6",
+        "source": "Other",
+        "completed": True,
+        "id": "HW6-241"
+    }
+]
+
 # Function to extract text from a PDF file using a Firebase URL
 def extract_text_from_pdf_url(pdf_url):
     text = ""
@@ -72,14 +146,15 @@ def parse_pdf():
     # Process the PDF file
     text = extract_text_from_pdf_file(file)
     
-    #     # need json in this form
-#     # date: new Date(det.grading.due),
-#     #       event: `${classes[i].courseName} ${det.name}`,
-#     #       source: "Blackboard",
-#     #       completed: false,
-#     #       id: det.id,
+    # need json in this form
+    # date: new Date(det.grading.due),
+    #       event: `${classes[i].courseName} ${det.name}`,
+    #       source: "Blackboard",
+    #       completed: false,
+    #       id: det.id,
 
-    return {"message": "File received", "text": text}
+    # return {"message": "File received", "text": text)}
+    return jsonify(sample_data)
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)
