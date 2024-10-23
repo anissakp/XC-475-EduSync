@@ -13,72 +13,73 @@ import io
 import PyPDF2
 
 # Your sample JSON data
+# Your sample JSON data with ISO 8601 date format
 sample_data = [
     {
-        "date": "10/23/2024",
+        "date": "2024-10-23T10:30:00.000Z",
         "event": "CS101 Assignment 1",
         "source": "Other",
         "completed": False,
         "id": "A1-001"
     },
     {
-        "date": "10/25/2024",
+        "date": "2024-10-25T10:30:00.000Z",
         "event": "MATH241 Quiz 3",
         "source": "Other",
         "completed": False,
         "id": "Q3-201"
     },
     {
-        "date": "10/27/2024",
+        "date": "2024-10-27T10:30:00.000Z",
         "event": "HIST331 Midterm Exam",
         "source": "Other",
         "completed": False,
         "id": "EXAM-101"
     },
     {
-        "date": "10/30/2024",
+        "date": "2024-10-30T10:30:00.000Z",
         "event": "CS101 Project Milestone",
         "source": "Other",
         "completed": True,
         "id": "PM-001"
     },
     {
-        "date": "11/01/2024",
+        "date": "2024-11-01T10:30:00.000Z",
         "event": "ENG202 Essay Draft",
         "source": "Other",
         "completed": False,
         "id": "ESSAY-202"
     },
     {
-        "date": "11/03/2024",
+        "date": "2024-11-03T10:30:00.000Z",
         "event": "BIO150 Lab Report",
         "source": "Other",
         "completed": True,
         "id": "LR-150"
     },
     {
-        "date": "11/05/2024",
+        "date": "2024-11-05T10:30:00.000Z",
         "event": "CHEM101 Final Project",
         "source": "Other",
         "completed": False,
         "id": "FP-101"
     },
     {
-        "date": "11/07/2024",
+        "date": "2024-11-07T10:30:00.000Z",
         "event": "CS101 Final Exam",
         "source": "Other",
         "completed": False,
         "id": "EXAM-101-FINAL"
     },
     {
-        "date": "11/10/2024",
+        "date": "2024-11-10T10:30:00.000Z",
         "event": "PSY102 Research Paper",
         "source": "Other",
         "completed": False,
         "id": "RP-102"
     },
     {
-        "date": "11/12/2024",
+        "date": "2024-11-12T10:30:00.000Z",
         "event": "MATH241 Homework 6",
         "source": "Other",
         "completed": True,

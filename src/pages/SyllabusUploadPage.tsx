@@ -110,6 +110,11 @@ export default function ConnectPage() {
           };
           // Store the syllabus data in Firestore
           await setDoc(syllabusDocRef, syllabusData, { merge: true });
+          // TODO: decide if necessary
+          if (userID) {
+            const userRef = doc(db, "users", userID); 
+            await setDoc(userRef, { otherConnected: true, statusOther:true }, { merge: true });
+          }
       } catch (error) {
           setError('Failed to upload file');
           console.error(error);

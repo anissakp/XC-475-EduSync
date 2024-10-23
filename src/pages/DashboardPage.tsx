@@ -40,7 +40,6 @@ export default function DashboardPage() {
 
   // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
   // Updated to accept syllabus data instead of a File object
-  // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
   const fetchFlaskData = async (syllabus) => {
     console.log('Called the method to fetch flask data');
     
@@ -94,15 +93,40 @@ export default function DashboardPage() {
         for (let i = 0; i < syllabi.length; i++) {
             await fetchFlaskData(syllabi[i]);
         }
-
-        // return syllabi; // Return the array of syllabus data
-        return
+        return syllabi; // Return the array of syllabus data
     } catch (error) {
         console.error('Error fetching syllabi:', error);
         return [];
     }
   };
 
+  // RETRIEVE ASSIGNMENT FROM SYLLABI
+// RETRIEVE ASSIGNMENT FROM SYLLABI
+const getSyllabusAssignments = async (userId: string) => {
+    console.log("getSyllabus assignment")
+    const syllabi = await fetchAllSyllabi(userId); // Fetch all syllabi
+    let syllabusAssignments: any[] = [];
+
+    // Loop through each syllabus, extract assignments, and format them
+    for (let i = 0; i < syllabi.length; i++) {
+        const syllabus = syllabi[i];
+
+        // Assuming that the Flask API returns an array of assignments from the syllabus
+        const assignmentsFromFlask = await fetchFlaskData(syllabus);
+        const formattedAssignments = assignmentsFromFlask.map((assignment: any) => ({
+            date: new Date(assignment.dueDate), // Assuming Flask returns a dueDate
+            event: `${syllabus.courseName} ${assignment.name}`, // Combine course name and assignment name
+            source: "Syllabus", // Mark the source as "Syllabus"
+            completed: false, // Set completed to false by default
+            id: assignment.id // Assuming each assignment has a unique ID
+        }));
+        syllabusAssignments = [...syllabusAssignments, ...formattedAssignments];
+    }
+    // Update the state with the syllabus assignments
+    setCourses((prevCourses) => [...prevCourses, ...syllabusAssignments]);
+    // Save these assignments to Firestore
+    await saveAssignmentsToFirestore(userId, syllabusAssignments);
+  };
 
 
   // RETRIEVE ASSIGNMENT FROM BB API
@@ -147,9 +171,12 @@ export default function DashboardPage() {
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
     const auth = getAuth(app);
+    console.log('useEffect triggered')
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        fetchAllSyllabi(user.uid);
+        console.log('user is valid')
+        // await fetchAllSyllabi(user.uid); // this calls twice but only want it once
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         const userRef = doc(db, "users", user.uid);
@@ -167,6 +194,13 @@ export default function DashboardPage() {
           // if user pressed connect to Blackboard, fetch and update assignments
           await getAssignments(user.uid);
           await setDoc(userRef, { gradescopeConnected: false }, { merge: true });
+          await fetchAssignmentsFromFirestore(user.uid);
+        }
+        else if (userDoc.exists() && userDoc.data().otherConnected) {
+          // if user connected to syllabus fetch and update assigments
+          console.log('calling getSyllabus assignment')
+          await getSyllabusAssignments(user.uid);
+          await setDoc(userRef, { otherConnected: false }, { merge: true });
           await fetchAssignmentsFromFirestore(user.uid);
         }
         else {
