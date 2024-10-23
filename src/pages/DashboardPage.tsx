@@ -98,7 +98,7 @@ export default function DashboardPage() {
 
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
-    fetchFlaskData();
+    fetchFlaskData();       // TODO: update this -- just used to test right now
     const auth = getAuth(app);
     onAuthStateChanged(auth, async (user) => {
       if (user) {

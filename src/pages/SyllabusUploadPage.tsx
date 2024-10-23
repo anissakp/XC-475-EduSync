@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { app } from "../firebase";
-import {  getDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db, app, storage } from "../firebase";
 import Header from '../components/Header';
 import connectBlob from "../assets/connectBlob.png"
 import blackboardLogo from "../assets/blackboardLogo.png"
@@ -12,8 +13,7 @@ import connectOrangeBlob from "../assets/connectOrangeBlob.png"
 import FormDialog from "../components/FormDialog";
 import CircularIndeterminate from "../components/CircularIndeterminate";
 import Checkbox from '@mui/material/Checkbox';
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
+
 import UploadSyllabusButton from '../components/UploadSyllabusButton.tsx';
 
 
@@ -26,9 +26,10 @@ export default function ConnectPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [syllabusLoading, setSyllabusLoading] = useState(false);
 
-  // just added ********
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // set up firestore:
 
 
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -61,57 +62,70 @@ export default function ConnectPage() {
         const data = docSnap.data();
         console.log("DAT", data)
 
-        if (data && data.statusBB) setBlackboardStatus(true)
-        if (data && data.statusGS) setGradeScopeStatus(true)
+        // if (data && data.statusBB) setBlackboardStatus(true)
+        // if (data && data.statusGS) setGradeScopeStatus(true)
         if (data && data.gmailApiRefreshToken) setPiazzaStatus(true)
       });
     };
     checkStatus();
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-          setSelectedFile(file);
-      }
-  };
+  useEffect(() => {
+    // Trigger file upload when selectedFile is updated
+    const user = getAuth().currentUser;
+        if (user && selectedFile) {
+            handleUpload(user.uid); // Pass user ID to handleUpload
+        }
+  }, [selectedFile]); // Dependency is selectedFile
 
-  const handleUpload = async () => {
+  // function to upload syllabus to Firebase Storage and save the URL to Firestore
+  const handleUpload = async (userID: string) => {
+      console.log('handle upload called');
       if (!selectedFile) {
           setError('Please select a file');
           return;
       }
-
       setSyllabusLoading(true);
       setError(null);
       setResult(null);
-
       try {
-          const formData = new FormData();
-          formData.append('file', selectedFile);
+          // Create a reference to the file in Firebase Storage
+          const storageRef = ref(storage, `syllabi/${selectedFile.name}`);
+          // Upload the file to Firebase Storage
+          const snapshot = await uploadBytes(storageRef, selectedFile);
+          // Get the download URL of the uploaded file
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          console.log('File uploaded successfully. URL:', downloadURL);
+          setResult(downloadURL);
+          // Save the download URL to Firestore under the user's document
+          const userDocRef = doc(db, "users", userID); // Reference to the user's document
+          const syllabusDocRef = doc(db, `users/${userID}/syllabi`, selectedFile.name); // Reference for the syllabus document
 
-          // the endpoint of our cloud function
-          const response = await fetch('YOUR_FIREBASE_CLOUD_FUNCTION_ENDPOINT', {
-              method: 'POST',
-              body: formData,
-          });
-
-          if (!response.ok) {
-              throw new Error('Failed to upload file');
-          }
-
-          // File successfully uploaded
-          console.log('File uploaded successfully');
-          const resultData = await response.text();
-          setResult(resultData);
-
-
-          } catch (error) {
-              setError('Failed to upload file');
-              console.error(error);
-          } finally {
-              setSyllabusLoading(false);
+          // Create the data to store
+          const syllabusData = {
+              fileName: selectedFile.name,
+              url: downloadURL,
+              uploadedAt: new Date(),
+              status: 'new', // or any other property you want
+          };
+          // Store the syllabus data in Firestore
+          await setDoc(syllabusDocRef, syllabusData, { merge: true });
+      } catch (error) {
+          setError('Failed to upload file');
+          console.error(error);
+      } finally {
+          setSyllabusLoading(false);
       }
+  };
+
+
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    console.log('handle file change. file here:', file);
+    if (file) {
+        setSelectedFile(file);
+    }
   };
 
   function handleClickSignOut() {
