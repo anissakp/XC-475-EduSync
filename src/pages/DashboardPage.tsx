@@ -9,7 +9,7 @@ import { app, db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
-import { collection, getDocs, getDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, Timestamp } from "firebase/firestore";
 import NewStickynotes from "../components/NewStickynotes";
 
 export default function DashboardPage() {
@@ -24,6 +24,7 @@ export default function DashboardPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [hasFetchedSyllabi, setHasFetchedSyllabi] = useState(false);
 
   interface AssignmentData {
     name: string;
@@ -40,41 +41,38 @@ export default function DashboardPage() {
 
   // RETRIEVE DATA FROM FLASK (FOR SYLLABUS)
   // Updated to accept syllabus data instead of a File object
+  // should return data about all assignments for a given syllabus/course
+  // TODO: are we trying to get one syllabus at a time or all of them?
   const fetchFlaskData = async (syllabus) => {
-    console.log('Called the method to fetch flask data');
+    console.log('Called the method to fetch flask data for:', syllabus);
     
     try {
         // Fetch the PDF from the URL
         const pdfResponse = await fetch(syllabus.url);
-        
         if (!pdfResponse.ok) {
             throw new Error(`Failed to fetch PDF: ${pdfResponse.status}`);
         }
-        
         // Convert the response into a Blob
         const pdfBlob = await pdfResponse.blob();
-        
         // Create a FormData object to hold the file
         const formData = new FormData();
         formData.append('syllabus', pdfBlob, syllabus.fileName); // Use the appropriate field name expected by your Flask backend
-        
         // Send the FormData to Flask
         const response = await fetch('http://127.0.0.1:5000/data', {
             method: 'POST',
             body: formData,
         });
-        
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
         const data = await response.json();
         console.log("Data from Flask:", data); // Handle the response data as needed
-        // Call a function to add the data to Firebase
+        return data;
     } catch (error) {
         console.error('Error:', error);
     }
-  };
+};
+
 
   // Function to retrieve all syllabi for a user
   const fetchAllSyllabi = async (userID: string) => {
@@ -88,45 +86,55 @@ export default function DashboardPage() {
             const data = doc.data();
             syllabi.push(data); // Push the syllabus data into the array
         });
-        console.log('number of syllabi:', syllabi.length, syllabi[0])
-        // Get the course details for each syllabus
-        for (let i = 0; i < syllabi.length; i++) {
-            await fetchFlaskData(syllabi[i]);
+        console.log("syllabi in FAS:", syllabi)
+        console.log('number of syllabi in FAS:', syllabi.length, syllabi[0])
+
+
+        const flaskData: any[] = [];
+        for (const syllabus of syllabi) {
+          console.log("in fetchAllSyllabi the syllabus used to call is:", syllabus)
+          const parsedData = await fetchFlaskData(syllabus);
+          if (parsedData) {
+            flaskData.push(parsedData); // Store the parsed data from Flask
+          }
         }
-        return syllabi; // Return the array of syllabus data
+        console.log("FlaskData in FAS:", flaskData)
+        return flaskData; // Return the array of syllabus data
     } catch (error) {
-        console.error('Error fetching syllabi:', error);
+        console.error('Error fetching syllabi in FAS:', error);
         return [];
     }
   };
 
-  // RETRIEVE ASSIGNMENT FROM SYLLABI
-// RETRIEVE ASSIGNMENT FROM SYLLABI
+// FORMAT ASSIGNMENTS FROM SYLLABUS DATA
 const getSyllabusAssignments = async (userId: string) => {
-    console.log("getSyllabus assignment")
-    const syllabi = await fetchAllSyllabi(userId); // Fetch all syllabi
-    let syllabusAssignments: any[] = [];
+  console.log("getSyllabus assignment");
+  const assignments = await fetchAllSyllabi(userId); // Fetch all syllabi
+  console.log("length of assignments returned by fetchAllSyllabi:", assignments[0]);
+  
+  const formattedAssignments = assignments[0].map((assignment: any) => ({
+    grading: { due: (new Date(assignment.date)) }, // Wrap dueDate in grading object
+      courseName: "CAS CS 101", // Dummy course name
+      name: assignment.event || "Unknown name",
+      source: "Other",
+      completed: assignment.completed || false,
+      id: assignment.id || "Unknown ID"
+  }));
 
-    // Loop through each syllabus, extract assignments, and format them
-    for (let i = 0; i < syllabi.length; i++) {
-        const syllabus = syllabi[i];
+  const syllabusAssignments = [
+      {
+          courseName: "CAS CS 101",
+          assignments: formattedAssignments
+      }
+  ];
 
-        // Assuming that the Flask API returns an array of assignments from the syllabus
-        const assignmentsFromFlask = await fetchFlaskData(syllabus);
-        const formattedAssignments = assignmentsFromFlask.map((assignment: any) => ({
-            date: new Date(assignment.dueDate), // Assuming Flask returns a dueDate
-            event: `${syllabus.courseName} ${assignment.name}`, // Combine course name and assignment name
-            source: "Syllabus", // Mark the source as "Syllabus"
-            completed: false, // Set completed to false by default
-            id: assignment.id // Assuming each assignment has a unique ID
-        }));
-        syllabusAssignments = [...syllabusAssignments, ...formattedAssignments];
-    }
-    // Update the state with the syllabus assignments
-    setCourses((prevCourses) => [...prevCourses, ...syllabusAssignments]);
-    // Save these assignments to Firestore
-    await saveAssignmentsToFirestore(userId, syllabusAssignments);
-  };
+  console.log("formatted assignments from flask:", formattedAssignments);
+  console.log("syllabus assignments:", syllabusAssignments);
+
+  setCourses((prevCourses) => [...prevCourses, ...formattedAssignments]);
+
+  await saveAssignmentsToFirestore(userId, syllabusAssignments);
+};
 
 
   // RETRIEVE ASSIGNMENT FROM BB API
@@ -198,10 +206,13 @@ const getSyllabusAssignments = async (userId: string) => {
         }
         else if (userDoc.exists() && userDoc.data().otherConnected) {
           // if user connected to syllabus fetch and update assigments
-          console.log('calling getSyllabus assignment')
-          await getSyllabusAssignments(user.uid);
-          await setDoc(userRef, { otherConnected: false }, { merge: true });
-          await fetchAssignmentsFromFirestore(user.uid);
+          if (!hasFetchedSyllabi) {
+            console.log('calling getSyllabus assignment')
+            await getSyllabusAssignments(user.uid);
+            await setDoc(userRef, { otherConnected: false }, { merge: true });
+            await fetchAssignmentsFromFirestore(user.uid);
+            setHasFetchedSyllabi(true);
+          }
         }
         else {
           await getAssignments(user.uid);
@@ -254,63 +265,18 @@ const getSyllabusAssignments = async (userId: string) => {
     const assignments: any = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
+      const dueDate = data.dueDate && data.dueDate.toDate ? data.dueDate.toDate() : null; // temp fix for weird behavior of one extra assignment leading to invalid dates
       assignments.push({
-        date: data.dueDate.toDate(),
+        date: dueDate,
         event: `${data.courseName} ${data.name}`,
         source: data.source, 
         completed: data.completed,
         id: doc.id,
       });
     });
-    console.log(assignments);
+    console.log("Assignments from firestore:", assignments);
     setCourses(assignments);
   };
-
-  // Function to retrieve all syllabi for a user
-  // const fetchAllSyllabi = async (userID: string) => {
-  //     try {
-  //         const syllabiCollectionRef = collection(db, `users/${userID}/syllabi`);
-  //         const querySnapshot = await getDocs(syllabiCollectionRef);
-          
-  //         const syllabi: any = [];
-  //         querySnapshot.forEach((doc) => {
-  //             const data = doc.data();
-  //             syllabi.push(data); // Push the syllabus data into the array
-  //         });
-
-  //         // get the course details for each syllabus
-  //         for(let i = 0; i < syllabi.length; i++) {
-  //           await fetchFlaskData(syllabi[i]);
-  //         }
-
-  //         return syllabi; // Return the array of syllabus data
-  //     } catch (error) {
-  //         console.error('Error fetching syllabi:', error);
-  //         return [];
-  //     }
-  // };
-
-  // const handleFetchAllSyllabi = async () => {
-  //   const userID = 'user-id'; // Replace with the actual user ID
-  //   const syllabi = await fetchAllSyllabi(userID);
-    
-  //   if (syllabi.length > 0) {
-  //       // Assuming you have a way to let users choose a syllabus
-  //       const syllabusURL = syllabi[0].url; // For example, just taking the first one
-        
-  //       // Create a link to download the PDF
-  //       const link = document.createElement('a');
-  //       link.href = syllabusURL;
-  //       link.target = '_blank'; // Open in a new tab
-  //       link.download = syllabi[0].fileName; // Suggest a filename for download
-  //       document.body.appendChild(link);
-  //       link.click(); // Simulate a click to trigger download
-  //       document.body.removeChild(link); // Clean up
-  //   } else {
-  //       console.error('No syllabi found for this user.');
-  //   }
-  // };
-
 
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);
   const onClone = (id: number) => {

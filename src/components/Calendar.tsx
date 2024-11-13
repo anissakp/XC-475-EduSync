@@ -31,7 +31,7 @@ interface Props {
   courses: Course[];
 }
 
-type SourceType = 'Blackboard' | 'Gradescope' | 'EduSync'; // Add more as needed
+type SourceType = 'Blackboard' | 'Gradescope' | 'EduSync' | 'Other'; // Add more as needed
 
 
 const sourceLogoMap: { [key: string]: string | undefined } = {

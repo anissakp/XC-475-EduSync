@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import PyPDF2
 import ollama  # Using the downloaded Ollama 3 model locally
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -87,6 +88,30 @@ sample_data = [
     }
 ]
 
+sample_data_short = [
+    {
+        "date": "11/16/2024",
+        "event": "CS101 Assignment 1",
+        "source": "Other",
+        "completed": False,
+        "id": "CS101 Assignment 1"
+    },
+    # {
+    #     "date": "11/13/2024",
+    #     "event": "CS101 Project Milestone",
+    #     "source": "Other",
+    #     "completed": True,
+    #     "id": "CS101 Project Milestone"
+    # },
+    {
+        "date": "11/18/2024",
+        "event": "CS101 Final Exam",
+        "source": "Other",
+        "completed": False,
+        "id": "CS101 Final Exam"
+    },
+]
+
 # Function to extract text from a PDF file using a Firebase URL
 def extract_text_from_pdf_url(pdf_url):
     text = ""
@@ -116,7 +141,6 @@ def get_due_dates_from_text(extracted_text):
     # Craft the question to ask Ollama 3
     question = f"Identify and return only the dates that their is a homework assignments due and the homework number: {extracted_text}"
 
-    
     # Generate the response using the local Ollama model
     response = ollama.generate(model='llama3.2', prompt=question)
     
@@ -137,6 +161,7 @@ def extract_text_from_pdf_file(file):
 
 @app.route('/data', methods=['POST'])
 def parse_pdf():
+    print("MOOOOO: parse pdf called")
     if 'syllabus' not in request.files:
         return {"error": "No file part"}, 400
     # Get the file from the request
@@ -155,7 +180,7 @@ def parse_pdf():
     #       id: det.id,
 
     # return {"message": "File received", "text": text)}
-    return jsonify(sample_data)
+    return jsonify(sample_data_short)
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)
