@@ -62,12 +62,14 @@ To build the application for production, run these commands in the root director
    firebase deploy
    ```
 
-## Team Members
-- Anissa Patel: Innovator - Technical
-- Shaimaa Sabbagh: Innovator - UX Design
-- Zai Sugino: Technical Teammate
-- Samantha Pang: Technical Teammate
-- Emily Doherty: Technical Teammate
+## Teammates
+- Anissa Patel: Innovator - Technical (Spring & Fall 2024)
+- Samantha Pang: Technical Teammate (Spring & Fall 2024)
+- Shaimaa Sabbagh: Innovator - UX Design (Spring 2024)
+- Zai Sugino: Technical Teammate (Spring 2024)
+- Emily Doherty: Technical Teammate (Spring 2024)
+- Wyatt Napier: Technical Teammate (Fall 2024)
+- Aditya Chowdhri: Technical Teammate (Fall 2024)
 
 ## More Information
 For more details about using or contributing to the EduSync project, please visit our project site: [EduSync Site](https://edusync-e6e17.web.app/).
