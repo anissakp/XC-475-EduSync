@@ -8,12 +8,12 @@ Follow these steps to set up the project locally:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/anissakp/XC-475-EduSync.git
+   git clone https://github.com/anissakp/EduSync.git
    ```
 
 2. **Install Dependencies at Root Directory**
    ```bash
-   cd XC-475-EduSync
+   cd EduSync
    npm install
    ```
 
