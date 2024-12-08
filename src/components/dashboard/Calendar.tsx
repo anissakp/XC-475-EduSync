@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import CalendarViewSwitcher from "./CalendarViewSwitcher";
-import "../css_files/Calendar.css";
-import blackboardLogo from "../assets/blackboardLogo.png"
-import gradescopeLogo from "../assets/gradescopeLogo.png"
-import edusyncLogo from "../assets/edusyncIcon.png"
-import IconRight from "../assets/IconRight.png"
+import CalendarViewSwitcher from "../CalendarViewSwitcher";
+import "../../css_files/Calendar.css";
+import blackboardLogo from "../../assets/blackboardLogo.png"
+import gradescopeLogo from "../../assets/gradescopeLogo.png"
+import edusyncLogo from "../../assets/edusyncIcon.png"
 
 import {
   format,
@@ -19,7 +18,7 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
-import DropdownCalendarView from "./DropdownCalendarView";
+import DropdownCalendarView from "../DropdownCalendarView";
 
 interface Course {
   source: SourceType;
@@ -46,8 +45,12 @@ const Calendar: React.FC<Props> = ({ courses }: Props) => {
   const [selectedView, setSelectedView] = useState("Monthly");
   const [selectedDate, setSelectedDate] = useState(currentMonth); 
 
+  
+
   // Update selectedDate when currentMonth changes
   useEffect(() => {
+    console.log(courses)
+    
     setSelectedDate(currentMonth);
   }, [currentMonth]);
 

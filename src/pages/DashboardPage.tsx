@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 
 import { AuthContext } from "../contexts/authContext";
 
-import Calendar from "../components/Calendar";
+import Calendar from "../components/dashboard/Calendar";
 import ToDoList from "../components/ToDoList";
 import { doc, setDoc } from "firebase/firestore";
 import { app, db } from "../firebase";
@@ -14,14 +14,11 @@ import NewStickynotes from "../components/NewStickynotes";
 
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
-
   const auth = useContext(AuthContext);
 
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
   const [classNameList, setClassNameList] = useState<string[]>([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
 
@@ -32,7 +29,6 @@ export default function DashboardPage() {
     // optional field
     completed?: boolean;
   }
-
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -71,15 +67,20 @@ export default function DashboardPage() {
 
       arr = [...arr, ...newArr];
     }
-    setCourses(arr);
+    //setCourses(prevCourses => [...prevCourses, ...arr]);
 
     // puts assignments into database
     await saveAssignmentsToFirestore(userId, classes);
   };
 
+
+  
+
   // CHECKS FOR TOKEN AND RETRIEVES BB ASSIGNMENT DATA
   useEffect(() => {
     const auth = getAuth(app);
+    
+    
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
@@ -112,6 +113,59 @@ export default function DashboardPage() {
       }
     });
   }, [auth.token, auth.userID]);
+
+  const fetchLoggedIn = async () => {
+    fetch('http://127.0.0.1:5000/dueDates')
+
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+    
+      // Make sure to read the response body as JSON
+      return response.json();  // If the response is JSON
+    })
+    .then(data => {
+      console.log(data);  // This is where your data will be
+      addToCourses(data)
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+    
+  };
+
+
+ 
+  useEffect(() => {
+    fetchLoggedIn();
+  }, [auth.token, auth.userID]);
+
+  const addToCourses = (newDates:any) => {
+    const newCourses = newDates.map((dateString:any, index:any) => {
+      const dateParts = dateString.split('/');
+      const month = parseInt(dateParts[0], 10) - 1; // Month is 0-based in JavaScript Date
+      const day = parseInt(dateParts[1], 10);
+      const year = month < 8 ? 2024 : 2024; // Assuming dates are all in 2024
+
+      const date = new Date(year, month, day, 23, 59); // Set time to 23:59 for all events
+
+      return {
+        date: date,
+        event: `CAS CS 350 F2024 Homework ${index + 1}`, // Example event name
+        source: 'Gradescope',
+        completed: false,
+        id: `CAS CS 330 F2024Homework ${index + 1}`
+      };
+    });
+
+    // Use the state setter function to update the state
+    console.log(courses)
+    console.log("THIS IS NEW COURSES")
+    console.log(newCourses)
+    setCourses(prevCourses => [...prevCourses, ...newCourses]);
+  };
 
 
   // function to save assignments to database, userID is from Firebase Auth
@@ -162,8 +216,7 @@ export default function DashboardPage() {
         id: doc.id,
       });
     });
-    console.log(assignments);
-    setCourses(assignments);
+    //setCourses(prevCourses => [...prevCourses, ...assignments]);
   };
 
   const [stickyNotes, setStickyNotes] = useState<number[]>([]);

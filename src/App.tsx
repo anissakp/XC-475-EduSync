@@ -8,7 +8,6 @@ import { app, db } from "./firebase";
 
 import DashboardPage from "./pages/DashboardPage";
 import ConnectPage from "./pages/ConnectPage";
-import AuthorizedPage from "./pages/AuthorizedPage";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
 import PiazzaPage from "./pages/PiazzaPage";
@@ -138,7 +137,6 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/connect" element={<ConnectPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/authorized" element={<AuthorizedPage />} />
           <Route path="/coursespage" element={<CoursesPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/piazza" element={<PiazzaPage />} />

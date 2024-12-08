@@ -1,4 +1,4 @@
-import eduSyncLogo from "../assets/edusyncLogo.png"
+import eduSyncLogo from "../../assets/edusyncLogo.png"
 import { Link } from "react-router-dom";
 
 type HeaderProps = {
