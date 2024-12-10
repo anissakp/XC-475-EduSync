@@ -16,6 +16,7 @@ export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
   const auth = useContext(AuthContext);
 
+
   // SET INITIAL STATE
   const [courses, setCourses] = useState<any[]>([]);
   const [classNameList, setClassNameList] = useState<string[]>([]);
@@ -49,13 +50,12 @@ export default function DashboardPage() {
       elem.courseName,
       elem.courseID,
     ]);
-    console.log("classname", className);
     setClassNameList(className);
 
     let arr: any = [];
     for (let i = 0; i < classes.length; i++) {
       const newArr = classes[i].assignments.map((det: any) => {
-        console.log(det.grading.due);
+
         return {
           date: new Date(det.grading.due),
           event: `${classes[i].courseName} ${det.name}`,
@@ -126,8 +126,7 @@ export default function DashboardPage() {
       // Make sure to read the response body as JSON
       return response.json();  // If the response is JSON
     })
-    .then(data => {
-      console.log(data);  // This is where your data will be
+    .then(data => {// This is where your data will be
       addToCourses(data)
     })
     .catch(error => {
@@ -161,9 +160,6 @@ export default function DashboardPage() {
     });
 
     // Use the state setter function to update the state
-    console.log(courses)
-    console.log("THIS IS NEW COURSES")
-    console.log(newCourses)
     setCourses(prevCourses => [...prevCourses, ...newCourses]);
   };
 
@@ -203,6 +199,7 @@ export default function DashboardPage() {
   // THIS PULLS ALL THE EVENTS FROM THE DATABASE
   // THE DATABASE GROUPS ALL THE ASSIGNMENTS TOGETHER (SOURCE OF ASSIGNMENT IS A SEPARATE FIELD)
   const fetchAssignmentsFromFirestore = async (userId: string) => {
+
     const userAssignmentsRef = collection(db, `users/${userId}/assignments`);
     const querySnapshot = await getDocs(userAssignmentsRef);
     const assignments: any = [];
@@ -239,7 +236,6 @@ export default function DashboardPage() {
 
   const handleChatBotSubmit = async () => {
     try {
-      console.log("it is here")
       const res = await fetch('http://127.0.0.1:5000/chatbot', {
         method: 'POST',
         headers: {
@@ -253,8 +249,8 @@ export default function DashboardPage() {
       }
 
       const data = await res.json();
-      console.log(data.response.response)
-      setChatBotResponse(data.response.response); // Update state with backend response
+      console.log(data.response.choices[0].message.content)
+      setChatBotResponse(data.response.choices[0].message.content); // Update state with backend response
     } catch (error) {
       console.error('Error connecting to backend:', error);
     }
