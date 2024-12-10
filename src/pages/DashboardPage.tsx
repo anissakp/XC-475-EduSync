@@ -234,6 +234,31 @@ export default function DashboardPage() {
   };
 
   const ToDoListComponent = <ToDoList courses={courses} />;
+  const [chatBotQuestion, setChatBotQuestion] = useState('');
+  const [chatBotResponse, setChatBotResponse] = useState('');
+
+  const handleChatBotSubmit = async () => {
+    try {
+      console.log("it is here")
+      const res = await fetch('http://127.0.0.1:5000/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input: chatBotQuestion }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log(data.response.response)
+      setChatBotResponse(data.response.response); // Update state with backend response
+    } catch (error) {
+      console.error('Error connecting to backend:', error);
+    }
+  };
 
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
@@ -251,6 +276,15 @@ export default function DashboardPage() {
             <div className="justify-self-center mt-4">
               <NewStickynotes />
             </div>
+
+            <input
+        type="text"
+        value={chatBotQuestion}
+        onChange={(e) => setChatBotQuestion(e.target.value)}
+        placeholder="Enter something"
+      />
+      <button onClick={handleChatBotSubmit}>Submit</button>
+      <p>Response: {chatBotResponse}</p>
           </div>
 
         </div>
