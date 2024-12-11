@@ -11,7 +11,8 @@ import DashBoardHeader from "../components/DashboardHeader";
 import SideMenu from "../components/SideMenu";
 import { collection, getDocs, getDoc } from "firebase/firestore";
 import NewStickynotes from "../components/NewStickynotes";
-
+import { getData } from "../components/DataStore";
+import { parse } from "date-fns";
 export default function DashboardPage() {
   // ACCESS AUTH CONTEXT
   const auth = useContext(AuthContext);
@@ -141,6 +142,70 @@ export default function DashboardPage() {
     fetchLoggedIn();
   }, [auth.token, auth.userID]);
 
+
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchedData = getData();  // Call getData() to fetch the data
+    
+    // Only update state if getData() returns something
+    if (fetchedData) {
+      setData(fetchedData);  // Update state with the fetched data
+    }
+  }, []); 
+
+  const [dummy, setDummy] = useState(false);
+
+const forceRerender = () => {
+  setDummy((prev) => !prev);
+};
+
+  useEffect(() => {
+    const rawData = getData();  // Get the data once
+    console.log("laksjdfkajoiefwef")
+    console.log(rawData)
+    
+    if (rawData) {
+      console.log(rawData)
+      const rawDataString = JSON.stringify(rawData);
+      try {
+        // Assuming getData() returns an array of assignments or a valid JSON string.
+        //const parsedAssignments = Array.isArray(rawData) ? rawData : JSON.parse(rawData);
+        const parsedAssignments = rawDataString.replace(/.*\[/, '[')  // Remove everything before the first '['
+        .replace(/\].*/, ']')
+        .replace(/`/g, '')         // Remove backticks if any (replace them with an empty string)
+        .replace(/\\n/g, '')       // Remove newline characters (optional based on your data)
+        .replace(/\\t/g, '') 
+        .replace(/new Date\("(.*?)"\)/g, '"$1"')
+        .replace(/\s*([{}[\],:])\s*/g, '$1') // Remove spaces around braces, brackets, colons, and commas
+        .replace(/\s*"\s*([^"]*?)\s*"\s*:/g, '"$1":').replace(/'/g, '"')
+        .replace(/new Date\((.*?)\)/g, '$1').replace(/([{,])\s*(\w+):/g, '$1"$2":').replace(/\\\"/g, '"')
+        console.log(parsedAssignments) 
+
+        const parsedAssignments2 = JSON.parse(parsedAssignments);
+        console.log(parsedAssignments2)
+        // Format assignments
+        const formattedAssignments = parsedAssignments2.map((assignment: any) => ({
+          ...assignment,completed: false, 
+          date: new Date(assignment.date) // Convert the date to a Date object
+        }));
+
+        console.log("hello we are here")
+
+        console.log(formattedAssignments) 
+  
+        setCourses([...formattedAssignments]); 
+        forceRerender();
+  
+      } catch (error) { 
+        console.error("Error parsing assignments data:", error);
+        setCourses([]); // In case parsing fails, set courses to an empty array
+      }
+    } else {
+      setCourses([]); // If there's no data, set courses to an empty array
+    }
+  }, [data, courses]);
+
   const addToCourses = (newDates:any) => {
     const newCourses = newDates.map((dateString:any, index:any) => {
       const dateParts = dateString.split('/');
@@ -159,8 +224,10 @@ export default function DashboardPage() {
       };
     });
 
+    
+
     // Use the state setter function to update the state
-    setCourses(prevCourses => [...prevCourses, ...newCourses]);
+    //setCourses(prevCourses => [...prevCourses, ...newCourses]);
   };
 
 
@@ -250,11 +317,26 @@ export default function DashboardPage() {
 
       const data = await res.json();
       console.log(data.response.choices[0].message.content)
-      setChatBotResponse(data.response.choices[0].message.content); // Update state with backend response
+      setChatBotResponse(data.response.choices[0].message.content); 
     } catch (error) {
       console.error('Error connecting to backend:', error);
     }
   };
+
+  const [file, setFile] = useState(null);
+  const [fileURL, setFileURL] = useState("");
+
+  const handleFileChange = (event:any) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+
+    // Create a local URL for the file
+    const url = URL.createObjectURL(selectedFile);
+    setFileURL(url);
+  };
+
+
+  console.log(courses)
 
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
