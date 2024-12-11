@@ -161,9 +161,11 @@ const forceRerender = () => {
 };
 
   useEffect(() => {
+
     const rawData = getData();  // Get the data once
     console.log("laksjdfkajoiefwef")
     console.log(rawData)
+
     
     if (rawData) {
       console.log(rawData)
@@ -204,6 +206,7 @@ const forceRerender = () => {
     } else {
       setCourses([]); // If there's no data, set courses to an empty array
     }
+  
   }, [data, courses]);
 
   const addToCourses = (newDates:any) => {
@@ -337,6 +340,11 @@ const forceRerender = () => {
 
 
   console.log(courses)
+  const [showChat, setShowChat] = useState(false);
+
+  const toggleChat = () => {
+    setShowChat(!showChat);
+  };
 
   return (
     <div className="bg-gradient-to-bl from-[#4aadba] to-[#fbe5b4] w-full h-full">
@@ -355,14 +363,57 @@ const forceRerender = () => {
               <NewStickynotes />
             </div>
 
-            <input
-        type="text"
-        value={chatBotQuestion}
-        onChange={(e) => setChatBotQuestion(e.target.value)}
-        placeholder="Enter something"
-      />
-      <button onClick={handleChatBotSubmit}>Submit</button>
-      <p>Response: {chatBotResponse}</p>
+            <div className="relative">
+      {/* Button to toggle the chatbot */}
+      <button
+        onClick={toggleChat}
+        className="px-6 py-3 bg-[#4aadba] text-white rounded-lg shadow-lg hover:bg-[#4aadba] focus:outline-none"
+      >
+        Chat with Bot
+      </button>
+
+      {/* Chatbot popup */}
+      {showChat && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg w-3/4 md:w-1/2 lg:w-1/3 shadow-lg">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold">Chat with Bot</h2>
+
+              {/* Chatbot question input */}
+              <input
+                type="text"
+                value={chatBotQuestion}
+                onChange={(e) => setChatBotQuestion(e.target.value)}
+                placeholder="Enter your question"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              {/* Submit button */}
+              <button
+                onClick={handleChatBotSubmit}
+                className="w-full py-3 bg-[#4aadba] text-white rounded-lg hover:bg-[#4aadba] focus:outline-none"
+              >
+                Submit
+              </button>
+
+              {/* Response */}
+              <div className="mt-4">
+                <p className="font-medium text-gray-700">Response:</p>
+                <p>{chatBotResponse}</p>
+              </div>
+
+              {/* Close button */}
+              <button
+                onClick={toggleChat}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              >
+                ✖
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
           </div>
 
         </div>
